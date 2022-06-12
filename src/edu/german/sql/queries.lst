@@ -1,0 +1,49 @@
+# sql queries
+# titel -> [titel_of_query]
+# EOSQL -> end of sql
+
+[add_new_word]
+INSERT INTO ge.all_words_objects (word, meaning, genus) VALUES(?, ?, ?);
+EOSQL
+
+[check_word]
+SELECT woid FROM ge.all_words_objects awo WHERE awo.word = ? AND awo.genus = ? LIMIT 1;
+EOSQL
+
+[add_new_sentence]
+INSERT INTO ge.sentences (sentence, meaning, type) VALUES(?, ?, ?);
+EOSQL
+
+[check_sentence]
+SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.type = ? ;
+EOSQL
+
+[get_all_words_by_genus]
+SELECT * FROM ge.all_words_objects awo WHERE awo.genus = ? LIMIT ? ;
+EOSQL
+
+[get_word_from_main_table_by_woid]
+SELECT awo.word, awo.meaning, awo.genus FROM ge.all_words_objects awo WHERE awo.woid = ? ;
+EOSQL
+
+[get_word_from_main_table_by_word]
+SELECT awo.woid, awo.meaning, awo.genus FROM ge.all_words_objects awo WHERE awo.word = ? ;
+EOSQL
+
+[get_limit_nouns]
+SELECT awo.* FROM ge.all_words_objects awo WHERE awo.genus = 'das Substantiv' limit ? ;
+EOSQL
+
+[get_noun_by_word]
+SELECT n.* FROM ge.nouns n WHERE n.word = ? LIMIT 1;
+EOSQL
+
+[check_word_in_table_nouns]
+SELECT n.oid FROM ge.nouns n WHERE n.word = ? LIMIT 1;
+EOSQL
+
+[get_all_nouns]
+SELECT awo.woid, awo.word, awo.genus, n.meaning, n."oid" 
+FROM ge.all_words_objects awo, ge.nouns n 
+WHERE awo.genus = 'das Substantiv' AND n.word = awo.word ;
+EOSQL
