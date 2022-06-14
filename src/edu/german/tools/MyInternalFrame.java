@@ -13,7 +13,8 @@ import edu.german.tools.buttons.ExitButton;
 
 public class MyInternalFrame extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
-
+	public JToolBar tb;
+	
 	public MyInternalFrame(int height, int width, String titel) {
 		ScreenSetup sp = new ScreenSetup();
 		String myIcon = "src/edu/german/img/tak3.gif";
@@ -38,7 +39,7 @@ public class MyInternalFrame extends JInternalFrame {
 			}
 		});
 
-		JToolBar tb = new JToolBar();
+		tb = new JToolBar();
 		tb.setRollover(true);
 		tb.add(bExit);
 

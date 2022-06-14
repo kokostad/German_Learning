@@ -10,9 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
- * The class to handle a simple table
- * the class presents a list of objects according to the header table
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class to handle
+ *         a simple table the class presents a list of objects according to the
+ *         header table
  */
 public class TableHanlder extends JTable {
 	private static final long serialVersionUID = 1L;

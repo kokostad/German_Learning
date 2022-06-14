@@ -1,7 +1,10 @@
 package edu.german.sentences;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -21,16 +24,27 @@ public class SentenceEditPanel extends JPanel {
 	public SentenceEditPanel(String labelInfo1, String labelInfo2, String[] selectionList) {
 		sentence = new OneEditableField(labelInfo1, null, 16, 70);
 		meaning = new OneEditableField(labelInfo2, null, 16, 70);
-		box = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_TYP"), selectionList);
 
-		this.setLayout((LayoutManager) new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		this.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-		this.add(Box.createHorizontalGlue());
-		this.add(sentence);
-		this.add(Box.createRigidArea(new Dimension(0, 5)));
-		this.add(meaning);
-		this.add(Box.createRigidArea(new Dimension(0, 5)));
-		this.add(box);
+		GridLayout gl = new GridLayout(2, 1);
+		JPanel editFieldsPan = new JPanel();
+		editFieldsPan.setLayout(gl);
+		editFieldsPan.add(sentence);
+		editFieldsPan.add(meaning);
+
+		box = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_MODE"), selectionList);
+		JPanel boxPanel = new JPanel();
+		boxPanel.add(box);
+
+		this.add(editFieldsPan);
+		this.add(boxPanel);
+	}
+
+	Map getValuesAsMap() {
+		Map map = new HashMap<>();
+		map.put("SENTENCE", sentence.getValue());
+		map.put("MEANING", meaning.getValue());
+		map.put("MODE", box.getValue());
+		return map;
 	}
 
 	String[] getValues() {
@@ -50,10 +64,21 @@ public class SentenceEditPanel extends JPanel {
 		return null;
 	}
 
-	void setValues(String newSentence, String newMeaning, String typ) {
+	void setValues(String newSentence, String newMeaning, String mode) {
 		sentence.setValue(newSentence);
 		meaning.setValue(newMeaning);
-		box.setValue(typ);
+		box.setValue(mode);
 	}
 
+	void clearEditFields() {
+		sentence.setValue(null);
+		meaning.setValue(null);
+		box.setValue(null);
+	}
+
+	public void showData(String newSentence, String newMeaning, String mode) {
+		sentence.setValue(newSentence);
+		meaning.setValue(newMeaning);
+		box.setValue(mode);
+	}
 }

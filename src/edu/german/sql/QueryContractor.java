@@ -47,14 +47,14 @@ public class QueryContractor {
 		}
 	}
 
-	public boolean executeQuery(String sql, String string, String meaning, String genus) {
+	public boolean executeQuery(String sql, String string, String meaning, String parametr) {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, string);
 			ps.setString(2, meaning);
-			ps.setString(3, genus);
+			ps.setString(3, parametr);
 
 			return ps.execute();
 		} catch (SQLException e) {

@@ -8,6 +8,7 @@ public class MyIcon {
 	public static String btn_add_to_list = "btn_add_to_list.png";
 	public static String btn_clear = "btn_clear.png";
 	public static String exit = "exit.png";
+	public static String rules = "rules.png";
 	public static String btn_exit = "btn_exit.png";
 	public static String btn_close = "close.gif";
 

@@ -41,7 +41,7 @@ public class ExecutorSentenceTask implements Runnable {
 
 	private void addSentenceToMainTab(String[] array) {
 		AddSenteceToDatabase astdb = new AddSenteceToDatabase();
-		if (!astdb.checkIfExist(array[0], type))
+		if (!astdb.checkIfExist(array[0], type, null, null, null))
 			astdb.addNewSentence(new GetQuery().getSql("add_new_sentence"), array[0], array[1], type);
 	}
 }
