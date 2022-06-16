@@ -16,6 +16,7 @@ import edu.german.tools.buttons.ButtonsPanel;
 public class AddRules extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static String FILE_CFG = "object_list.properties";
+	private static String SCR_CFG = "screen.properties";
 	private ButtonsPanel bp;
 	private JButton clearBtn;
 	private JButton addBtn;
@@ -32,9 +33,10 @@ public class AddRules extends MyInternalFrame implements ActionListener {
 		addBtn = bp.getB2();
 		addBtn.addActionListener(this);
 
-		titles = new OneEditableField("Podaj tytuł zasady", "Czego dotyczy zasada", 16, 30);
+		int panelWidth = width / Integer.parseInt(new MyProperties(SCR_CFG).getValue("EDIT_FIELD_FACTOR"));
+		titles = new OneEditableField("Podaj tytuł zasady", "Czego dotyczy zasada", 16, panelWidth);
 		String[] tableHeaders = new MyProperties(FILE_CFG).getValuesArray("ALL_OBJECTS");
-		box = new MyComboBox("Zasada dotyczy: ", tableHeaders);
+		box = new MyComboBox("Czego dotyczy: ", tableHeaders);
 
 		JPanel upPanel = new JPanel();
 		upPanel.add(titles);

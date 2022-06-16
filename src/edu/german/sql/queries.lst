@@ -56,3 +56,7 @@ SELECT awo.woid, awo.word, awo.genus, n.meaning, n."oid"
 FROM ge.all_words_objects awo, ge.nouns n 
 WHERE awo.genus = 'das Substantiv' AND n.word = awo.word ;
 EOSQL
+
+[add_rules]
+INSERT INTO ge.rules(titles, contents, refers_to_1) VALUES(?, ?, ?);
+EOSQL
