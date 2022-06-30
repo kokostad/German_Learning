@@ -1,25 +1,20 @@
-package edu.german.words;
+package edu.german.words.model;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.german.words.model.WordModel;
-
 public class Word implements WordModel {
-	private Integer id = -1;
+	private int oid = -1;
+	private int woid = -1;
 	private String word;
 	private String meaning;
 	private String[] meanings;
 	private String genus;
 	private Map<Object, Object> wordAsMap;
 
-	public Word() {
-		wordAsMap = new HashMap<Object, Object>();
-	}
-
 	@Override
-	public Integer getId() {
-		return id;
+	public int getOid() {
+		return oid;
 	}
 
 	@Override
@@ -38,9 +33,8 @@ public class Word implements WordModel {
 	}
 
 	@Override
-	public void setId(Integer id) {
-		this.id = id;
-
+	public void setOid(int oid) {
+		this.oid = oid;
 	}
 
 	@Override
@@ -51,13 +45,11 @@ public class Word implements WordModel {
 	@Override
 	public void setMeaning(String meaning) {
 		this.meaning = meaning;
-
 	}
 
 	@Override
 	public void setMeanings(String[] meanings) {
 		this.meanings = meanings;
-
 	}
 
 	public String getGenus() {
@@ -69,14 +61,31 @@ public class Word implements WordModel {
 	}
 
 	public Map<Object, Object> getWordAsMap() {
-		if (!wordAsMap.isEmpty())
-			return wordAsMap;
-
-		return null;
+		return wordAsMap;
 	}
 
 	public void setWordAsMap(Map<Object, Object> wordAsMap) {
 		this.wordAsMap = wordAsMap;
+	}
+
+	@Override
+	public int getWoid() {
+		return woid;
+	}
+
+	@Override
+	public void setWoid(int woid) {
+		this.woid = woid;
+	}
+
+	@Override
+	public String getWord() {
+		return word;
+	}
+
+	@Override
+	public void setWord(String word) {
+		this.word = word;
 	}
 
 }

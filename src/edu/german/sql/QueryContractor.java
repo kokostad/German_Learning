@@ -15,6 +15,7 @@ import edu.german.dao.DbConnect;
 import edu.german.tools.Translator;
 import edu.german.words.WordPkg;
 import edu.german.words.model.Noun;
+import edu.german.words.model.Word;
 
 public class QueryContractor {
 	private DbConnect dbc;
@@ -47,14 +48,14 @@ public class QueryContractor {
 		}
 	}
 
-	public boolean executeQuery(String sql, String string, String meaning, String parametr) {
+	public boolean executeQuery(String sql, String str1, String str2, String str3) {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, string);
-			ps.setString(2, meaning);
-			ps.setString(3, parametr);
+			ps.setString(1, str1);
+			ps.setString(2, str2);
+			ps.setString(3, str3);
 
 			return ps.execute();
 		} catch (SQLException e) {
@@ -210,10 +211,14 @@ public class QueryContractor {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Noun noun = new Noun();
+				noun.setOid(rs.getInt("oid"));
 				noun.setWoid(rs.getInt("woid"));
-				noun.setMainWord(rs.getString("word"));
+				noun.setNoun(rs.getString("word").split(" "));
+				noun.setWord(rs.getString("word"));
+				String[] article = rs.getString("word").split(" ", 1);
+				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
-				noun.setGenus(rs.getString("genus"));
+				noun.setMeanings(rs.getString("meaning").split(", "));
 				nounLst.add(noun);
 			}
 
@@ -236,8 +241,13 @@ public class QueryContractor {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				noun.setWoid(rs.getInt("woid"));
-				noun.setMainWord(rs.getString("word"));
+				noun.setOid(rs.getInt("oid"));
+				noun.setWord(rs.getString("word"));
+				noun.setNoun(rs.getString("word").split(" "));
+				String[] article = rs.getString("word").split(" ", 1);
+				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
+				noun.setMeanings(rs.getString("meaning").split(", "));
 			}
 
 		} catch (SQLException e) {
@@ -260,10 +270,13 @@ public class QueryContractor {
 			while (rs.next()) {
 				Noun noun = new Noun();
 				noun.setWoid(rs.getInt("woid"));
-				noun.setId(rs.getInt("oid"));
-				noun.setMainWord(rs.getString("word"));
+				noun.setOid(rs.getInt("oid"));
+				noun.setWord(rs.getString("word"));
+				noun.setNoun(rs.getString("word").split(" "));
+				String[] article = rs.getString("word").split(" ");
+				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
-				noun.setGenus(rs.getString("genus"));
+				noun.setMeanings(rs.getString("meaning").split(", "));
 				nounLst.add(noun);
 			}
 
@@ -274,6 +287,33 @@ public class QueryContractor {
 		}
 
 		return nounLst;
+	}
+
+	public List<Word> getAllWordsList(String sql) {
+		List<Word> wordLst = new LinkedList<>();
+
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Word word = new Word();
+				word.setWoid(rs.getInt("woid"));
+				word.setOid(rs.getInt("oid"));
+				word.setMainWord(rs.getString("word"));
+				word.setMeaning(rs.getString("meaning"));
+				word.setGenus(rs.getString("genus"));
+				wordLst.add(word);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return wordLst;
 	}
 
 	public List<String[]> getSentencesList(String sql) {

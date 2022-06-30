@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 
 import edu.german.tools.buttons.ButtonsPanel;
 
-public class AddRules extends MyInternalFrame implements ActionListener {
+public class AddRule extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static String FILE_CFG = "object_list.properties";
 	private static String SCR_CFG = "screen.properties";
@@ -23,9 +23,8 @@ public class AddRules extends MyInternalFrame implements ActionListener {
 	private JTextArea area;
 	private OneEditableField titles;
 	private MyComboBox box;
-	private boolean state;
 
-	public AddRules(int height, int width, String titel) {
+	public AddRule(int height, int width, String titel) {
 		super(height, width, titel);
 		bp = new ButtonsPanel("CLEAR_EDIT_FIELD", "ADD_TO_REPOSITORY");
 		clearBtn = bp.getB1();
@@ -34,7 +33,7 @@ public class AddRules extends MyInternalFrame implements ActionListener {
 		addBtn.addActionListener(this);
 
 		int panelWidth = width / Integer.parseInt(new MyProperties(SCR_CFG).getValue("EDIT_FIELD_FACTOR"));
-		titles = new OneEditableField("Podaj tytuł zasady", "Czego dotyczy zasada", 16, panelWidth);
+		titles = new OneEditableField("Podaj tytuł reguły", "Czego reguła dotyczy", 16, panelWidth);
 		String[] tableHeaders = new MyProperties(FILE_CFG).getValuesArray("ALL_OBJECTS");
 		box = new MyComboBox("Czego dotyczy: ", tableHeaders);
 
@@ -96,9 +95,11 @@ public class AddRules extends MyInternalFrame implements ActionListener {
 			if (!testData(titles.getValue()) || !testData(box.getValue()) || !testData(area.getText())) {
 				new ShowMessage("EMPTY_FIELDS");
 			} else {
-				HashMap<String, String> var = getData();
-				WriteRulesToRepository write = new WriteRulesToRepository();
-				write.addToRepo(var);
+				HashMap<String, String> map = getData();
+
+				if (!map.isEmpty()) {
+					new WriteRulesToRepository().addToRepo(map);
+				}
 				clearEditFiles();
 			}
 		}

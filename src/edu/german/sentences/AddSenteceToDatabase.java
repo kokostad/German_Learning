@@ -52,10 +52,8 @@ public class AddSenteceToDatabase {
 				mode = map.get("MODE");
 
 			if (sentence != null && mode != null && meaning != null) {
-//				System.out.println("Zdanie: " + sentence + " tryb: " + mode);
 				if (!checkIfExist(sentence, null, null, null, mode)) {
 					String sql = query.getSql("add_sentence_with_mode");
-//					System.out.println("Query: " + sql);
 					new QueryContractor().executeQuery(sql, sentence, meaning, mode);
 				}
 			}

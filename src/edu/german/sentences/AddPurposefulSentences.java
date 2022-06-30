@@ -13,7 +13,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import edu.german.tools.AddRules;
+import edu.german.tools.AddRule;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditableField;
@@ -138,7 +138,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		else if (src == rulesBtn) {
 			int hight = this.getParent().getHeight();
 			int width = this.getParent().getWidth();
-			AddRules ar = new AddRules(hight, width, Titles.setTitel("ADD_RULES"));
+			AddRule ar = new AddRule(hight, width, Titles.setTitel("ADD_RULES"));
 			getDesktopPane().add(ar);
 			getDesktopPane().moveToFront(ar);
 			getDesktopPane().repaint();

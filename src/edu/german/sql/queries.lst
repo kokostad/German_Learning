@@ -40,7 +40,7 @@ SELECT awo.woid, awo.meaning, awo.genus FROM ge.all_words_objects awo WHERE awo.
 EOSQL
 
 [get_limit_nouns]
-SELECT awo.* FROM ge.all_words_objects awo WHERE awo.genus = 'das Substantiv' limit ? ;
+SELECT awo.* FROM ge.nouns limit ? ;
 EOSQL
 
 [get_noun_by_word]
@@ -52,9 +52,7 @@ SELECT n.oid FROM ge.nouns n WHERE n.word = ? LIMIT 1;
 EOSQL
 
 [get_all_nouns]
-SELECT awo.woid, awo.word, awo.genus, n.meaning, n."oid" 
-FROM ge.all_words_objects awo, ge.nouns n 
-WHERE awo.genus = 'das Substantiv' AND n.word = awo.word ;
+SELECT * from ge.nouns;
 EOSQL
 
 [add_rules]

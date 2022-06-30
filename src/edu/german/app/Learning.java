@@ -16,6 +16,7 @@ import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 
 import edu.german.games.GuessArticle;
+import edu.german.games.GuessTheMeaning;
 import edu.german.io.ExportToFile;
 import edu.german.io.ImportFromFile;
 import edu.german.sentences.AddPurposefulSentences;
@@ -90,6 +91,7 @@ public class Learning extends JFrame implements ActionListener {
 		mAddition.add(miAddPurposefulSentences);
 
 		guessTheMeaning = new JMenuItem(Titles.setTitel("GUESS_THE_MEANING"));
+		guessTheMeaning.addActionListener(this);
 		miWhatKind = new JMenuItem(Titles.setTitel("WHAT_ARTICLE"));
 		miWhatKind.addActionListener(this);
 
@@ -181,6 +183,14 @@ public class Learning extends JFrame implements ActionListener {
 					Titles.setTitel("WHAT_ARTICLE"));
 			dsk.add(guessArticle);
 			dsk.moveToFront(guessArticle);
+			dsk.repaint();
+		}
+
+		else if (src == guessTheMeaning) {
+			GuessTheMeaning guessMeaning = new GuessTheMeaning(dsk.getHeight(), dsk.getWidth(),
+					Titles.setTitel("GUESS_THE_MEANING"));
+			dsk.add(guessMeaning);
+			dsk.moveToFront(guessMeaning);
 			dsk.repaint();
 		}
 

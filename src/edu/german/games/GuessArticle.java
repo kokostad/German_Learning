@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 
+import edu.german.services.ExecutorWordTask;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.ResultsPanel;
 import edu.german.tools.ShowMessage;
@@ -37,29 +40,33 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private JButton nextBtn;
 	private JButton checkBtn;
 	private JButton repeatBtn;
-	private JLabel wordTocheckLbl;
+	private JLabel gameWordLbl;
 	private String[] fullWord;
 	private String answer;
-	private String wordToCheck;
+	private String gameWord;
 	private JLabel answerLab;
 	private String article;
 	private String wordMeaning;
-	private String noun;
+	private String controlWord;
+	private String newWord;
 	private static final int size = 26;
 	private static final int wordSize = 36;
 	private ShowResultAsImage showImage;
-	private List<Noun> nounList;
-	private static String genus = "Substantiv";
+	private List<Noun> allNounList;
+	private List<Noun> severalNouns;
 	private int actualDraw = 0;
 	private int numberOfWords;
 	private int actualScore = 0;
 	private int goodAnswer = 0;
 	private int wrongAnswer = 0;
 	private ResultsPanel resultPan;
+//	private ExecutorService es;
 
 	public GuessArticle(int height, int width, String setTitel) {
 		super(height, width, setTitel);
-		nounList = new LinkedList<Noun>();
+		severalNouns = new LinkedList<Noun>();
+//		es = Executors.newSingleThreadExecutor();
+		allNounList = new WordPkg().getNounList();
 		showImage = new ShowResultAsImage(200, 200);
 
 		bp = new ButtonsPanel("NEW_WORD", "CHECK_ANSWER", "NEXT", "RELOAD");
@@ -88,15 +95,15 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		dasBtn.setFont(new Font("MV Boli", Font.ITALIC, size));
 		dasBtn.addActionListener(this);
 
-		wordTocheckLbl = new JLabel();
-		wordTocheckLbl.setText(" Wyraz do sprawdzenia ");
-		wordTocheckLbl.setFont(new Font("MV Boli", Font.ITALIC, wordSize));
-		wordTocheckLbl.setForeground(new Color(34, 139, 34));
-		wordTocheckLbl.setHorizontalAlignment(JTextField.LEFT);
+		gameWordLbl = new JLabel();
+		gameWordLbl.setText(Titles.setTitel("WORD_TO_CHECK"));
+		gameWordLbl.setFont(new Font("MV Boli", Font.ITALIC, wordSize));
+		gameWordLbl.setForeground(new Color(34, 139, 34));
+		gameWordLbl.setHorizontalAlignment(JTextField.LEFT);
 
 		JPanel labelPane = new JPanel();
 		labelPane.setLayout(new GridLayout(3, 1, 20, 5));
-		labelPane.add(wordTocheckLbl);
+		labelPane.add(gameWordLbl);
 
 		JPanel leftPanel = new JPanel();
 		leftPanel.add(showImage);
@@ -127,22 +134,23 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	}
 
 	private void nextWord(int number) {
-		if (number < nounList.size()) {
-			setGameWord(number, nounList);
-			actualDraw += 1;
-		} else {
+		if (number < severalNouns.size())
+			setGameWord(number, severalNouns);
+		else
 			new ShowMessage("NO_MORE_WORDS");
-		}
 	}
 
 	private void setGameWord(int actuelNumber, List<Noun> nounList) {
-		Noun var = nounList.get(actuelNumber);
-		String[] word = var.getMainWord().split(" ");
-		article = word[0];
-		wordToCheck = word[1];
-		noun = var.getMainWord();
-		wordMeaning = var.getMeaning();
-		wordTocheckLbl.setText(" " + wordToCheck + " ");
+		Noun nounFromList = nounList.get(actuelNumber);
+		if (actuelNumber == 0)
+			controlWord = nounFromList.getWord();
+
+		newWord = nounFromList.getWord();
+		String[] noun = nounFromList.getWord().split(" ");
+		article = noun[0];
+		gameWord = noun[1];
+		wordMeaning = nounFromList.getMeaning();
+		gameWordLbl.setText(" " + gameWord + " ");
 	}
 
 	private String getAnswer() {
@@ -185,59 +193,110 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		this.actualDraw = actualDraw;
 	}
 
+	private boolean gameControler(String answerArticel) {
+		if (getActualDraw() > 0 && getActualDraw() != getNumberOfWords() && controlWord.equals(newWord)) {
+			new ShowMessage("THE_SAME_WORD");
+			return false;
+		}
+
+		if (answerArticel == null) {
+			new ShowMessage("NO_ANSWER");
+			return false;
+		}
+
+		if (article.equals(answerArticel) && article != null)
+			return true;
+
+		return false;
+	}
+
+	private void setInitialParams() {
+		resultPan.setYourAnswer(" ");
+		article = null;
+		wordMeaning = null;
+	}
+
+	private List<Noun> getSeveral(int number) {
+		List<Noun> list = new LinkedList<>();
+		for (int i = 0; i < number; i++) {
+			list.add(allNounList.get(i));
+			allNounList.remove(i);
+		}
+
+		return list;
+	}
+
+	private void positiveScoreUpdate() {
+		controlWord = newWord;
+		setActualDraw(getActualDraw() + 1);
+		actualScore = actualScore + 1;
+		goodAnswer = goodAnswer + 1;
+		showImage.showScore(true);
+		resultPan.setYourScoreLab(" " + actualDraw);
+		resultPan.setGoodAnswerNumber(" " + goodAnswer);
+		resultPan.setOverallResultLab(" " + actualScore);
+		resultPan.setYourAnswer(getArticle() + " " + gameWord + ", " + Titles.setTitel("MEANING") + ": " + wordMeaning);
+	}
+
+	private void negativeScoreUpdate() {
+		actualScore = actualScore - 1;
+		wrongAnswer = wrongAnswer + 1;
+		showImage.showScore(false);
+		resultPan.setYourScoreLab(" " + actualDraw);
+		resultPan.setWrongAnswerNumber(" " + wrongAnswer);
+		resultPan.setOverallResultLab(" " + actualScore);
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
 
 		if (src == drawBtn) {
-			if (nounList.isEmpty()) {
+			showImage.showIndifference();
+			if (severalNouns.isEmpty()) {
 				setNumberOfWords((int) selectionPan.getNumber());
-				nounList = new WordPkg(genus, getNumberOfWords()).getNounList(getNumberOfWords());
+				severalNouns = getSeveral(getNumberOfWords());
 				setActualDraw(0);
 				actualScore = 0;
-			}
+			} else
+				setInitialParams();
 
 			nextWord(getActualDraw());
-			showImage.showIndifference();
+
+			if (getActualDraw() > 0 && getActualDraw() < getNumberOfWords() && controlWord.equals(newWord))
+				new ShowMessage("THE_SAME_WORD");
 		}
 
 		else if (src == checkBtn) {
-			if (article.equals(getAnswer())) {
-				numberOfWords = 0;
-				actualScore = actualScore + 1;
-				goodAnswer = goodAnswer + 1;
-				showImage.showScore(true);
-				resultPan.setYourScoreLab(" " + actualDraw);
-				resultPan.setGoodAnswerNumber(" " + goodAnswer);
-				resultPan.setOverallResultLab(" " + actualScore);
-				resultPan.setYourAnswer(noun + ", znaczenie: " + wordMeaning);
-			} else {
-				actualScore = actualScore - 1;
-				wrongAnswer = wrongAnswer + 1;
-				showImage.showScore(false);
-				resultPan.setYourScoreLab(" " + actualDraw);
-				resultPan.setWrongAnswerNumber(" " + wrongAnswer);
-				resultPan.setOverallResultLab(" " + actualScore);
-			}
+			if (gameControler(answer))
+				positiveScoreUpdate();
+			else
+				negativeScoreUpdate();
 		}
 
 		else if (src == derBtn) {
 			setAnswer("der");
-			resultPan.setYourAnswer(getAnswer() + " " + wordToCheck);
+			resultPan.setYourAnswer(getAnswer() + " " + gameWord);
 		}
 
 		else if (src == dieBtn) {
 			setAnswer("die");
-			resultPan.setYourAnswer(getAnswer() + " " + wordToCheck);
+			resultPan.setYourAnswer(getAnswer() + " " + gameWord);
 		}
 
 		else if (src == dasBtn) {
 			setAnswer("das");
-			resultPan.setYourAnswer(getAnswer() + " " + wordToCheck);
+			resultPan.setYourAnswer(getAnswer() + " " + gameWord);
 		}
 
 		else if (src == nextBtn) {
-
+			gameWordLbl.setText(Titles.setTitel("NEW_ROUND"));
+			setNumberOfWords((int) selectionPan.getNumber());
+			if (allNounList.size() > getNumberOfWords()) {
+				severalNouns = getSeveral(getNumberOfWords());
+			} else {
+				new ShowMessage("NO_MORE_WORDS");
+			}
 		}
 
 	}

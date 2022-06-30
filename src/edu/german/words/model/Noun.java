@@ -1,106 +1,107 @@
 package edu.german.words.model;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.german.sql.GetSqlFromConfigFile;
-import edu.german.sql.QueryContractor;
 
-public class Noun implements WordModel {
-	private Integer woid;
-	private Integer oid;
-	private String article;
-	private String word;
-	private String meaning;
-	private String[] meanings;
-	private String[] noun;
+public class Noun extends Word {
 	private String genus = "das Substantiv";
-	private Map<Object, Object> propertyMap;
 	private List<Map<Object, Object>> propertyList;
 
 	public Noun() {
 		propertyList = new LinkedList<Map<Object, Object>>();
+		super.setGenus(genus);
 	}
 
-	@Override
-	public Integer getId() {
-		if (oid > -1)
-			return oid;
+	private Object getObjectFromList(String key) {
+		for (Map<Object, Object> m : propertyList)
+			if (m.containsKey(key))
+				return m.get(key);
 
-		return -1;
+		return null;
 	}
 
-	@Override
-	public String getMainWord() {
-		return word;
+	private void setObjectToList(Object key, Object value) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put(key, value);
+		propertyList.add(map);
 	}
 
-	@Override
+	public int getOid() {
+		if (Integer.parseInt("OID") > -1)
+			return Integer.parseInt("OID");
+		else
+			return -1;
+	}
+
+	public String getWord() {
+		return getObjectFromList("WORD").toString();
+	}
+
 	public String getMeaning() {
-		return meaning;
+		return getObjectFromList("MEANING").toString();
 	}
 
-	@Override
 	public String[] getMeanings() {
-		meanings = meaning.split(",");
-		return meanings;
+		return (getObjectFromList("MEANING").toString()).split(" ");
 	}
 
-	@Override
-	public void setId(Integer oid) {
-		this.oid = oid;
+	public void setOid(int oid) {
+		if (oid > -1)
+			setObjectToList("OID", oid);
 	}
 
-	@Override
-	public void setMainWord(String word) {
-		this.word = word;
+	public void setWord(String word) {
+		if (!word.isBlank())
+			setObjectToList("WORD", word);
 	}
 
-	@Override
 	public void setMeaning(String meaning) {
-		this.meaning = meaning;
+		if (!meaning.isBlank())
+			setObjectToList("MEANING", meaning);
 	}
 
-	@Override
 	public void setMeanings(String[] meanings) {
-		this.meanings = meanings;
+		if (meanings.length > 0)
+			setObjectToList("MEANINGS", meanings);
 	}
 
-	public Integer getWoid() {
-		if (woid > -1)
-			return woid;
+	public int getWoid() {
+		int num = Integer.parseInt(getObjectFromList("WOID").toString());
 
-		return -1;
+		if (num > -1)
+			return num;
+		else
+			return -1;
 	}
 
 	public void setWoid(Integer woid) {
-		this.woid = woid;
+		if (woid > -1)
+			setObjectToList("WOID", woid);
 	}
 
 	public String getArticle() {
-		return article;
+		String[] arr = getNoun();
+		return arr[0];
 	}
 
 	public void setArticle(String article) {
-		this.article = article;
+		setObjectToList("ARTICLE", article);
 	}
 
 	public String[] getNoun() {
-		return noun;
+		if (!(getObjectFromList("NOUN").toString().isBlank())) {
+			return (getObjectFromList("NOUN").toString()).split(" ");
+		}
+		return null;
 	}
 
 	public void setNoun(String[] noun) {
-		this.noun = noun;
-	}
-
-	public Map<Object, Object> getPropertyMap() {
-		return propertyMap;
-	}
-
-	public void setPropertyMap(Map<Object, Object> propertyMap) {
-		this.propertyMap = propertyMap;
+		if (noun.length > 0) {
+			setObjectToList("NOUN", noun);
+		}
 	}
 
 	public List<Map<Object, Object>> getPropertyList() {
@@ -115,47 +116,12 @@ public class Noun implements WordModel {
 		propertyList.add(propertyMap);
 	}
 
-	public void prepareNoun(String word) {
-		String sql = new GetSqlFromConfigFile("get_noun_by_word").getSql();
-		Noun nounTmp = new QueryContractor().getNoun(sql, word);
-
-		// NOTICE need to set up all values
-		if (!nounTmp.getArticle().isBlank()) {
-			this.setArticle(nounTmp.getArticle());
-			this.setGenus(nounTmp.getGenus());
-			this.setId(nounTmp.getId());
-			this.setMainWord(nounTmp.getMainWord());
-			this.setMeaning(nounTmp.getMeaning());
-		}
-//			propertyList.add(wordMap);
-
-//			return this;
-
-	}
-
-	private int checkIfExist(String tablename, String word) {
-		String sql = new GetSqlFromConfigFile("check_word_in_table_" + tablename).getSql();
-		return new QueryContractor().getWoidByWord(sql, word);
-	}
-
-	private int checkIfExist(String word) {
-		String sql = new GetSqlFromConfigFile("get_word_from_main_table_by_word").getSql();
-		return new QueryContractor().getWoidByWord(sql, word);
-	}
-
 	public String getGenus() {
 		return genus;
 	}
 
-	public void setGenus(String genus) {
-		this.genus = genus;
-	}
-
-	@Override
-	public String toString() {
-		return "Noun [woid=" + woid + ", oid=" + oid + ", article=" + article + ", word=" + word + ", meaning="
-				+ meaning + ", meanings=" + Arrays.toString(meanings) + ", noun=" + Arrays.toString(noun) + ", genus="
-				+ genus + "]";
+	public void setWoid(int woid) {
+		setObjectToList("WOID", woid);
 	}
 
 }

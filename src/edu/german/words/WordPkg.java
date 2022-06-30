@@ -8,6 +8,7 @@ import java.util.Map;
 import edu.german.sql.GetSqlFromConfigFile;
 import edu.german.sql.QueryContractor;
 import edu.german.words.model.Noun;
+import edu.german.words.model.Word;
 
 public class WordPkg {
 	private List<WordPkg> pkgList;
@@ -15,7 +16,12 @@ public class WordPkg {
 	public WordPkg() {
 	}
 
-	public WordPkg(String genus) {
+	public WordPkg(String genus, String pattern) {
+	}
+
+	private List<Noun> prepareNounList() {
+		String query = new GetSqlFromConfigFile("get_all_nouns").getSql();
+		return new QueryContractor().getAllNounsList(query);
 	}
 
 	public WordPkg(String genus, int number) {
@@ -60,20 +66,20 @@ public class WordPkg {
 
 	public List<Noun> getNounList(int number) {
 		String query = new GetSqlFromConfigFile("get_limit_" + "nouns").getSql();
-		List<Noun> list = new QueryContractor().getNounsList(query, number);
+//		List<Noun> list = new QueryContractor().getNounsList(query, number);
 
 		// NOTICE you need make case when word is getting from specific table
 //		for (Noun noun : list) {
 //			String word = noun.getMainWord();
 //			noun.prepareNoun(word);
 //		}
-
-		return list;
+		return new QueryContractor().getNounsList(query, number);
 	}
 
 	public List<Noun> getNounList() {
 		String query = new GetSqlFromConfigFile("get_all_" + "nouns").getSql();
-		return new QueryContractor().getAllNounsList(query);
+		List<Noun> list = new QueryContractor().getAllNounsList(query);
+		return list;
 	}
 
 //	public void setWoid(int woid) {
