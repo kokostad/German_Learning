@@ -289,7 +289,7 @@ public class QueryContractor {
 		return nounLst;
 	}
 
-	public List<Word> getAllWordsList(String sql) {
+	public List<Word> getAllWordList(String sql) {
 		List<Word> wordLst = new LinkedList<>();
 
 		loadDriver();
@@ -300,9 +300,9 @@ public class QueryContractor {
 			while (rs.next()) {
 				Word word = new Word();
 				word.setWoid(rs.getInt("woid"));
-				word.setOid(rs.getInt("oid"));
 				word.setMainWord(rs.getString("word"));
 				word.setMeaning(rs.getString("meaning"));
+				word.setMeanings(rs.getString("meaning").split(","));
 				word.setGenus(rs.getString("genus"));
 				wordLst.add(word);
 			}

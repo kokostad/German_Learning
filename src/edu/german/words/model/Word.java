@@ -4,88 +4,107 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Word implements WordModel {
-	private int oid = -1;
-	private int woid = -1;
-	private String word;
-	private String meaning;
-	private String[] meanings;
-	private String genus;
-	private Map<Object, Object> wordAsMap;
+	private Map<Object, Object> wordMap;
 
+	public Word() {
+		wordMap = new HashMap<>();
+	}
+	
 	@Override
 	public int getOid() {
-		return oid;
+		if (wordMap.containsKey("OID"))
+			return Integer.parseInt(wordMap.get("OID").toString());
+
+		return -1;
 	}
 
 	@Override
 	public String getMainWord() {
-		return word;
+		if (wordMap.containsKey("WORD"))
+			return wordMap.get("WORD").toString();
+
+		return null;
 	}
 
 	@Override
 	public String getMeaning() {
-		return meaning;
+		if (wordMap.containsKey("MEANING"))
+			return wordMap.get("MEANING").toString();
+
+		return null;
 	}
 
 	@Override
 	public String[] getMeanings() {
-		return meanings;
+		if (wordMap.containsKey("MEANINGS"))
+			return (wordMap.get("MEANINGS").toString()).split(", ");
+
+		return null;
 	}
 
 	@Override
 	public void setOid(int oid) {
-		this.oid = oid;
+		wordMap.put("OID", oid);
 	}
 
 	@Override
 	public void setMainWord(String word) {
-		this.word = word;
+		wordMap.put("WORD", word);
 	}
 
 	@Override
 	public void setMeaning(String meaning) {
-		this.meaning = meaning;
+		wordMap.put("MEANING", meaning);
 	}
 
 	@Override
 	public void setMeanings(String[] meanings) {
-		this.meanings = meanings;
+		wordMap.put("MEANINGS", meanings);
 	}
 
 	public String getGenus() {
-		return genus;
+		if (wordMap.containsKey("GENUS"))
+			return wordMap.get("GENUS").toString();
+
+		return null;
 	}
 
 	public void setGenus(String genus) {
-		this.genus = genus;
+		wordMap.put("GENUS", genus);
 	}
 
-	public Map<Object, Object> getWordAsMap() {
-		return wordAsMap;
+	public Map<Object, Object> getWordMap() {
+		return wordMap;
 	}
 
-	public void setWordAsMap(Map<Object, Object> wordAsMap) {
-		this.wordAsMap = wordAsMap;
+	public void setWordMap(Map<Object, Object> wordMap) {
+		this.wordMap = wordMap;
 	}
 
 	@Override
 	public int getWoid() {
-		return woid;
+		if (wordMap.containsKey("WOID"))
+			return Integer.parseInt(wordMap.get("WOID").toString());
+
+		return -1;
 	}
 
 	@Override
 	public void setWoid(int woid) {
-		this.woid = woid;
+		wordMap.put("WOID", woid);
 	}
 
 	@Override
 	public String getWord() {
-		return word;
+		if (wordMap.containsKey("WORD"))
+			return wordMap.get("WORD").toString();
+
+		return null;
 	}
 
 	@Override
 	public void setWord(String word) {
-		this.word = word;
+		wordMap.put("WORD", word);
 	}
 
 }

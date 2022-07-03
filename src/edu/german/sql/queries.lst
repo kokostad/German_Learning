@@ -58,3 +58,7 @@ EOSQL
 [add_rules]
 INSERT INTO ge.rules(titles, contents, refers_to_1) VALUES(?, ?, ?);
 EOSQL
+
+[get_all_words]
+SELECT * from ge.all_words_objects;
+EOSQL

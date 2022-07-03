@@ -9,8 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,13 +20,12 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 
-import edu.german.services.ExecutorWordTask;
+import edu.german.services.ExecutorDoCallNoun;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.ResultsPanel;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.words.WordPkg;
 import edu.german.words.WordSelectionPanel;
 import edu.german.words.model.Noun;
 
@@ -60,13 +61,11 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private int goodAnswer = 0;
 	private int wrongAnswer = 0;
 	private ResultsPanel resultPan;
-//	private ExecutorService es;
 
 	public GuessArticle(int height, int width, String setTitel) {
 		super(height, width, setTitel);
 		severalNouns = new LinkedList<Noun>();
-//		es = Executors.newSingleThreadExecutor();
-		allNounList = new WordPkg().getNounList();
+		allNounList = tryToGetList();
 		showImage = new ShowResultAsImage(200, 200);
 
 		bp = new ButtonsPanel("NEW_WORD", "CHECK_ANSWER", "NEXT", "RELOAD");
@@ -79,7 +78,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		repeatBtn = bp.getB4();
 		repeatBtn.addActionListener(this);
 
-		selectionPan = new WordSelectionPanel();
+		selectionPan = new WordSelectionPanel(false);
 
 		bpAnser = new ButtonsPanel("DER", "DIE", "DAS");
 		derBtn = bpAnser.getB1();
@@ -131,6 +130,20 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
 		this.setVisible(true);
+	}
+
+	private List<Noun> tryToGetList() {
+		List<Noun> list = new LinkedList<Noun>();
+		ExecutorService es = Executors.newSingleThreadExecutor();
+		Future<List<Noun>> lst = es.submit(new ExecutorDoCallNoun());
+		try {
+			list = lst.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	private void nextWord(int number) {

@@ -18,7 +18,7 @@ public class ResultsPanel extends JPanel {
 	private JLabel infoLab;
 	private JLabel yourAnswerLab;
 	private JLabel yourScoreLab;
-	private String answerInfo = "Twoja odpowied\u017A: ";
+	private String answerInfo = "Wyraz: ";
 	private String scoreInfo = "Statystyki: ";
 	private String goodAnswerNumber = "Ilość dobrych odpowiedzi: ";
 	private JLabel goodAnswerNumberLab;
