@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.german.dao.DbConnect;
+import edu.german.tools.PrepareArrayFromString;
 import edu.german.tools.Translator;
 import edu.german.words.WordPkg;
 import edu.german.words.model.Noun;
@@ -36,9 +37,9 @@ public class QueryContractor {
 		}
 	}
 
-	private void showSql(String sql) {
-		System.out.println(sql);
-	}
+//	private void showSql(String sql) {
+//		System.out.println(sql);
+//	}
 
 	public void loadDriver() {
 		try {
@@ -131,8 +132,7 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, genus);
 			ps.setInt(2, number);
-
-			showSql(ps.toString());
+//			showSql(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -157,8 +157,7 @@ public class QueryContractor {
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
-
-			showSql(ps.toString());
+//			showSql(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -218,7 +217,7 @@ public class QueryContractor {
 				String[] article = rs.getString("word").split(" ", 1);
 				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
-				noun.setMeanings(rs.getString("meaning").split(", "));
+				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
 				nounLst.add(noun);
 			}
 
@@ -247,7 +246,7 @@ public class QueryContractor {
 				String[] article = rs.getString("word").split(" ", 1);
 				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
-				noun.setMeanings(rs.getString("meaning").split(", "));
+				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
 			}
 
 		} catch (SQLException e) {
@@ -276,7 +275,7 @@ public class QueryContractor {
 				String[] article = rs.getString("word").split(" ");
 				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
-				noun.setMeanings(rs.getString("meaning").split(", "));
+				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
 				nounLst.add(noun);
 			}
 
@@ -302,7 +301,7 @@ public class QueryContractor {
 				word.setWoid(rs.getInt("woid"));
 				word.setMainWord(rs.getString("word"));
 				word.setMeaning(rs.getString("meaning"));
-				word.setMeanings(rs.getString("meaning").split(","));
+				word.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
 				word.setGenus(rs.getString("genus"));
 				wordLst.add(word);
 			}

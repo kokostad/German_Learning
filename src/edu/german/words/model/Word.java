@@ -3,13 +3,15 @@ package edu.german.words.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.german.tools.PrepareArrayFromString;
+
 public class Word implements WordModel {
 	private Map<Object, Object> wordMap;
 
 	public Word() {
 		wordMap = new HashMap<>();
 	}
-	
+
 	@Override
 	public int getOid() {
 		if (wordMap.containsKey("OID"))
@@ -37,7 +39,7 @@ public class Word implements WordModel {
 	@Override
 	public String[] getMeanings() {
 		if (wordMap.containsKey("MEANINGS"))
-			return (wordMap.get("MEANINGS").toString()).split(", ");
+			return (String[]) wordMap.get("MEANINGS");
 
 		return null;
 	}
@@ -59,7 +61,8 @@ public class Word implements WordModel {
 
 	@Override
 	public void setMeanings(String[] meanings) {
-		wordMap.put("MEANINGS", meanings);
+		if (meanings != null)
+			wordMap.put("MEANINGS", meanings);
 	}
 
 	public String getGenus() {

@@ -1,6 +1,7 @@
 package edu.german.games;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -43,8 +44,9 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	private ShowResultAsImage showImage;
 	private JPanel gamePanel;
 	private JLabel choosenWordLabel;
+	private JLabel communique;
 	private OneEditableField answer;
-	private String information;
+	private String information = "Słowo do odgadnięcia: ";
 	private ResultsPanel resultPan;
 	private String choosenWord;
 	private String controlWord;
@@ -61,7 +63,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		int fontSize = Integer.parseInt(new MyProperties(SCREEN_PARAM_FILE).getValue("DEFAULT_FONT_SIZE"));
 		int gamesWordfontSize = Integer.parseInt(new MyProperties(SCREEN_PARAM_FILE).getValue("WORD_FOR_GAME"));
 		showImage = new ShowResultAsImage(200, 200);
-		information = "Słowo do odgadnięcia: ";
 
 		allWordList = tryToGetList();
 		severalWords = new LinkedList<Word>();
@@ -79,14 +80,20 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		JPanel leftPanel = new JPanel();
 		leftPanel.add(showImage);
 
-		answer = new OneEditableField("Twoja odpowiedź", "wpisz po niemiecku", gamesWordfontSize, fontSize);
+		answer = new OneEditableField("Twoja odpowiedź", "wpisz polskie znaczenie", gamesWordfontSize, fontSize);
+
+		communique = new JLabel();
+		communique.setFont(new Font("MV Boli", Font.ITALIC, gamesWordfontSize));
+		communique.setForeground(Color.red);
+		communique.setText("");
 
 		choosenWordLabel = new JLabel();
 		choosenWordLabel.setFont(new Font("Serif", Font.BOLD, gamesWordfontSize));
 		choosenWordLabel.setText(information);
 
 		JPanel labelPanel = new JPanel();
-		labelPanel.setLayout(new GridLayout(2, 1, 10, 10));
+		labelPanel.setLayout(new GridLayout(3, 1, 10, 10));
+		labelPanel.add(communique);
 		labelPanel.add(choosenWordLabel);
 		labelPanel.add(answer);
 
@@ -128,10 +135,9 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		if (src == drawBtn) {
 			showImage.showIndifference();
 			if (severalWords.isEmpty()) {
+				initData();
 				setNumberOfWords((int) selectionPanel.getNumber());
-				severalWords = getSeveral(Integer.parseInt(getNumberOfWords().toString()));
-				actualDraw = 0;
-				actualScore = 0;
+				severalWords = getSeveral(getNumberOfWords());
 				setNextWord(actualDraw);
 			} else {
 				actualDraw = actualDraw + 1;
@@ -150,25 +156,56 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 				negativeScoreUpdate();
 		}
 
+		else if (src == repeatBtn) {
+			severalWords.clear();
+			communique.setText(Titles.setTitel("NEW_ROUND"));
+			setNumberOfWords((int) selectionPanel.getNumber());
+			choosenWordLabel.setText(information);
+
+			if (allWordList.size() > getNumberOfWords()) {
+				severalWords = getSeveral(getNumberOfWords());
+			} else {
+				new ShowMessage("NO_MORE_WORDS");
+			}
+
+			initData();
+		}
+
 	}
 
 	private void negativeScoreUpdate() {
-		wrongAnswer = wrongAnswer - 1;
+		wrongAnswer = wrongAnswer + 1;
 		resultPan.setWrongAnswerNumber(String.valueOf(wrongAnswer));
 		actualScore = actualScore - 1;
-//		resultPan.setYourScoreLab(String.valueOf(actualScore));
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
 		showImage.showScore(false);
 	}
 
 	private void positiveScoreUpdate() {
 		goodAnswer = goodAnswer + 1;
-		resultPan.setYourAnswer(choosenWord + " " + Titles.setTitel("MEANING") + ": " + meaning);
+		resultPan.setYourAnswer(choosenWord + ", " + Titles.setTitel("MEANING") + ": " + meaning);
 		resultPan.setGoodAnswerNumber(String.valueOf(goodAnswer));
 		actualScore = actualScore + 1;
-//		resultPan.setYourScoreLab(String.valueOf(actualScore));
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
 		showImage.showScore(true);
+		answer.clearField();
+	}
+
+	private void initData() {
+		actualDraw = 0;
+		actualScore = 0;
+		goodAnswer = 0;
+		wrongAnswer = 0;
+
+		resultPan.setYourScoreLab(String.valueOf(actualDraw + 0));
+		resultPan.setYourAnswer("");
+		resultPan.setGoodAnswerNumber(String.valueOf(goodAnswer));
+		resultPan.setOverallResultLab(String.valueOf(actualScore));
+		resultPan.setWrongAnswerNumber(String.valueOf(wrongAnswer));
+
+		showImage.showScore(true);
+//		communique.setText("");
+		answer.clearField();
 	}
 
 	private boolean gameControler(String str) {
@@ -182,12 +219,14 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 			return false;
 		}
 
-		// TODO need to change it,m check if space sign exists?
-		if (str != null) {
-			for (String toCheck : meanings) {
-				if (str.equals(toCheck))
+		if (meanings != null) {
+			for (int i = 0; i < meanings.length; i++) {
+				if (str.equals(meanings[i].toString()))
 					return true;
 			}
+		} else if (str != null && meanings == null) {
+			if (str.equals(meaning))
+				return true;
 		}
 
 		return false;
@@ -200,7 +239,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 			if (number == 0)
 				controlWord = choosenWord;
 			meaning = var.getMeaning();
-			meanings = meaning.split(", ");
+			meanings = var.getMeanings();
 			choosenWordLabel.setText(information + choosenWord);
 			resultPan.setYourAnswer(choosenWord);
 			resultPan.setYourScoreLab(String.valueOf(actualDraw + 1));
@@ -218,13 +257,12 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		return list;
 	}
 
-	private Object getNumberOfWords() {
+	private int getNumberOfWords() {
 		return numberOfWords;
 	}
 
 	private void setNumberOfWords(int number) {
 		this.numberOfWords = number;
-
 	}
 
 }
