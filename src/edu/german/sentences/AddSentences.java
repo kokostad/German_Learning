@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -19,13 +18,11 @@ import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.tools.buttons.RulesButton;
 
-public class AddPurposefulSentences extends MyInternalFrame implements ActionListener {
+public class AddSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static final String CFG_FILE = "sentence.properties";
+	private String CFG_FILE = "sentence.properties";
+	private SentenceEditPanel edit;
 	private ButtonsPanel bp;
-	private SentenceEditPanel sentenceEditPanel;
-	private TableHanlder st;
-	private String[] tableHeaders;
 	private JButton clearEditFieldsBtn;
 	private JButton clearListBtn;
 	private JButton addToListBtn;
@@ -33,11 +30,12 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
 	private RulesButton rulesBtn;
+	private TableHanlder st;
+	private String[] tableHeaders;
 	private List<HashMap<String, String>> mapList;
 
-	public AddPurposefulSentences(int height, int width, String setTitel) {
-		super(height, width, setTitel);
-		mapList = new LinkedList<>();
+	public AddSentences(int height, int width, String titel) {
+		super(height, width, titel);
 		bp = new ButtonsPanel("CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
 				"ADD_TO_REPOSITORY");
 		clearEditFieldsBtn = bp.getB1();
@@ -56,8 +54,8 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
 		st = new TableHanlder(tableHeaders);
 
-		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("MODE");
-		sentenceEditPanel = new SentenceEditPanel("Wpisz zdanie niemieckie", "Wpisz polskie znaczenie", selectionList,
+		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("CHOOSE_SENTENCE_GENUS_LIST");
+		edit = new SentenceEditPanel("Wpisz niemieckie zdanie", "Wpisz polskie znaczenie", selectionList,
 				tableHeaders.length);
 
 		JScrollPane scp = new JScrollPane();
@@ -65,7 +63,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sentenceEditPanel, scp);
+		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, edit, scp);
 		sp.setResizeWeight(0.5);
 
 		rulesBtn = new RulesButton();
@@ -87,27 +85,11 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		}
 
 		else if (src == addToListBtn) {
-			String[] var = sentenceEditPanel.getValues();
+			String[] var = edit.getValues();
 			if (var != null) {
 				st.showRow(var);
 				clearEditFiles();
 			}
-		}
-
-		else if (src == clearListBtn) {
-			st.clearTable();
-		}
-
-		else if (src == removeBtn) {
-			if (st.getIdx() > -1)
-				st.removeRow();
-		}
-
-		else if (src == editRowBtn) {
-			String[] array = st.getSelectedRowAsArray();
-			sentenceEditPanel.showData(array[0].toString(), array[1].toString(), array[2].toString(), null);
-			if (st.getIdx() > -1)
-				st.removeRow();
 		}
 
 		else if (src == addToRepoBtn) {
@@ -129,15 +111,10 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 			getDesktopPane().moveToFront(ar);
 			getDesktopPane().repaint();
 		}
-
 	}
 
 	private void clearEditFiles() {
-		sentenceEditPanel.clearEditFields();
-	}
-
-	private String[] getValues() {
-		return sentenceEditPanel.getValues();
+		edit.clearEditFields();
 	}
 
 }

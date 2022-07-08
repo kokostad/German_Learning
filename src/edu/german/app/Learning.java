@@ -20,7 +20,7 @@ import edu.german.games.GuessTheMeaning;
 import edu.german.io.ExportToFile;
 import edu.german.io.ImportFromFile;
 import edu.german.sentences.AddPurposefulSentences;
-import edu.german.sentences.SimpleAddingSentences;
+import edu.german.sentences.AddSentences;
 import edu.german.tools.MyToolbar;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.Titles;
@@ -76,7 +76,7 @@ public class Learning extends JFrame implements ActionListener {
 
 		miSimpleWordsAddition = new JMenuItem(Titles.setTitel("SIMPLE_WORDS_ADDITION"));
 		miSimpleWordsAddition.addActionListener(this);
-		miSentencesAddition = new JMenuItem(Titles.setTitel("SIMPLE_SENTENCES_ADDITION"));
+		miSentencesAddition = new JMenuItem(Titles.setTitel("SENTENCES_ADDITION"));
 		miSentencesAddition.addActionListener(this);
 		miAddWords = new JMenuItem(Titles.setTitel("WORDS_ADDITION"));
 		miAddWords.addActionListener(this);
@@ -150,8 +150,8 @@ public class Learning extends JFrame implements ActionListener {
 		}
 
 		else if (src == miSentencesAddition) {
-			SimpleAddingSentences ssa = new SimpleAddingSentences(dsk.getHeight(), dsk.getWidth(),
-					Titles.setTitel("SIMPLE_SENTENCES_ADDITION"));
+			AddSentences ssa = new AddSentences(dsk.getHeight(), dsk.getWidth(),
+					Titles.setTitel("SENTENCES_ADDITION"));
 			dsk.add(ssa);
 			dsk.moveToFront(ssa);
 			dsk.repaint();
