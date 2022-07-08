@@ -1,11 +1,10 @@
 package test.words.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
 import edu.german.words.model.Noun;
-import junit.framework.Assert;
 
 class NounTest {
 
