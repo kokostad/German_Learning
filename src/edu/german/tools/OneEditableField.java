@@ -106,8 +106,7 @@ public class OneEditableField extends JPanel {
 	}
 
 	public char getSign() {
-		char sign = (char) textField.getText().charAt(0);
-		return sign;
+		return (char) textField.getText().charAt(0);
 	}
 
 }

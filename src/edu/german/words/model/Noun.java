@@ -64,7 +64,6 @@ public class Noun extends Word {
 	}
 
 	public void setMeanings(String[] meanings) {
-		if (meanings.length > 0)
 			setObjectToList("MEANINGS", meanings);
 	}
 

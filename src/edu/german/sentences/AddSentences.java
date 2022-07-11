@@ -54,9 +54,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
 		st = new TableHanlder(tableHeaders);
 
-		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("CHOOSE_SENTENCE_GENUS_LIST");
-		edit = new SentenceEditPanel("Wpisz niemieckie zdanie", "Wpisz polskie znaczenie", selectionList,
-				tableHeaders.length);
+		edit = new SentenceEditPanel("Wpisz niemieckie zdanie", "Wpisz polskie znaczenie", tableHeaders.length);
 
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
@@ -90,6 +88,14 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 				st.showRow(var);
 				clearEditFiles();
 			}
+		}
+
+		else if (src == editRowBtn) {
+			String[] array = st.getSelectedRowAsArray();
+			edit.showData(array[0].toString(), array[1].toString(), array[2].toString(), array[3].toString(),
+					array[4].toString());
+			if (st.getIdx() > -1)
+				st.removeRow();
 		}
 
 		else if (src == addToRepoBtn) {

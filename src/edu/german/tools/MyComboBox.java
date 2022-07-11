@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 public class MyComboBox extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private int fontSize = 16;
+	private int fontSize = 14;
 
 	@SuppressWarnings("rawtypes")
 	private JComboBox box;

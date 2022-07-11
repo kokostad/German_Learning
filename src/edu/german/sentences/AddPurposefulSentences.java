@@ -56,8 +56,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
 		st = new TableHanlder(tableHeaders);
 
-		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("MODE");
-		sentenceEditPanel = new SentenceEditPanel("Wpisz zdanie niemieckie", "Wpisz polskie znaczenie", selectionList,
+		sentenceEditPanel = new SentenceEditPanel("Wpisz zdanie niemieckie", "Wpisz polskie znaczenie",
 				tableHeaders.length);
 
 		JScrollPane scp = new JScrollPane();
@@ -105,7 +104,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 
 		else if (src == editRowBtn) {
 			String[] array = st.getSelectedRowAsArray();
-			sentenceEditPanel.showData(array[0].toString(), array[1].toString(), array[2].toString(), null);
+			sentenceEditPanel.showData(array[0].toString(), array[1].toString(), array[2].toString());
 			if (st.getIdx() > -1)
 				st.removeRow();
 		}
