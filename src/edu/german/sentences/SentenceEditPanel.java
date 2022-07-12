@@ -17,17 +17,24 @@ public class SentenceEditPanel extends JPanel {
 	private OneEditableField sentence;
 	private OneEditableField meaning;
 	private OneEditableField word;
+	private String boxList1;
+	private String boxList2;
 	private MyComboBox box;
 	private MyComboBox timeBox;
 	private int mapSize;
 
-	public SentenceEditPanel(String labelInfo1, String labelInfo2, int mapSize) {
+	public SentenceEditPanel(int mapSize, String boxList1, String boxList2) {
 		this.mapSize = mapSize;
+		this.boxList1 = boxList1;
+		this.boxList2 = boxList2;
+
+		String labelInfo1 = "Wpisz zdanie niemieckie";
+		String labelInfo2 = "Wpisz polskie znaczenie";
 
 		sentence = new OneEditableField(labelInfo1, null, 16, 50);
 		meaning = new OneEditableField(labelInfo2, null, 16, 50);
 
-		word = new OneEditableField("Słowo kluczowe", "słowo klucz, według którego nastąpi wyszukiwanie", 16, 16);
+		word = new OneEditableField("Słowo kluczowe", "słowo klucz, według którego nastąpi wyszukiwanie", 14, 17);
 
 		GridLayout gl = new GridLayout(3, 1);
 		JPanel editFieldsPan = new JPanel();
@@ -35,15 +42,20 @@ public class SentenceEditPanel extends JPanel {
 		editFieldsPan.add(sentence);
 		editFieldsPan.add(meaning);
 
-		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("CHOOSE_SENTENCE_GENUS_LIST");
-		box = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_MODE"), selectionList);
-
-		String[] times = new MyProperties(CFG_FILE).getValuesArray("TIMES");
-		timeBox = new MyComboBox(Titles.setTitel("CHOOSE_TIME"), times);
-
 		JPanel boxPanel = new JPanel();
-		boxPanel.add(box);
-		boxPanel.add(timeBox);
+
+		if (boxList1 != null) {
+			String[] selectionList = new MyProperties(CFG_FILE).getValuesArray(boxList1);
+			box = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_MODE"), selectionList);
+			boxPanel.add(box);
+		}
+
+		if (boxList2 != null) {
+			String[] times = new MyProperties(CFG_FILE).getValuesArray(boxList2);
+			timeBox = new MyComboBox(Titles.setTitel("CHOOSE_TIME"), times);
+			boxPanel.add(timeBox);
+		}
+
 		boxPanel.add(word);
 
 		this.add(editFieldsPan);
@@ -54,40 +66,33 @@ public class SentenceEditPanel extends JPanel {
 		Map<Object, Object> map = new HashMap<>();
 		map.put("SENTENCE", sentence.getValue());
 		map.put("MEANING", meaning.getValue());
-		map.put("MODE", box.getValue());
-		map.put("TIME", timeBox.getValue());
-		map.put("WORD", word.getValue());
+		if (boxList1 != null)
+			map.put("MODE", box.getValue());
+		if (boxList2 != null)
+			map.put("TIME", timeBox.getValue());
+		if (word.getValue() != null)
+			map.put("WORD", word.getValue());
 		return map;
 	}
 
 	String[] getValues() {
 		String[] array = new String[mapSize];
-		String newSentence = sentence.getValue();
-		String newMeaning = meaning.getValue();
-		String boxVar = box.getValue();
-		String sentenceTime = timeBox.getValue();
-		String wordField = word.getValue();
-
-		if (newSentence != null && newMeaning != null && boxVar != null) {
-			array[0] = newSentence;
-			array[1] = newMeaning;
-			array[2] = boxVar;
-			array[3] = sentenceTime;
-			array[4] = wordField;
+		int i = 0;
+		if (sentence.getValue() != null && meaning.getValue() != null) {
+			array[i++] = sentence.getValue();
+			array[i++] = meaning.getValue();
+			if (boxList1 != null)
+				array[i++] = box.getValue();
+			if (boxList2 != null)
+				array[i++] = timeBox.getValue();
+			if (word.getValue() != null)
+				array[i] = word.getValue();
 
 			return array;
 		}
 
 		return null;
 	}
-
-//	void setValues(String newSentence, String newMeaning, String mode, String time, String var) {
-//		sentence.setValue(newSentence);
-//		meaning.setValue(newMeaning);
-//		box.setValue(mode);
-//		timeBox.setValue(time);
-//		word.setValue(var);
-//	}
 
 	void clearEditFields() {
 		sentence.clearField();
@@ -105,9 +110,28 @@ public class SentenceEditPanel extends JPanel {
 		word.setValue(var);
 	}
 
-	public void showData(String newSentence, String newMeaning, String mode) {
+	public void showData(String newSentence, String newMeaning, String mode, String var) {
 		sentence.setValue(newSentence);
 		meaning.setValue(newMeaning);
 		box.setValue(mode);
+		word.setValue(var);
+	}
+
+	public void showData(String newSentence, String newMeaning, String var) {
+		sentence.setValue(newSentence);
+		meaning.setValue(newMeaning);
+		word.setValue(var);
+	}
+
+	public void showData(String[] array) {
+		if (array.length == 3)
+			showData(array[0], array[2], array[2]);
+
+		if (array.length == 4)
+			showData(array[0], array[1], array[2], array[3]);
+
+		if (array.length == 5)
+			showData(array[0], array[1], array[2], array[3], array[4]);
+
 	}
 }

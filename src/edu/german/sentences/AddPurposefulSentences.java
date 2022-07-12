@@ -53,11 +53,10 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		addToRepoBtn = bp.getB6();
 		addToRepoBtn.addActionListener(this);
 
-		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
+		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER_PURP");
 		st = new TableHanlder(tableHeaders);
 
-		sentenceEditPanel = new SentenceEditPanel("Wpisz zdanie niemieckie", "Wpisz polskie znaczenie",
-				tableHeaders.length);
+		sentenceEditPanel = new SentenceEditPanel(tableHeaders.length, null, null);
 
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);

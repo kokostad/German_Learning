@@ -50,7 +50,10 @@ public class MyComboBox extends JPanel {
 	}
 
 	public String getValue() {
-		return (box.getSelectedItem().toString());
+		if (box.getSelectedItem() != null)
+			return (box.getSelectedItem().toString());
+
+		return null;
 	}
 
 	public void clearField() {
