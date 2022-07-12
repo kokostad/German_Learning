@@ -21,11 +21,19 @@ public class TableHanlder extends JTable {
 	private String[] headers;
 	private List<String[]> wordsList;
 
-	public TableHanlder(String[] headers) {
+	/**
+	 * @param headers
+	 * @param translate
+	 */
+	public TableHanlder(String[] headers, boolean translate) {
 		this.headers = headers;
 		wordsList = new LinkedList<String[]>();
 		model = new DefaultTableModel();
-		model.setColumnIdentifiers(translateArray(headers));
+		if (translate)
+			model.setColumnIdentifiers(translateArray(headers));
+		else
+			model.setColumnIdentifiers(headers);
+
 		setModel(model);
 	}
 
@@ -96,7 +104,7 @@ public class TableHanlder extends JTable {
 		wordsList.clear();
 	}
 
-	public List<HashMap<String, String>> getDataAsMap() {
+	public List<HashMap<String, String>> getDataAsMapList() {
 		List<HashMap<String, String>> list = new LinkedList<HashMap<String, String>>();
 
 		for (int i = 0; model.getRowCount() > i; i++) {

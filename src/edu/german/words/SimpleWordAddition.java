@@ -56,7 +56,7 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 
 		tableHeaders = new MyProperties(FILE_NAME).getValuesArray("SIMPLE_WORDS_TABLE_HEADERS");
 
-		st = new TableHanlder(tableHeaders);
+		st = new TableHanlder(tableHeaders, true);
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -105,14 +105,13 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 			if (st.getIdx() > -1)
 				st.removeRow();
 		} else if (src == addToRepoBtn) {
-			List<HashMap<String, String>> list = st.getDataAsMap();
+			List<HashMap<String, String>> list = st.getDataAsMapList();
 			if (!list.isEmpty()) {
 				AddWordsToDatabase addToRepo = new AddWordsToDatabase();
 				addToRepo.addWordsList(list);
 				st.clearWordsList();
 				st.clearTable();
 			}
-
 		}
 
 	}

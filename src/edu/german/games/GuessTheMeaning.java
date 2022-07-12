@@ -3,7 +3,6 @@ package edu.german.games;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 
 import edu.german.services.ExecutorDoCallWord;
 import edu.german.tools.MyInternalFrame;
@@ -28,7 +28,6 @@ import edu.german.tools.ShowMessage;
 import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.WordSelectionPanel;
-import edu.german.words.model.Noun;
 import edu.german.words.model.Word;
 
 public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
@@ -57,6 +56,8 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	private int actualScore = 0;
 	private int goodAnswer = 0;
 	private int wrongAnswer = 0;
+	private int deal = 1;
+	private JTextField textField;
 
 	public GuessTheMeaning(int height, int width, String titel) {
 		super(height, width, titel);
@@ -67,7 +68,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		allWordList = tryToGetList();
 		severalWords = new LinkedList<Word>();
 
-		bp = new ButtonsPanel("NEW_WORD", "CHECK_ANSWER", "RELOAD");
+		bp = new ButtonsPanel("NEW_WORD", "CHECK_ANSWER", "NEW_ROUND");
 		drawBtn = bp.getB1();
 		drawBtn.addActionListener(this);
 		checkBtn = bp.getB2();
@@ -81,6 +82,14 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		leftPanel.add(showImage);
 
 		answer = new OneEditableField("Twoja odpowiedź", "wpisz polskie znaczenie", gamesWordfontSize, fontSize);
+		textField = answer.getTextField();
+		textField.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				checkAnswer();
+			}
+		});
 
 		communique = new JLabel();
 		communique.setFont(new Font("MV Boli", Font.ITALIC, gamesWordfontSize));
@@ -109,23 +118,11 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		centralPan.add(resultPan);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, selectionPanel, centralPan);
+//		sp.setDividerSize(5);
+		sp.setResizeWeight(0.5);
 
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
-	}
-
-	private List<Word> tryToGetList() {
-		List<Word> list = new LinkedList<Word>();
-		ExecutorService es = Executors.newSingleThreadExecutor();
-		Future<List<Word>> lst = es.submit(new ExecutorDoCallWord());
-		try {
-			list = lst.get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return list;
 	}
 
 	@Override
@@ -147,18 +144,17 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 			if (actualDraw > 0 && actualDraw < severalWords.size() && controlWord.equals(choosenWord))
 				new ShowMessage("THE_SAME_WORD");
 
+			showImage.showIndifference();
 		}
 
 		else if (src == checkBtn) {
-			if (gameControler(answer.getValue()))
-				positiveScoreUpdate();
-			else
-				negativeScoreUpdate();
+			checkAnswer();
 		}
 
 		else if (src == repeatBtn) {
+			deal += 1;
 			severalWords.clear();
-			communique.setText(Titles.setTitel("NEW_ROUND"));
+			communique.setText("Runda: " + deal);
 			setNumberOfWords((int) selectionPanel.getNumber());
 			choosenWordLabel.setText(information);
 
@@ -171,6 +167,20 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 			initData();
 		}
 
+	}
+
+	private List<Word> tryToGetList() {
+		List<Word> list = new LinkedList<Word>();
+		ExecutorService es = Executors.newSingleThreadExecutor();
+		Future<List<Word>> lst = es.submit(new ExecutorDoCallWord());
+		try {
+			list = lst.get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	private void negativeScoreUpdate() {
@@ -189,6 +199,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
 		showImage.showScore(true);
 		answer.clearField();
+		choosenWordLabel.setText(information);
 	}
 
 	private void initData() {
@@ -204,7 +215,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		resultPan.setWrongAnswerNumber(String.valueOf(wrongAnswer));
 
 		showImage.showScore(true);
-//		communique.setText("");
+		communique.setText("Runda: " + deal);
 		answer.clearField();
 	}
 
@@ -265,4 +276,13 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		this.numberOfWords = number;
 	}
 
+	private void checkAnswer() {
+		if (gameControler(answer.getValue())) {
+			positiveScoreUpdate();
+			actualDraw = actualDraw + 1;
+			setNextWord(actualDraw);
+		}
+		else
+			negativeScoreUpdate();
+	}
 }

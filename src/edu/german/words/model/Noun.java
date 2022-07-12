@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
 public class Noun extends Word {
 	private String genus = "das Substantiv";
 	private List<Map<Object, Object>> propertyList;
@@ -64,8 +63,7 @@ public class Noun extends Word {
 	}
 
 	public void setMeanings(String[] meanings) {
-		if (meanings.length > 0)
-			setObjectToList("MEANINGS", meanings);
+		setObjectToList("MEANINGS", meanings);
 	}
 
 	public int getWoid() {
@@ -73,8 +71,8 @@ public class Noun extends Word {
 
 		if (num > -1)
 			return num;
-		else
-			return -1;
+
+		return -1;
 	}
 
 	public void setWoid(Integer woid) {

@@ -64,7 +64,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		sentenceEditPanel = new SentenceEditPanel("Wpisz zdanie niemieckie", "Wpisz polskie znaczenie", selectionList);
 
 		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
-		st = new TableHanlder(tableHeaders);
+		st = new TableHanlder(tableHeaders, true);
 
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
@@ -124,7 +124,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		}
 
 		else if (src == addToRepoBtn) {
-			mapList = st.getDataAsMap();
+			mapList = st.getDataAsMapList();
 			if (!mapList.isEmpty()) {
 				AddSenteceToDatabase addToRepo = new AddSenteceToDatabase();
 				addToRepo.addList(mapList);

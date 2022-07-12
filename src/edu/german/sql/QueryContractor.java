@@ -272,8 +272,8 @@ public class QueryContractor {
 				noun.setOid(rs.getInt("oid"));
 				noun.setWord(rs.getString("word"));
 				noun.setNoun(rs.getString("word").split(" "));
-				String[] article = rs.getString("word").split(" ");
-				noun.setArticle(article[0]);
+				String[] array = rs.getString("word").split(" ");
+				noun.setArticle(array[0]);
 				noun.setMeaning(rs.getString("meaning"));
 				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
 				nounLst.add(noun);

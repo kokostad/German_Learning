@@ -22,9 +22,10 @@ public class OneEditableField extends JPanel {
 	public OneEditableField(String labelInfo, String tipInfo) {
 		this.labelInfo = labelInfo;
 
-		label = new JLabel(labelInfo + sign);
+		label = new JLabel();
+		label.setText(labelInfo + sign);
 		label.setFont(new MyFont().myFont(fontSize));
-		textField = new JTextField(fieldSize);
+		textField = new JTextField();
 		textField.setText(null);
 		textField.setFont(new MyFont().myFont(fontSize));
 		if (tipInfo != null)
@@ -32,8 +33,8 @@ public class OneEditableField extends JPanel {
 
 		var gl = new GroupLayout(this);
 		GroupLayout.SequentialGroup sg = gl.createSequentialGroup();
-		sg.addComponent(label).addGap(2).addComponent(textField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-				GroupLayout.PREFERRED_SIZE);
+		sg.addComponent(label).addGap(2).addComponent(getTextField(), GroupLayout.DEFAULT_SIZE,
+				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);
 
 	}
 
@@ -43,15 +44,15 @@ public class OneEditableField extends JPanel {
 
 		label = new JLabel(labelInfo + sign);
 		label.setFont(new MyFont().myFont(fontSize));
-		textField = new JTextField(fieldSize);
-		textField.setFont(new MyFont().myFont(fontSize));
+		setTextField(new JTextField(fieldSize));
+		getTextField().setFont(new MyFont().myFont(fontSize));
 		if (tipInfo != null)
-			textField.setToolTipText(tipInfo);
+			getTextField().setToolTipText(tipInfo);
 
 		var gl = new GroupLayout(this);
 		GroupLayout.SequentialGroup sg = gl.createSequentialGroup();
-		sg.addComponent(label).addGap(2).addComponent(textField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-				GroupLayout.PREFERRED_SIZE);
+		sg.addComponent(label).addGap(2).addComponent(getTextField(), GroupLayout.DEFAULT_SIZE,
+				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);
 	}
 
 	public OneEditableField(String labelInfo, String tipInfo, int fontSize, int fieldSize) {
@@ -61,30 +62,34 @@ public class OneEditableField extends JPanel {
 
 		label = new JLabel(labelInfo + sign);
 		label.setFont(new MyFont().myFont(fontSize));
-		textField = new JTextField(fieldSize);
-		textField.setFont(new MyFont().myFont(fontSize));
+		setTextField(new JTextField(fieldSize));
+		getTextField().setFont(new MyFont().myFont(fontSize));
 		if (tipInfo != null)
-			textField.setToolTipText(tipInfo);
+			getTextField().setToolTipText(tipInfo);
 
 		var gl = new GroupLayout(this);
 		GroupLayout.SequentialGroup sg = gl.createSequentialGroup();
-		sg.addComponent(label).addGap(2).addComponent(textField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-				GroupLayout.PREFERRED_SIZE);
+		sg.addComponent(label).addGap(2).addComponent(getTextField(), GroupLayout.DEFAULT_SIZE,
+				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);
+	}
+
+	public void setLabeInfo(String str) {
+		label.setText(labelInfo + sign + str);
 	}
 
 	public String getValue() {
-		if (textField.getText() != null && !(textField.getText()).equals(""))
-			return textField.getText();
+		if (getTextField().getText() != null && !(getTextField().getText()).equals(""))
+			return getTextField().getText();
 
 		return null;
 	}
 
 	public void setValue(String str) {
-		textField.setText(str);
+		getTextField().setText(str);
 	}
 
 	public void clearField() {
-		textField.setText(null);
+		getTextField().setText(null);
 	}
 
 	public String getPassword() {
@@ -96,17 +101,22 @@ public class OneEditableField extends JPanel {
 	}
 
 	public Map<String, String> getMap() {
-		String lInf = labelInfo.toUpperCase();
-		String txt = getValue();
-
 		Map<String, String> map = new HashMap<String, String>();
-		map.put(lInf, txt);
+		map.put(labelInfo.toUpperCase(), getValue());
 
 		return map;
 	}
 
 	public char getSign() {
-		return (char) textField.getText().charAt(0);
+		return (char) getTextField().getText().charAt(0);
+	}
+
+	public JTextField getTextField() {
+		return textField;
+	}
+
+	public void setTextField(JTextField textField) {
+		this.textField = textField;
 	}
 
 }
