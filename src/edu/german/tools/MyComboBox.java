@@ -11,16 +11,17 @@ import javax.swing.JPanel;
 
 public class MyComboBox extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private int fontSize = 16;
+	private int fontSize = 14;
 
 	@SuppressWarnings("rawtypes")
 	private JComboBox box;
 
 	/**
 	 * Class to create a JCombobox
-	 * @param labelInfo      - label title
+	 * 
+	 * @param labelInfo - label title
 	 * @param array     - value list for box
-	 * @param b 
+	 * @param b
 	 * @param translate - parameter showing whether to translate the values
 	 */
 	public MyComboBox(String labelInfo, Object[] array) {
@@ -49,6 +50,13 @@ public class MyComboBox extends JPanel {
 	}
 
 	public String getValue() {
-		return (box.getSelectedItem().toString());
+		if (box.getSelectedItem() != null)
+			return (box.getSelectedItem().toString());
+
+		return null;
+	}
+
+	public void clearField() {
+		box.setSelectedItem(null);
 	}
 }

@@ -1,5 +1,6 @@
 package edu.german.words;
 
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import edu.german.tools.MyCheckBox;
 import edu.german.tools.MyComboBox;
 import edu.german.tools.MyFileChooser;
 import edu.german.tools.MyProperties;
@@ -23,6 +25,7 @@ public class WordsSetting extends JPanel {
 	private MyComboBox box;
 	private JButton chooseBtn;
 	private String filePath;
+	private MyCheckBox cBox;
 
 	public WordsSetting() {
 		chooseFile = new OneEditableField(Titles.setTitel("CHOOSE_FILE"), "Wybierz odpowiedni plik", fontSize, 16);
@@ -44,12 +47,16 @@ public class WordsSetting extends JPanel {
 
 		String[] selectionList = new MyProperties(FILE_NAME).getValuesArray("GENUS_LIST");
 		box = new MyComboBox(Titles.setTitel("CHOOSE_GENUS"), selectionList);
+		cBox = new MyCheckBox(" Zmień kolejność w pliku: ", "polski/niemiecki",
+				"Kolejność wyrazów (domyślnie: niemiecki/polski)");
 
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
 		this.add(chooseFile);
 		this.add(chooseBtn);
 		this.add(separationSign);
 		this.add(box);
+		this.add(cBox);
+		this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 	}
 
 	public String getFilePath() {
@@ -70,6 +77,10 @@ public class WordsSetting extends JPanel {
 
 	public void clearSeparationSign() {
 		separationSign.setValue(null);
+	}
+
+	public boolean getOrder() {
+		return cBox.result();
 	}
 
 }

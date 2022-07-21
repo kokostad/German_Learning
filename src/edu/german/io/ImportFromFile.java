@@ -75,7 +75,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tp, jp);
 		sp.setOneTouchExpandable(true);
-		sp.setDividerLocation(0.5);
+		sp.setResizeWeight(0.3);
 
 		bar = new MyProgressBar("Postęp importu:");
 
@@ -86,7 +86,6 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 		this.add(sp, BorderLayout.CENTER);
 		this.add(rightPan, BorderLayout.EAST);
-//		setVisible(true);
 	}
 
 	private String getFilePath() {
@@ -139,9 +138,11 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 					if (br != null) {
 						if (type.equals("SENTENCE")) {
 							SentencesListPreparation sPrep = new SentencesListPreparation(br, getSeparationSign());
-							es.submit(new ExecutorSentenceTask(sPrep.getList(), type, bar));
+							es.submit(new ExecutorSentenceTask(sPrep.getList(), type, bar,
+									sentenceSettingPanel.getOrder()));
 						} else {
-							es.submit(new ExecutorWordTask(br, getSeparationSign(), getGenus(), bar));
+							es.submit(new ExecutorWordTask(br, getSeparationSign(), getGenus(), bar,
+									wordSettingPanel.getOrder()));
 						}
 					}
 				} catch (FileNotFoundException e1) {

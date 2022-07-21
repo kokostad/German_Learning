@@ -63,7 +63,7 @@ public class Noun extends Word {
 	}
 
 	public void setMeanings(String[] meanings) {
-		setObjectToList("MEANINGS", meanings);
+			setObjectToList("MEANINGS", meanings);
 	}
 
 	public int getWoid() {
@@ -71,8 +71,8 @@ public class Noun extends Word {
 
 		if (num > -1)
 			return num;
-
-		return -1;
+		else
+			return -1;
 	}
 
 	public void setWoid(Integer woid) {

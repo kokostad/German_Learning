@@ -118,4 +118,19 @@ public class TableHanlder extends JTable {
 		return list;
 	}
 
+	public List<HashMap<String, String>> getDataAsMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Map<String, String> getSelectedRowAsMap() {
+		int idx = getIdx();
+		HashMap<String, String> map = new HashMap<String, String>();
+
+		for (int i = 0; i < headers.length; i++)
+			map.put(headers[i], (String) this.getValueAt(idx, i));
+
+		return map;
+	}
+
 }
