@@ -23,7 +23,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 	private static final long serialVersionUID = 1L;
 	private static final String CFG_FILE = "sentence.properties";
 	private ButtonsPanel bp;
-	private SentenceEditPanel sentenceEditPanel;
+	private SentenceEditPanel edit;
 	private TableHanlder st;
 	private String[] tableHeaders;
 	private JButton clearEditFieldsBtn;
@@ -56,14 +56,14 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER_PURP");
 		st = new TableHanlder(tableHeaders);
 
-		sentenceEditPanel = new SentenceEditPanel(tableHeaders.length, null, null);
+		edit = new SentenceEditPanel(tableHeaders.length, "MODE", null);
 
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sentenceEditPanel, scp);
+		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, edit, scp);
 		sp.setResizeWeight(0.5);
 
 		rulesBtn = new RulesButton();
@@ -85,7 +85,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		}
 
 		else if (src == addToListBtn) {
-			String[] var = sentenceEditPanel.getValues();
+			String[] var = edit.getValues();
 			if (var != null) {
 				st.showRow(var);
 				clearEditFiles();
@@ -103,13 +103,13 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 
 		else if (src == editRowBtn) {
 			String[] array = st.getSelectedRowAsArray();
-			sentenceEditPanel.showData(array[0].toString(), array[1].toString(), array[2].toString());
+			edit.showData(array[0].toString(), array[1].toString(), array[2].toString());
 			if (st.getIdx() > -1)
 				st.removeRow();
 		}
 
 		else if (src == addToRepoBtn) {
-			mapList = st.getDataAsMap();
+			mapList = st.getDataAsMapList();
 			if (!mapList.isEmpty()) {
 				AddSenteceToDatabase addToRepo = new AddSenteceToDatabase();
 				addToRepo.addList(mapList);
@@ -131,11 +131,11 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 	}
 
 	private void clearEditFiles() {
-		sentenceEditPanel.clearEditFields();
+		edit.clearEditFields();
 	}
 
 	private String[] getValues() {
-		return sentenceEditPanel.getValues();
+		return edit.getValues();
 	}
 
 }

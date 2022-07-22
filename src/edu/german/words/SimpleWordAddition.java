@@ -105,7 +105,7 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 			if (st.getIdx() > -1)
 				st.removeRow();
 		} else if (src == addToRepoBtn) {
-			List<HashMap<String, String>> list = st.getDataAsMap();
+			List<HashMap<String, String>> list = st.getDataAsMapList();
 			if (!list.isEmpty()) {
 				AddWordsToDatabase addToRepo = new AddWordsToDatabase();
 				addToRepo.addWordsList(list);

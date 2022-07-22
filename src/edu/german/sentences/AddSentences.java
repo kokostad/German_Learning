@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -91,16 +92,15 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == editRowBtn) {
-			String[] array = st.getSelectedRowAsArray();
-//			edit.showData(array[0].toString(), array[1].toString(), array[2].toString(), array[3].toString(),
-//					array[4].toString());
-			edit.showData(array);
+			Map<String, String> map = st.getDataAsMap();
+
+			edit.showData(map);
 			if (st.getIdx() > -1)
 				st.removeRow();
 		}
 
 		else if (src == addToRepoBtn) {
-			mapList = st.getDataAsMap();
+			mapList = st.getDataAsMapList();
 			if (!mapList.isEmpty()) {
 				AddSenteceToDatabase addToRepo = new AddSenteceToDatabase();
 				addToRepo.addList(mapList);

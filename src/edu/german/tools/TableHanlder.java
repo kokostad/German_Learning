@@ -38,16 +38,6 @@ public class TableHanlder extends JTable {
 		}
 	}
 
-	public void showMap(Map<String, String> map) {
-		int i = 0;
-		String[] row = new String[headers.length];
-		for (String str : headers)
-			if (map.containsKey(str))
-				row[i++] = map.get(str);
-
-		showRow(row);
-	}
-
 	public int getRowCount() {
 		return model.getRowCount();
 	}
@@ -96,7 +86,7 @@ public class TableHanlder extends JTable {
 		wordsList.clear();
 	}
 
-	public List<HashMap<String, String>> getDataAsMap() {
+	public List<HashMap<String, String>> getDataAsMapList() {
 		List<HashMap<String, String>> list = new LinkedList<HashMap<String, String>>();
 
 		for (int i = 0; model.getRowCount() > i; i++) {
@@ -108,6 +98,31 @@ public class TableHanlder extends JTable {
 		}
 
 		return list;
+	}
+
+	public Map<String, String> getDataAsMap() {
+		int idx = getIdx();
+		Map<String, String> map = new HashMap<String, String>();
+		for (int i = 0; i < headers.length; i++)
+			map.put(headers[i].toUpperCase(), (String) this.getValueAt(idx, i));
+
+		return map;
+	}
+
+	public void showMap(Map<String, String> map) {
+		int i = 0;
+		String[] row = new String[headers.length];
+		for (String str : headers)
+			if (map.containsKey(str))
+				row[i++] = map.get(str);
+
+		showRow(row);
+	}
+
+	public void showMapList(List<Map<String, String>> listMap) {
+		for (Map<String, String> map : listMap) {
+			showMap(map);
+		}
 	}
 
 }
