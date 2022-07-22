@@ -7,8 +7,6 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Headers;
-
 import edu.german.tools.MyComboBox;
 import edu.german.tools.MyFont;
 import edu.german.tools.MyProperties;
@@ -66,8 +64,8 @@ public class SentenceEditPanel extends JPanel {
 		this.add(boxPanel);
 	}
 
-	public Map<Object, Object> getValuesAsMap() {
-		Map<Object, Object> map = new HashMap<>();
+	public Map<String, String> getValuesAsMap() {
+		Map<String, String> map = new HashMap<>();
 		map.put("SENTENCE", sentence.getValue());
 		map.put("MEANING", meaning.getValue());
 		if (boxList1 != null)
@@ -79,7 +77,7 @@ public class SentenceEditPanel extends JPanel {
 		return map;
 	}
 
-	String[] getValues() {
+	String[] getValuesAsArray() {
 		String[] array = new String[mapSize];
 		int i = 0;
 		if (sentence.getValue() != null && meaning.getValue() != null) {

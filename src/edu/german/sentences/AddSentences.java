@@ -26,14 +26,13 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private ButtonsPanel bp;
 	private JButton clearEditFieldsBtn;
 	private JButton clearListBtn;
-	private JButton addToListBtn;
+	private JButton addToTableBtn;
 	private JButton editRowBtn;
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
 	private RulesButton rulesBtn;
 	private TableHanlder st;
 	private String[] tableHeaders;
-	private List<HashMap<String, String>> mapList;
 
 	public AddSentences(int height, int width, String titel) {
 		super(height, width, titel);
@@ -41,8 +40,8 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 				"ADD_TO_REPOSITORY");
 		clearEditFieldsBtn = bp.getB1();
 		clearEditFieldsBtn.addActionListener(this);
-		addToListBtn = bp.getB2();
-		addToListBtn.addActionListener(this);
+		addToTableBtn = bp.getB2();
+		addToTableBtn.addActionListener(this);
 		removeBtn = bp.getB3();
 		removeBtn.addActionListener(this);
 		clearListBtn = bp.getB4();
@@ -83,12 +82,22 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 			clearEditFiles();
 		}
 
-		else if (src == addToListBtn) {
-			String[] var = edit.getValues();
+		else if (src == addToTableBtn) {
+			String[] var = edit.getValuesAsArray();
 			if (var != null) {
 				st.showRow(var);
 				clearEditFiles();
 			}
+		}
+
+		else if (src == removeBtn) {
+			if (st.getIdx() > -1)
+				st.removeRow();
+		}
+
+		else if (src == clearListBtn) {
+			st.clearWordsList();
+			st.clearTable();
 		}
 
 		else if (src == editRowBtn) {
@@ -100,7 +109,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addToRepoBtn) {
-			mapList = st.getDataAsMapList();
+			List<HashMap<String, String>> mapList = st.getDataAsMapList();
 			if (!mapList.isEmpty()) {
 				AddSenteceToDatabase addToRepo = new AddSenteceToDatabase();
 				addToRepo.addList(mapList);

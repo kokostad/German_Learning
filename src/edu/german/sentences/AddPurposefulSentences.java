@@ -85,7 +85,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		}
 
 		else if (src == addToListBtn) {
-			String[] var = edit.getValues();
+			String[] var = edit.getValuesAsArray();
 			if (var != null) {
 				st.showRow(var);
 				clearEditFiles();
@@ -135,7 +135,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 	}
 
 	private String[] getValues() {
-		return edit.getValues();
+		return edit.getValuesAsArray();
 	}
 
 }
