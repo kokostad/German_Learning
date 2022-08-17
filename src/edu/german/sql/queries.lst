@@ -10,6 +10,14 @@ EOSQL
 SELECT woid FROM ge.all_words_objects awo WHERE awo.word = ? AND awo.genus = ? LIMIT 1;
 EOSQL
 
+[check_adjectives_old]
+SELECT oid FROM ge.adjectives a WHERE a.word = ? LIMIT 1;
+EOSQL
+
+[check_adjectives]
+SELECT a.oid FROM ge.adjective_graduation a WHERE a.equal_degree_ge = ? LIMIT 1;
+EOSQL
+
 [add_new_sentence]
 INSERT INTO ge.sentences (sentence, meaning, type) VALUES(?, ?, ?);
 EOSQL
@@ -61,4 +69,9 @@ EOSQL
 
 [get_all_words]
 SELECT * from ge.all_words_objects;
+EOSQL
+
+[add_adjective_graduation]
+INSERT INTO ge.adjective_graduation(equal_degree_ge,equal_degree_pl,comparative_ge,comparative_pl,highest_degree_ge,highest_degree_pl,aid)
+ VALUES(?,?,?,?,?,?,(SELECT a.woid FROM ge.all_words_objects a WHERE a.word = ? LIMIT 1));
 EOSQL

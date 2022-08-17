@@ -112,6 +112,31 @@ public class TableHanlder extends JTable {
 			for (int j = 0; j < model.getColumnCount(); j++) {
 				map.put(headers[j].toUpperCase(), (String) model.getValueAt(i, j));
 			}
+
+			list.add(map);
+		}
+
+		return list;
+	}
+
+	public List<HashMap<String, String>> getDataAsMapList(String sign) {
+		List<HashMap<String, String>> list = new LinkedList<HashMap<String, String>>();
+
+		for (int i = 0; model.getRowCount() > i; i++) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			for (int j = 0; j < model.getColumnCount(); j++) {
+				map.put(headers[j].toUpperCase(), (String) model.getValueAt(i, j));
+			}
+
+			if (sign.equals("WORD")) {
+				for (int j = 0; j < model.getColumnCount(); j++) {
+					if (!map.containsKey("WORD"))
+						map.put("WORD", (String) model.getValueAt(i, 0));
+					if (!map.containsKey("MEANING"))
+						map.put("MEANING", (String) model.getValueAt(i, 1));
+				}
+			}
+
 			list.add(map);
 		}
 

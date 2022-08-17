@@ -22,6 +22,14 @@ public class QueryContractor {
 	private DbConnect dbc;
 	private Connection con;
 
+	public void loadDriver() {
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public boolean executeQuery(String sql) {
 		boolean state = false;
 		loadDriver();
@@ -34,18 +42,6 @@ public class QueryContractor {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return state;
-		}
-	}
-
-//	private void showSql(String sql) {
-//		System.out.println(sql);
-//	}
-
-	public void loadDriver() {
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -67,6 +63,25 @@ public class QueryContractor {
 
 	public void closeConnection() {
 		dbc.closeConnection(con);
+	}
+
+	public int getId(String sql, String word) {
+		int id = -1;
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, word);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+				id = rs.getInt(1);
+
+			return id;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return id;
+		}
 	}
 
 	public int getId(String sql, String string, String genus) {
@@ -343,6 +358,37 @@ public class QueryContractor {
 		}
 
 		return list;
+	}
+
+	public boolean addAdjectiveGraduation(String sql, String word, String goal, String goal2, String goal3,
+			String goal4, String goal5, String goal6) {
+		boolean state = false;
+		int i = -1;
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, goal);
+			ps.setString(2, goal2);
+			ps.setString(3, goal3);
+			ps.setString(4, goal4);
+			ps.setString(5, goal5);
+			ps.setString(6, goal6);
+			ps.setString(7, word);
+
+			i = ps.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		if (i > 0)
+			state = true;
+
+		return state;
 	}
 
 }

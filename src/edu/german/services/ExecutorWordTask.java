@@ -54,25 +54,17 @@ public class ExecutorWordTask implements Runnable {
 				 * TODO check if word exist in main table in database check if word exist in
 				 * specific table if not exist write down to the appropriate tables
 				 */
-				if (!awtdb.checkIfExistInMainTable(array[1], genus))
+				if (!awtdb.checkIfExistInSpecificTable(array[1].toString(), genus))
 					awtdb.addNewWord(new GetQuery().getSql("add_new_word"), array[1], array[0], genus);
 		} else {
 			if (!(array[0].toString()).isBlank())
-				if (!awtdb.checkIfExistInMainTable(array[0], genus))
+				if (!awtdb.checkIfExistInSpecificTable(array[0].toString(), genus))
 					awtdb.addNewWord(new GetQuery().getSql("add_new_word"), array[0], array[1], genus);
 		}
 	}
 
+	// TODO check and improve this method if needed
 	private String[] formatString(String line) {
-//		System.out.println(line);
-		int idx = line.indexOf(sign);
-//		System.out.println(idx + " " + sign);
-		// TODO improve this method
-
-//		String[] tmpArray = new String[2];
-//		tmpArray[0] = line.substring(0, idx);
-//		tmpArray[1] = line.substring(idx, line.lastIndexOf(line) - 1);
-
 		String[] arr = line.split(sign);
 		String[] tmpArr = new String[arr.length];
 
