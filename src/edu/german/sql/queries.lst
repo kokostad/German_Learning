@@ -72,6 +72,6 @@ SELECT * from ge.all_words_objects;
 EOSQL
 
 [add_adjective_graduation]
-INSERT INTO ge.adjective_graduation(equal_degree_ge,equal_degree_pl,comparative_ge,comparative_pl,highest_degree_ge,highest_degree_pl,aid)
+INSERT INTO ge.adjective_graduation(equal_degree_ge,equal_degree_pl,comparative_ge,comparative_pl,highest_degree_ge,highest_degree_pl,woid)
  VALUES(?,?,?,?,?,?,(SELECT a.woid FROM ge.all_words_objects a WHERE a.word = ? LIMIT 1));
 EOSQL

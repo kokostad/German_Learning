@@ -21,7 +21,6 @@ import edu.german.io.ExportToFile;
 import edu.german.io.ImportFromFile;
 import edu.german.sentences.AddPurposefulSentences;
 import edu.german.sentences.AddSentences;
-import edu.german.sentences.SimpleAddingSentences;
 import edu.german.tools.AddRule;
 import edu.german.tools.MyToolbar;
 import edu.german.tools.ScreenSetup;

@@ -147,7 +147,6 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, genus);
 			ps.setInt(2, number);
-//			showSql(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -172,7 +171,6 @@ public class QueryContractor {
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
-//			showSql(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
