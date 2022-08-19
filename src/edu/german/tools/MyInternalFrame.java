@@ -27,7 +27,7 @@ public class MyInternalFrame extends JInternalFrame {
 		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		setSize(width, height - sp.BOTTOM_BORDER);
 		setResizable(true);
-		BorderLayout bl = new BorderLayout(10, 20);
+		BorderLayout bl = new BorderLayout(5, 5);
 		setLayout(bl);
 
 		ExitButton bExit = new ExitButton();

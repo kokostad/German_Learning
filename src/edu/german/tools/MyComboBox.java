@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 public class MyComboBox extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private int fontSize = 14;
 
 	@SuppressWarnings("rawtypes")
 	private JComboBox box;
@@ -30,12 +31,12 @@ public class MyComboBox extends JPanel {
 
 		JLabel label = new JLabel(labelInfo);
 		label.setAlignmentX(LEFT_ALIGNMENT);
-		label.setFont(new MyFont().myFont());
+		label.setFont(new MyFont().myFont(fontSize));
 		boxPanel.add(label);
 		boxPanel.add(Box.createRigidArea(new Dimension(10, 5)));
 		if (array != null) {
 			box = new JComboBox<Object>(array);
-			box.setFont(new MyFont().myFont());
+			box.setFont(new MyFont().myFont(fontSize));
 			box.setAlignmentX(CENTER_ALIGNMENT);
 			boxPanel.add(box);
 		}

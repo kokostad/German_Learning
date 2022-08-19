@@ -6,24 +6,31 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import javax.naming.ContextNotEmptyException;
 import javax.swing.JButton;
+import javax.swing.JDesktopPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import edu.german.tools.AddRule;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
+import edu.german.tools.OneEditableField;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.tools.buttons.RulesButton;
+import edu.german.words.AddWordsToDatabase;
 
 public class AddPurposefulSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static final String CFG_FILE = "sentence.properties";
 	private ButtonsPanel bp;
-	private SentenceEditPanel edit;
+	private SentenceEditPanel sentenceEditPanel;
+	private OneEditableField sentence;
+	private OneEditableField meaning;
 	private TableHanlder st;
 	private String[] tableHeaders;
 	private JButton clearEditFieldsBtn;
@@ -33,6 +40,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
 	private RulesButton rulesBtn;
+	private List<String[]> sentenceList;
 	private List<HashMap<String, String>> mapList;
 
 	public AddPurposefulSentences(int height, int width, String setTitel) {
@@ -54,16 +62,16 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		addToRepoBtn.addActionListener(this);
 
 		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER_PURP");
-		st = new TableHanlder(tableHeaders);
+		st = new TableHanlder(tableHeaders, false);
 
-		edit = new SentenceEditPanel(tableHeaders.length, "MODE", null);
+		sentenceEditPanel = new SentenceEditPanel(tableHeaders.length, null, null);
 
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, edit, scp);
+		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sentenceEditPanel, scp);
 		sp.setResizeWeight(0.5);
 
 		rulesBtn = new RulesButton();
@@ -76,6 +84,14 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		repaint();
 	}
 
+	private void clearEditFiles() {
+		sentenceEditPanel.clearEditFields();
+	}
+
+	private String[] getValues() {
+		return sentenceEditPanel.getValues();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
@@ -85,7 +101,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		}
 
 		else if (src == addToListBtn) {
-			String[] var = edit.getValuesAsArray();
+			String[] var = sentenceEditPanel.getValuesAsArray();
 			if (var != null) {
 				st.showRow(var);
 				clearEditFiles();
@@ -102,8 +118,10 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		}
 
 		else if (src == editRowBtn) {
-			String[] array = st.getSelectedRowAsArray();
-			edit.showData(array[0].toString(), array[1].toString(), array[2].toString());
+//			String[] array = st.getSelectedRowAsArray();
+//			sentenceEditPanel.showData(array[0].toString(), array[1].toString(), array[2].toString());
+			Map<String, String> map = st.getSelectedRowAsMap();
+			sentenceEditPanel.showData(map);
 			if (st.getIdx() > -1)
 				st.removeRow();
 		}
@@ -117,6 +135,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 				st.clearTable();
 				mapList.clear();
 			}
+
 		}
 
 		else if (src == rulesBtn) {
@@ -126,16 +145,17 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 			getDesktopPane().add(ar);
 			getDesktopPane().moveToFront(ar);
 			getDesktopPane().repaint();
+
 		}
 
 	}
 
 	private void clearEditFiles() {
-		edit.clearEditFields();
+		sentenceEditPanel.clearEditFields();
 	}
 
 	private String[] getValues() {
-		return edit.getValuesAsArray();
+		return sentenceEditPanel.getValuesAsArray();
 	}
 
 }

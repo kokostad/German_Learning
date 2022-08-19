@@ -12,7 +12,7 @@ public class ExecutorSentenceTask implements Runnable {
 	private int sum;
 	private MyProgressBar bar;
 
-	public ExecutorSentenceTask(List<String[]> list, String type, MyProgressBar bar) {
+	public ExecutorSentenceTask(List<String[]> list, String type, MyProgressBar bar, boolean order) {
 		this.bar = bar;
 		this.list = list;
 		this.type = type;

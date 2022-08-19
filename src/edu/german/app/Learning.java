@@ -21,12 +21,14 @@ import edu.german.io.ExportToFile;
 import edu.german.io.ImportFromFile;
 import edu.german.sentences.AddPurposefulSentences;
 import edu.german.sentences.AddSentences;
+import edu.german.tools.AddRule;
 import edu.german.tools.MyToolbar;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.Titles;
 import edu.german.tools.buttons.ExitButton;
 import edu.german.tools.buttons.ExportButton;
 import edu.german.tools.buttons.ImportButton;
+import edu.german.words.AddAdjective;
 import edu.german.words.SimpleWordAddition;
 import edu.german.words.WordAddition;
 
@@ -40,9 +42,11 @@ public class Learning extends JFrame implements ActionListener {
 	private JMenuItem exit;
 	private JMenu mAddition;
 	private JMenuItem miSimpleWordsAddition;
-	private JMenuItem miAddWords;
+	private JMenu miAddWords;
+	private JMenuItem miAddAdjective;
 	private JMenuItem miSentencesAddition;
 	private JMenuItem miAddPurposefulSentences;
+	private JMenuItem miAddRules;
 	private JMenu mGames;
 	private JMenu mGuessing;
 	private JMenuItem miWhatKind;
@@ -78,10 +82,18 @@ public class Learning extends JFrame implements ActionListener {
 		miSimpleWordsAddition.addActionListener(this);
 		miSentencesAddition = new JMenuItem(Titles.setTitel("SENTENCES_ADDITION"));
 		miSentencesAddition.addActionListener(this);
-		miAddWords = new JMenuItem(Titles.setTitel("WORDS_ADDITION"));
+		miAddWords = new JMenu(Titles.setTitel("WORDS_ADDITION"));
 		miAddWords.addActionListener(this);
 		miAddPurposefulSentences = new JMenuItem(Titles.setTitel("PURPOSEFUL_SENTENCES"));
 		miAddPurposefulSentences.addActionListener(this);
+
+		miAddAdjective = new JMenuItem(Titles.setTitel("ADD_ADJECTIVE"));
+		miAddAdjective.addActionListener(this);
+
+		miAddWords.add(miAddAdjective);
+
+		miAddRules = new JMenuItem(Titles.setTitel("ADD_RULES"));
+		miAddRules.addActionListener(this);
 
 		mAddition = new JMenu(Titles.setTitel("MENU_ADDITION"));
 		mAddition.add(miSimpleWordsAddition);
@@ -89,6 +101,8 @@ public class Learning extends JFrame implements ActionListener {
 		mAddition.add(new JSeparator());
 		mAddition.add(miSentencesAddition);
 		mAddition.add(miAddPurposefulSentences);
+		mAddition.add(new JSeparator());
+		mAddition.add(miAddRules);
 
 		guessTheMeaning = new JMenuItem(Titles.setTitel("GUESS_THE_MEANING"));
 		guessTheMeaning.addActionListener(this);
@@ -149,9 +163,15 @@ public class Learning extends JFrame implements ActionListener {
 			dsk.repaint();
 		}
 
+		else if (src == miAddAdjective) {
+			AddAdjective aa = new AddAdjective(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("ADD_ADDJECTIVES"));
+			dsk.add(aa);
+			dsk.moveToFront(aa);
+			dsk.repaint();
+		}
+
 		else if (src == miSentencesAddition) {
-			AddSentences ssa = new AddSentences(dsk.getHeight(), dsk.getWidth(),
-					Titles.setTitel("SENTENCES_ADDITION"));
+			AddSentences ssa = new AddSentences(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("SENTENCES_ADDITION"));
 			dsk.add(ssa);
 			dsk.moveToFront(ssa);
 			dsk.repaint();
@@ -199,6 +219,13 @@ public class Learning extends JFrame implements ActionListener {
 					Titles.setTitel("PURPOSEFUL_SENTENCES"));
 			dsk.add(addPSent);
 			dsk.moveToFront(addPSent);
+			dsk.repaint();
+		}
+
+		else if (src == miAddRules) {
+			AddRule addRule = new AddRule(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("ADD_RULES"));
+			dsk.add(addRule);
+			dsk.moveToFront(addRule);
 			dsk.repaint();
 		}
 

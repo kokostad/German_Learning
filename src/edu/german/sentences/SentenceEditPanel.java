@@ -1,10 +1,15 @@
 package edu.german.sentences;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import edu.german.tools.MyComboBox;
@@ -21,7 +26,7 @@ public class SentenceEditPanel extends JPanel {
 	private OneEditableField word;
 	private String boxList1;
 	private String boxList2;
-	private MyComboBox categoryBox;
+	private MyComboBox modeBox;
 	private MyComboBox timeBox;
 	private int mapSize;
 
@@ -35,8 +40,8 @@ public class SentenceEditPanel extends JPanel {
 
 		sentence = new OneEditableField(labelInfo1, null, 16, 50);
 		meaning = new OneEditableField(labelInfo2, null, 16, 50);
-		word = new OneEditableField("Słowo kluczowe", "słowo klucz, według którego nastąpi wyszukiwanie",
-				new MyFont().fontSize(), 17);
+
+		word = new OneEditableField("Słowo kluczowe", "słowo klucz, według którego nastąpi wyszukiwanie", 14, 17);
 
 		GridLayout gl = new GridLayout(3, 1);
 		JPanel editFieldsPan = new JPanel();
@@ -44,12 +49,13 @@ public class SentenceEditPanel extends JPanel {
 		editFieldsPan.add(sentence);
 		editFieldsPan.add(meaning);
 
+		box = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_MODE"), selectionList);
 		JPanel boxPanel = new JPanel();
 
 		if (boxList1 != null) {
 			String[] selectionList = new MyProperties(CFG_FILE).getValuesArray(boxList1);
-			categoryBox = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_CATEGORY"), selectionList);
-			boxPanel.add(categoryBox);
+			modeBox = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_MODE"), selectionList);
+			boxPanel.add(modeBox);
 		}
 
 		if (boxList2 != null) {
@@ -64,14 +70,14 @@ public class SentenceEditPanel extends JPanel {
 		this.add(boxPanel);
 	}
 
-	public Map<String, String> getValuesAsMap() {
-		Map<String, String> map = new HashMap<>();
+	Map<Object, Object> getValuesAsMap() {
+		Map<Object, Object> map = new HashMap<>();
 		map.put("SENTENCE", sentence.getValue());
 		map.put("MEANING", meaning.getValue());
 		if (boxList1 != null)
-			map.put("MODE", categoryBox.getValue());
+			map.put("MODE", modeBox.getValue());
 		if (boxList2 != null)
-			map.put("TENS", timeBox.getValue());
+			map.put("TIME", timeBox.getValue());
 		if (word.getValue() != null)
 			map.put("WORD", word.getValue());
 		return map;
@@ -84,7 +90,7 @@ public class SentenceEditPanel extends JPanel {
 			array[i++] = sentence.getValue();
 			array[i++] = meaning.getValue();
 			if (boxList1 != null)
-				array[i++] = categoryBox.getValue();
+				array[i++] = modeBox.getValue();
 			if (boxList2 != null)
 				array[i++] = timeBox.getValue();
 			if (word.getValue() != null)
@@ -99,7 +105,7 @@ public class SentenceEditPanel extends JPanel {
 	void clearEditFields() {
 		sentence.clearField();
 		meaning.clearField();
-		categoryBox.clearField();
+		modeBox.clearField();
 		timeBox.clearField();
 		word.clearField();
 	}
@@ -107,35 +113,27 @@ public class SentenceEditPanel extends JPanel {
 	public void showData(String newSentence, String newMeaning, String mode, String time, String var) {
 		sentence.setValue(newSentence);
 		meaning.setValue(newMeaning);
-		categoryBox.setValue(mode);
+		modeBox.setValue(mode);
 		timeBox.setValue(time);
 		word.setValue(var);
 	}
 
-	public void showData(String newSentence, String newMeaning, String mode, String time) {
+	public void showData(String newSentence, String newMeaning, String mode, String var) {
 		sentence.setValue(newSentence);
 		meaning.setValue(newMeaning);
-		categoryBox.setValue(mode);
-		timeBox.setValue(time);
+		modeBox.setValue(mode);
+		word.setValue(var);
 	}
 
-	public void showData(String newSentence, String newMeaning, String mode) {
+	public void showData(String newSentence, String newMeaning, String var) {
 		sentence.setValue(newSentence);
 		meaning.setValue(newMeaning);
-		categoryBox.setValue(mode);
-	}
-
-	public void showData(String newSentence, String newMeaning) {
-		sentence.setValue(newSentence);
-		meaning.setValue(newMeaning);
+		word.setValue(var);
 	}
 
 	public void showData(String[] array) {
-		if (array.length == 2)
-			showData(array[0], array[1]);
-
 		if (array.length == 3)
-			showData(array[0], array[1], array[2]);
+			showData(array[0], array[2], array[2]);
 
 		if (array.length == 4)
 			showData(array[0], array[1], array[2], array[3]);
@@ -145,24 +143,25 @@ public class SentenceEditPanel extends JPanel {
 
 	}
 
-	public void showData(List<HashMap<String, String>> list) {
-		for (Map<String, String> map : list) {
-			showData(map);
-		}
-	}
-
+//	sentence.setValue(newSentence);
+//	meaning.setValue(newMeaning);
+//	box.setValue(mode);
+//	timeBox.setValue(time);
+//	word.setValue(var);
 	public void showData(Map<String, String> map) {
 		map.entrySet().forEach(entry -> {
-			if ((entry.getKey()).equals("SENTENCE"))
+			System.out.println(entry.getKey() + " " + entry.getValue());
+			if ((entry.getKey().toUpperCase()).equals("SENTENCE"))
 				sentence.setValue(entry.getValue());
-			if ((entry.getKey()).equals("MEANING"))
+			if ((entry.getKey().toUpperCase()).equals("MENING"))
 				meaning.setValue(entry.getValue());
-			if ((entry.getKey()).equals("MODE"))
-				categoryBox.setValue(entry.getValue());
-			if ((entry.getKey()).equals("TIME"))
+			if ((entry.getKey().toUpperCase()).equals("MODE"))
+				modeBox.setValue(entry.getValue());
+			if ((entry.getKey().toUpperCase()).equals("TIME"))
 				timeBox.setValue(entry.getValue());
-			if ((entry.getKey()).equals("WORD"))
+			if ((entry.getKey().toUpperCase()).equals("WORD"))
 				word.setValue(entry.getValue());
 		});
+
 	}
 }

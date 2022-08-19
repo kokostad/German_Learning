@@ -56,7 +56,7 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 
 		tableHeaders = new MyProperties(FILE_NAME).getValuesArray("SIMPLE_WORDS_TABLE_HEADERS");
 
-		st = new TableHanlder(tableHeaders);
+		st = new TableHanlder(tableHeaders, true);
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -112,7 +112,6 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 				st.clearWordsList();
 				st.clearTable();
 			}
-
 		}
 
 	}

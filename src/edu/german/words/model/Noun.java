@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-
 public class Noun extends Word {
 	private String genus = "das Substantiv";
 	private List<Map<Object, Object>> propertyList;

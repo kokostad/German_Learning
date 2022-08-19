@@ -26,13 +26,14 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private ButtonsPanel bp;
 	private JButton clearEditFieldsBtn;
 	private JButton clearListBtn;
-	private JButton addToTableBtn;
+	private JButton addToListBtn;
 	private JButton editRowBtn;
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
 	private RulesButton rulesBtn;
 	private TableHanlder st;
 	private String[] tableHeaders;
+	private List<HashMap<String, String>> mapList;
 
 	public AddSentences(int height, int width, String titel) {
 		super(height, width, titel);
@@ -40,8 +41,8 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 				"ADD_TO_REPOSITORY");
 		clearEditFieldsBtn = bp.getB1();
 		clearEditFieldsBtn.addActionListener(this);
-		addToTableBtn = bp.getB2();
-		addToTableBtn.addActionListener(this);
+		addToListBtn = bp.getB2();
+		addToListBtn.addActionListener(this);
 		removeBtn = bp.getB3();
 		removeBtn.addActionListener(this);
 		clearListBtn = bp.getB4();
@@ -52,7 +53,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		addToRepoBtn.addActionListener(this);
 
 		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
-		st = new TableHanlder(tableHeaders);
+		st = new TableHanlder(tableHeaders, false);
 
 		edit = new SentenceEditPanel(tableHeaders.length, "CHOOSE_SENTENCE_GENUS_LIST", "TIMES");
 
@@ -82,7 +83,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 			clearEditFiles();
 		}
 
-		else if (src == addToTableBtn) {
+		else if (src == addToListBtn) {
 			String[] var = edit.getValuesAsArray();
 			if (var != null) {
 				st.showRow(var);
@@ -101,7 +102,11 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == editRowBtn) {
-			Map<String, String> map = st.getDataAsMap();
+//			String[] array = st.getSelectedRowAsArray();
+//			edit.showData(array[0].toString(), array[1].toString(), array[2].toString(), array[3].toString(),
+//					array[4].toString());
+
+			Map<String, String> map = st.getSelectedRowAsMap();
 
 			edit.showData(map);
 			if (st.getIdx() > -1)
@@ -109,7 +114,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addToRepoBtn) {
-			List<HashMap<String, String>> mapList = st.getDataAsMapList();
+			mapList = st.getDataAsMap();
 			if (!mapList.isEmpty()) {
 				AddSenteceToDatabase addToRepo = new AddSenteceToDatabase();
 				addToRepo.addList(mapList);

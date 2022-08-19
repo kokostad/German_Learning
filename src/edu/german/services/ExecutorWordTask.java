@@ -15,9 +15,11 @@ public class ExecutorWordTask implements Runnable {
 	private MyProgressBar bar;
 	private int sum;
 	private List<String> list;
+	private boolean order;
 
-	public ExecutorWordTask(BufferedReader br, String sign, String genus, MyProgressBar bar) {
+	public ExecutorWordTask(BufferedReader br, String sign, String genus, MyProgressBar bar, boolean order) {
 		list = new LinkedList<String>();
+		this.order = order;
 		this.bar = bar;
 		this.sign = sign;
 		this.genus = genus;
@@ -26,10 +28,10 @@ public class ExecutorWordTask implements Runnable {
 
 	@Override
 	public void run() {
-		writeBrIntoDb();
+		writeIntoDb();
 	}
 
-	private void writeBrIntoDb() {
+	private void writeIntoDb() {
 		if (!list.isEmpty()) {
 			int i = 0;
 			for (String line : list) {
@@ -41,16 +43,27 @@ public class ExecutorWordTask implements Runnable {
 				if (result == 100 || i == sum)
 					bar.done();
 			}
-//			bar.done();
 		}
 	}
 
 	private void addWordToMainTab(String[] array) {
 		AddWordsToDatabase awtdb = new AddWordsToDatabase();
-		if (!awtdb.checkIfExistInMainTable(array[0], genus))
-			awtdb.addNewWord(new GetQuery().getSql("add_new_word"), array[0], array[1], genus);
+		if (order) {
+			if (!(array[1].toString()).isBlank())
+				/*
+				 * TODO check if word exist in main table in database check if word exist in
+				 * specific table if not exist write down to the appropriate tables
+				 */
+				if (!awtdb.checkIfExistInSpecificTable(array[1].toString(), genus))
+					awtdb.addNewWord(new GetQuery().getSql("add_new_word"), array[1], array[0], genus);
+		} else {
+			if (!(array[0].toString()).isBlank())
+				if (!awtdb.checkIfExistInSpecificTable(array[0].toString(), genus))
+					awtdb.addNewWord(new GetQuery().getSql("add_new_word"), array[0], array[1], genus);
+		}
 	}
 
+	// TODO check and improve this method if needed
 	private String[] formatString(String line) {
 		String[] arr = line.split(sign);
 		String[] tmpArr = new String[arr.length];

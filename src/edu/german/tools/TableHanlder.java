@@ -21,11 +21,19 @@ public class TableHanlder extends JTable {
 	private String[] headers;
 	private List<String[]> wordsList;
 
-	public TableHanlder(String[] headers) {
+	/**
+	 * @param headers
+	 * @param translate
+	 */
+	public TableHanlder(String[] headers, boolean translate) {
 		this.headers = headers;
 		wordsList = new LinkedList<String[]>();
 		model = new DefaultTableModel();
-		model.setColumnIdentifiers(translateArray(headers));
+		if (translate)
+			model.setColumnIdentifiers(translateArray(headers));
+		else
+			model.setColumnIdentifiers(headers);
+
 		setModel(model);
 	}
 
@@ -36,6 +44,16 @@ public class TableHanlder extends JTable {
 				wordsList.add(row);
 			}
 		}
+	}
+
+	public void showMap(Map<String, String> map) {
+		int i = 0;
+		String[] row = new String[headers.length];
+		for (String str : headers)
+			if (map.containsKey(str))
+				row[i++] = map.get(str);
+
+		showRow(row);
 	}
 
 	public int getRowCount() {
@@ -86,7 +104,7 @@ public class TableHanlder extends JTable {
 		wordsList.clear();
 	}
 
-	public List<HashMap<String, String>> getDataAsMapList() {
+	public List<HashMap<String, String>> getDataAsMap() {
 		List<HashMap<String, String>> list = new LinkedList<HashMap<String, String>>();
 
 		for (int i = 0; model.getRowCount() > i; i++) {
@@ -94,35 +112,50 @@ public class TableHanlder extends JTable {
 			for (int j = 0; j < model.getColumnCount(); j++) {
 				map.put(headers[j].toUpperCase(), (String) model.getValueAt(i, j));
 			}
+
 			list.add(map);
 		}
 
 		return list;
 	}
 
-	public Map<String, String> getDataAsMap() {
+	public List<HashMap<String, String>> getDataAsMapList(String sign) {
+		List<HashMap<String, String>> list = new LinkedList<HashMap<String, String>>();
+
+		for (int i = 0; model.getRowCount() > i; i++) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			for (int j = 0; j < model.getColumnCount(); j++) {
+				map.put(headers[j].toUpperCase(), (String) model.getValueAt(i, j));
+			}
+
+			if (sign.equals("WORD")) {
+				for (int j = 0; j < model.getColumnCount(); j++) {
+					if (!map.containsKey("WORD"))
+						map.put("WORD", (String) model.getValueAt(i, 0));
+					if (!map.containsKey("MEANING"))
+						map.put("MEANING", (String) model.getValueAt(i, 1));
+				}
+			}
+
+			list.add(map);
+		}
+
+		return list;
+	}
+
+	public List<HashMap<String, String>> getDataAsMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Map<String, String> getSelectedRowAsMap() {
 		int idx = getIdx();
-		Map<String, String> map = new HashMap<String, String>();
+		HashMap<String, String> map = new HashMap<String, String>();
+
 		for (int i = 0; i < headers.length; i++)
-			map.put(headers[i].toUpperCase(), (String) this.getValueAt(idx, i));
+			map.put(headers[i], (String) this.getValueAt(idx, i));
 
 		return map;
-	}
-
-	public void showMap(Map<String, String> map) {
-		int i = 0;
-		String[] row = new String[headers.length];
-		for (String str : headers)
-			if (map.containsKey(str))
-				row[i++] = map.get(str);
-
-		showRow(row);
-	}
-
-	public void showMapList(List<Map<String, String>> listMap) {
-		for (Map<String, String> map : listMap) {
-			showMap(map);
-		}
 	}
 
 }
