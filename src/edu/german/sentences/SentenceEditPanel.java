@@ -21,7 +21,7 @@ public class SentenceEditPanel extends JPanel {
 	private OneEditableField word;
 	private String boxList1;
 	private String boxList2;
-	private MyComboBox kindBox;
+	private MyComboBox categoryBox;
 	private MyComboBox timeBox;
 	private int mapSize;
 
@@ -48,8 +48,8 @@ public class SentenceEditPanel extends JPanel {
 
 		if (boxList1 != null) {
 			String[] selectionList = new MyProperties(CFG_FILE).getValuesArray(boxList1);
-			kindBox = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_MODE"), selectionList);
-			boxPanel.add(kindBox);
+			categoryBox = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_CATEGORY"), selectionList);
+			boxPanel.add(categoryBox);
 		}
 
 		if (boxList2 != null) {
@@ -69,9 +69,9 @@ public class SentenceEditPanel extends JPanel {
 		map.put("SENTENCE", sentence.getValue());
 		map.put("MEANING", meaning.getValue());
 		if (boxList1 != null)
-			map.put("MODE", kindBox.getValue());
+			map.put("MODE", categoryBox.getValue());
 		if (boxList2 != null)
-			map.put("TIME", timeBox.getValue());
+			map.put("TENS", timeBox.getValue());
 		if (word.getValue() != null)
 			map.put("WORD", word.getValue());
 		return map;
@@ -84,7 +84,7 @@ public class SentenceEditPanel extends JPanel {
 			array[i++] = sentence.getValue();
 			array[i++] = meaning.getValue();
 			if (boxList1 != null)
-				array[i++] = kindBox.getValue();
+				array[i++] = categoryBox.getValue();
 			if (boxList2 != null)
 				array[i++] = timeBox.getValue();
 			if (word.getValue() != null)
@@ -99,7 +99,7 @@ public class SentenceEditPanel extends JPanel {
 	void clearEditFields() {
 		sentence.clearField();
 		meaning.clearField();
-		kindBox.clearField();
+		categoryBox.clearField();
 		timeBox.clearField();
 		word.clearField();
 	}
@@ -107,7 +107,7 @@ public class SentenceEditPanel extends JPanel {
 	public void showData(String newSentence, String newMeaning, String mode, String time, String var) {
 		sentence.setValue(newSentence);
 		meaning.setValue(newMeaning);
-		kindBox.setValue(mode);
+		categoryBox.setValue(mode);
 		timeBox.setValue(time);
 		word.setValue(var);
 	}
@@ -115,14 +115,14 @@ public class SentenceEditPanel extends JPanel {
 	public void showData(String newSentence, String newMeaning, String mode, String time) {
 		sentence.setValue(newSentence);
 		meaning.setValue(newMeaning);
-		kindBox.setValue(mode);
+		categoryBox.setValue(mode);
 		timeBox.setValue(time);
 	}
 
 	public void showData(String newSentence, String newMeaning, String mode) {
 		sentence.setValue(newSentence);
 		meaning.setValue(newMeaning);
-		kindBox.setValue(mode);
+		categoryBox.setValue(mode);
 	}
 
 	public void showData(String newSentence, String newMeaning) {
@@ -158,7 +158,7 @@ public class SentenceEditPanel extends JPanel {
 			if ((entry.getKey()).equals("MEANING"))
 				meaning.setValue(entry.getValue());
 			if ((entry.getKey()).equals("MODE"))
-				kindBox.setValue(entry.getValue());
+				categoryBox.setValue(entry.getValue());
 			if ((entry.getKey()).equals("TIME"))
 				timeBox.setValue(entry.getValue());
 			if ((entry.getKey()).equals("WORD"))

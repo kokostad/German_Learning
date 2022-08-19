@@ -43,6 +43,8 @@ public class AddSenteceToDatabase {
 			String sentence = null;
 			String meaning = null;
 			String mode = null;
+			String category;
+			String tens;
 
 			if (map.containsKey("SENTENCE"))
 				sentence = map.get("SENTENCE");
@@ -50,6 +52,10 @@ public class AddSenteceToDatabase {
 				meaning = map.get("MEANING");
 			if (map.containsKey("MODE"))
 				mode = map.get("MODE");
+			if (map.containsKey("CATEGORY"))
+				mode = map.get("CATEGORY");
+			if (map.containsKey("TENS"))
+				mode = map.get("TENS");
 
 			if (sentence != null && mode != null && meaning != null) {
 				if (!checkIfExist(sentence, null, null, null, mode)) {
