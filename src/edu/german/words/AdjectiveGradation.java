@@ -1,11 +1,7 @@
 package edu.german.words;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -17,41 +13,16 @@ import edu.german.tools.MyProperties;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.Titles;
 import edu.german.tools.TwoEditableFieldsPanel;
-import edu.german.tools.buttons.ButtonsPanel;
 
-public class AdjectiveGradation extends JPanel implements ActionListener {
+public class AdjectiveGradation extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final String FILE_NAME = "table_headers.properties";
-	private ButtonsPanel bp;
-	private JButton clearEditFieldsBtn;
-	private JButton addToListBtn;
-	private JButton removeFromListBtn;
-	private JButton clearListBtn;
-	private JButton editRowBtn;
-	private JButton addToRepoBtn;
 	private TableHanlder st;
 	private TwoEditableFieldsPanel equel;
 	private TwoEditableFieldsPanel comparative;
 	private TwoEditableFieldsPanel supreme;
 
 	public AdjectiveGradation() {
-		bp = new ButtonsPanel("CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
-				"ADD_TO_REPOSITORY");
-		bp.setFontSize(20);
-
-		clearEditFieldsBtn = bp.getB1();
-		clearEditFieldsBtn.addActionListener(this);
-		addToListBtn = bp.getB2();
-		addToListBtn.addActionListener(this);
-		removeFromListBtn = bp.getB3();
-		removeFromListBtn.addActionListener(this);
-		clearListBtn = bp.getB4();
-		clearListBtn.addActionListener(this);
-		editRowBtn = bp.getB5();
-		editRowBtn.addActionListener(this);
-		addToRepoBtn = bp.getB6();
-		addToRepoBtn.addActionListener(this);
-
 		String[] tableHeaders = new MyProperties(FILE_NAME).getValuesArray("ADJEKTIV_GRADUATION");
 		st = new TableHanlder(tableHeaders, true);
 
@@ -72,11 +43,11 @@ public class AdjectiveGradation extends JPanel implements ActionListener {
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editPanel, scp);
 		sp.setResizeWeight(0.3);
 
-		add(sp, BorderLayout.CENTER);
-		add(bp, BorderLayout.EAST);
+		this.setLayout(new GridLayout(1, 1));
+		this.add(sp);
 	}
 
-	private void showData(String[] array) {
+	public void showData(String[] array) {
 		equel.setAdjective(array[0]);
 		equel.setMeaning(array[1]);
 		comparative.setAdjective(array[2]);
@@ -85,13 +56,13 @@ public class AdjectiveGradation extends JPanel implements ActionListener {
 		supreme.setMeaning(array[5]);
 	}
 
-	private void clearEditFields() {
+	public void clearEditFields() {
 		equel.clear();
 		comparative.clear();
 		supreme.clear();
 	}
 
-	private String[] getData() {
+	public String[] getData() {
 		String[] array = new String[6];
 		array[0] = equel.getAdjective();
 		array[1] = equel.getMeaning();
@@ -103,46 +74,32 @@ public class AdjectiveGradation extends JPanel implements ActionListener {
 		return array;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Object src = e.getSource();
+	public void showRow(String[] data) {
+		st.showRow(data);
+	}
 
-		if (src == clearEditFieldsBtn) {
-			clearEditFields();
-		}
+	public int getIdx() {
+		return st.getIdx();
+	}
 
-		else if (src == addToListBtn) {
-			st.showRow(getData());
-			clearEditFields();
-		}
+	public void removeRow() {
+		st.removeRow();
+	}
 
-		else if (src == removeFromListBtn) {
-			if (st.getIdx() > -1)
-				st.removeRow();
-		}
+	public void clearWordsList() {
+		st.clearTable();
+	}
 
-		else if (src == clearListBtn) {
-			st.clearWordsList();
-			st.clearTable();
-		}
+	public void clearTable() {
+		st.clearTable();
+	}
 
-		else if (src == editRowBtn) {
-			String[] array = st.getSelectedRowAsArray();
-			showData(array);
-			if (st.getIdx() > -1)
-				st.removeRow();
-		}
+	public String[] getSelectedRowAsArray() {
+		return st.getSelectedRowAsArray();
+	}
 
-		else if (src == addToRepoBtn) {
-			List<HashMap<String, String>> list = st.getDataAsMapList("WORD");
-			if (!list.isEmpty()) {
-				AddWordsToDatabase addToRepo = new AddWordsToDatabase("das Adjektiv");
-				addToRepo.addWordsList(list);
-
-				st.clearWordsList();
-				st.clearTable();
-			}
-		}
+	public List<HashMap<String, String>> getDataAsMapList(String string) {
+		return st.getDataAsMapList();
 	}
 
 }
