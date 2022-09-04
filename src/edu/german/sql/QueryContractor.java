@@ -72,7 +72,7 @@ public class QueryContractor {
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
-
+			System.out.println(ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 				id = rs.getInt(1);
@@ -84,14 +84,14 @@ public class QueryContractor {
 		}
 	}
 
-	public int getId(String sql, String string, String genus) {
+	public int getId(String sql, String word, String param) {
 		int id = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, string);
-			ps.setString(2, genus);
+			ps.setString(1, word);
+			ps.setString(2, param);
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -387,6 +387,40 @@ public class QueryContractor {
 			state = true;
 
 		return state;
+	}
+
+	public void addVerb(String sql, String modus, String tens, String ich, String ja, String du, String ty,
+			String erSieEs, String onOnaOno, String wir, String my, String ihr, String wy, String sieSie,
+			String oniPanstwo) {
+
+		int i = -1;
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, modus);
+			ps.setString(2, tens);
+			ps.setString(3, ich);
+			ps.setString(4, ja);
+			ps.setString(5, du);
+			ps.setString(6, ty);
+			ps.setString(7, erSieEs);
+			ps.setString(8, onOnaOno);
+			ps.setString(9, wir);
+			ps.setString(10, my);
+			ps.setString(11, ihr);
+			ps.setString(12, wy);
+			ps.setString(13, sieSie);
+			ps.setString(14, oniPanstwo);
+			ps.setString(15, wir);
+
+			i = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
 	}
 
 }

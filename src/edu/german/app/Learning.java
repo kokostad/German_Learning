@@ -29,9 +29,9 @@ import edu.german.tools.buttons.ExitButton;
 import edu.german.tools.buttons.ExportButton;
 import edu.german.tools.buttons.ImportButton;
 import edu.german.words.AddAdjective;
-import edu.german.words.AddVerbs;
 import edu.german.words.SimpleWordAddition;
 import edu.german.words.WordAddition;
+import edu.german.words.verbs.AddVerbs;
 
 public class Learning extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;

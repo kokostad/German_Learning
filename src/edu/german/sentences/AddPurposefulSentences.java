@@ -76,8 +76,8 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 
 		rulesBtn = new RulesButton();
 		rulesBtn.addActionListener(this);
-		tb.addSeparator();
-		tb.add(rulesBtn);
+		toolBar.addSeparator();
+		toolBar.add(rulesBtn);
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
 		setVisible(true);

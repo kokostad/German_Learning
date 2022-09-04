@@ -85,11 +85,11 @@ public class OneEditableField extends JPanel {
 	}
 
 	public void setValue(String str) {
-		getTextField().setText(str);
+		textField.setText(str);
 	}
 
 	public void clearField() {
-		getTextField().setText(null);
+		textField.setText(null);
 	}
 
 	public String getPassword() {
@@ -115,7 +115,7 @@ public class OneEditableField extends JPanel {
 		return textField;
 	}
 
-	public void setTextField(JTextField textField) {
+	private void setTextField(JTextField textField) {
 		this.textField = textField;
 	}
 

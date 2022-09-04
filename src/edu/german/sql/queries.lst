@@ -18,6 +18,10 @@ EOSQL
 SELECT a.oid FROM ge.adjective_graduation a WHERE a.equal_degree_ge = ? LIMIT 1;
 EOSQL
 
+[check_verbs_conjugation]
+SELECT v.oid FROM ge.verbs_conjugation v WHERE v.wir = ? AND v.tens = ? LIMIT 1;
+EOSQL
+
 [add_new_sentence]
 INSERT INTO ge.sentences (sentence, meaning, type) VALUES(?, ?, ?);
 EOSQL
@@ -72,6 +76,13 @@ SELECT * from ge.all_words_objects;
 EOSQL
 
 [add_adjective_graduation]
-INSERT INTO ge.adjective_graduation(equal_degree_ge,equal_degree_pl,comparative_ge,comparative_pl,highest_degree_ge,highest_degree_pl,woid)
- VALUES(?,?,?,?,?,?,(SELECT a.woid FROM ge.all_words_objects a WHERE a.word = ? LIMIT 1));
+INSERT INTO ge.adjective_graduation(equal_degree_ge,equal_degree_pl,comparative_ge,comparative_pl,
+highest_degree_ge,highest_degree_pl,woid)
+ VALUES(?,?,?,?,?,?,(SELECT a.woid FROM ge.all_words_objects a
+ WHERE a.word = ? LIMIT 1));
+EOSQL
+
+[add_verbs_conjugation]
+INSERT INTO ge.verbs_conjugation(modus,tens,ich,ja,du,ty,er_sie_es,on_ona_ono,wir,my,ihr,wy,sie_sie,oni_panstwo,woid)
+ VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,(SELECT a.woid FROM ge.all_words_objects a WHERE a.word = ? AND a.genus = 'das Verb' LIMIT 1));
 EOSQL

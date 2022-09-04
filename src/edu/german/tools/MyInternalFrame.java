@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JToolBar;
 
@@ -13,22 +12,19 @@ import edu.german.tools.buttons.ExitButton;
 
 public class MyInternalFrame extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
-	public JToolBar tb;
-	
+	protected JToolBar toolBar;
+
 	public MyInternalFrame(int height, int width, String titel) {
-		ScreenSetup sp = new ScreenSetup();
 		String myIcon = "src/edu/german/img/tak3.gif";
-		setFrameIcon(new ImageIcon(myIcon));
-		setTitle(titel);
-		setIconifiable(true);
-		setClosable(true);
-		setResizable(true);
-		setMaximizable(true);
-		setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-		setSize(width, height - sp.BOTTOM_BORDER);
-		setResizable(true);
-		BorderLayout bl = new BorderLayout(5, 5);
-		setLayout(bl);
+		this.setFrameIcon(new ImageIcon(myIcon));
+		this.setTitle(titel);
+		this.setIconifiable(true);
+		this.setClosable(true);
+		this.setResizable(true);
+		this.setMaximizable(true);
+		this.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+		this.setSize(width, height - ScreenSetup.BOTTOM_BORDER);
+		this.setResizable(true);
 
 		ExitButton bExit = new ExitButton();
 		bExit.addActionListener(new ActionListener() {
@@ -39,12 +35,11 @@ public class MyInternalFrame extends JInternalFrame {
 			}
 		});
 
-		tb = new JToolBar();
-		tb.setRollover(true);
-		tb.add(bExit);
+		toolBar = new JToolBar();
+		toolBar.setRollover(true);
+		toolBar.add(bExit);
 
-		add(tb, BorderLayout.BEFORE_FIRST_LINE);
-
+		this.add(toolBar, BorderLayout.BEFORE_FIRST_LINE);
 		setVisible(true);
 	}
 }

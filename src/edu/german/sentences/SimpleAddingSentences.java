@@ -46,8 +46,8 @@ public class SimpleAddingSentences extends MyInternalFrame implements ActionList
 		
 		rulesBtn = new RulesButton();
 		rulesBtn.addActionListener(this);
-		tb.addSeparator();
-		tb.add(rulesBtn);
+		toolBar.addSeparator();
+		toolBar.add(rulesBtn);
 		
 		add(bp, BorderLayout.EAST);
 		setVisible(true);

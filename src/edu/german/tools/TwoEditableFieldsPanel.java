@@ -78,14 +78,16 @@ public class TwoEditableFieldsPanel extends JPanel {
 		meaning.setValue(var);
 	}
 
-	public String getData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	public String getData() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	public void clear() {
-		setAdjective(null);
-		setMeaning(null);
+//		setAdjective(null);
+//		setMeaning(null);
+		this.adjective.clearField();
+		this.meaning.clearField();
 	}
 
 }

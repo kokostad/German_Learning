@@ -77,6 +77,7 @@ public class AddAdjective extends MyInternalFrame implements ActionListener {
 		else if (src == clearListBtn) {
 			ag.clearWordsList();
 			ag.clearTable();
+			ag.clearEditFields();
 		}
 
 		else if (src == editRowBtn) {
@@ -88,13 +89,11 @@ public class AddAdjective extends MyInternalFrame implements ActionListener {
 
 		else if (src == addToRepoBtn) {
 			List<HashMap<String, String>> list = ag.getDataAsMapList("WORD");
-			if (!list.isEmpty()) {
-				AddWordsToDatabase addToRepo = new AddWordsToDatabase("das Adjektiv");
-				addToRepo.addWordsList(list);
-
-				ag.clearWordsList();
-				ag.clearTable();
-			}
+			AddWordsToDatabase addToRepo = new AddWordsToDatabase("das Adjektiv");
+			addToRepo.addWordsList(list);
+			ag.clearWordsList();
+			ag.clearTable();
+			ag.clearEditFields();
 		}
 
 	}
