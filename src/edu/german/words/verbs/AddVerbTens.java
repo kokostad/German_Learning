@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import edu.german.tools.TextCleaner;
 import edu.german.tools.TwoEditFields;
 
 public class AddVerbTens extends JPanel {
@@ -58,18 +59,18 @@ public class AddVerbTens extends JPanel {
 
 	public Map<String, String> getMap() {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("ICH", i.getFirst());
-		map.put("JA", i.getSecond());
-		map.put("DU", youS.getFirst());
-		map.put("TY", youS.getSecond());
-		map.put("ER_SIE_ES", heSheIt.getFirst());
-		map.put("ON_ONA_ONO", heSheIt.getSecond());
-		map.put("WIR", we.getFirst());
-		map.put("MY", we.getSecond());
-		map.put("IHR", youP.getFirst());
-		map.put("WY", youP.getSecond());
-		map.put("SIE_SIE", they.getFirst());
-		map.put("ONI_PANSTWO", they.getSecond());
+		map.put("ICH", new TextCleaner(i.getFirst()).getWord());
+		map.put("JA", new TextCleaner(i.getSecond()).getWord());
+		map.put("DU", new TextCleaner(youS.getFirst()).getWord());
+		map.put("TY", new TextCleaner(youS.getSecond()).getWord());
+		map.put("ER_SIE_ES", new TextCleaner(heSheIt.getFirst()).getWord());
+		map.put("ON_ONA_ONO", new TextCleaner(heSheIt.getSecond()).getWord());
+		map.put("WIR", new TextCleaner(we.getFirst()).getWord());
+		map.put("MY", new TextCleaner(we.getSecond()).getWord());
+		map.put("IHR", new TextCleaner(youP.getFirst()).getWord());
+		map.put("WY", new TextCleaner(youP.getSecond()).getWord());
+		map.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
+		map.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
 		map.put("TENS", tens);
 		return map;
 	}

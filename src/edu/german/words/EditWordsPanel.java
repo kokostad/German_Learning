@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import edu.german.tools.MyComboBox;
 import edu.german.tools.OneEditableField;
+import edu.german.tools.TextCleaner;
 import edu.german.tools.Titles;
 
 public class EditWordsPanel extends JPanel {
@@ -17,7 +18,7 @@ public class EditWordsPanel extends JPanel {
 	private OneEditableField word;
 	private OneEditableField meaning;
 	private MyComboBox box;
-	
+
 	public EditWordsPanel(String labelInfo1, String labelInfo2, String[] selectionList) {
 		word = new OneEditableField(labelInfo1, null, 16, 16);
 		meaning = new OneEditableField(labelInfo2, null, 16, 16);
@@ -36,8 +37,8 @@ public class EditWordsPanel extends JPanel {
 
 	public String[] getValuAsArray() {
 		String[] array = new String[3];
-		array[0] = word.getValue();
-		array[1] = meaning.getValue();
+		array[0] = new TextCleaner(word.getValue()).getWord();
+		array[1] = new TextCleaner(meaning.getValue()).getWord();
 		array[2] = box.getValue();
 
 		return array;
@@ -45,8 +46,8 @@ public class EditWordsPanel extends JPanel {
 
 	public List<Object> getValuAsList() {
 		List<Object> list = new ArrayList<>();
-		list.add(word.getValue());
-		list.add(meaning.getValue());
+		list.add(new TextCleaner(word.getValue()).getWord());
+		list.add(new TextCleaner(meaning.getValue()).getWord());
 		list.add(box.getValue());
 
 		return list;
@@ -54,8 +55,8 @@ public class EditWordsPanel extends JPanel {
 
 	public Map<String, String> getValueAsHashMap(String[] tableHeaders) {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put(tableHeaders[0], word.getValue());
-		map.put(tableHeaders[1], meaning.getValue());
+		map.put(tableHeaders[0], new TextCleaner(word.getValue()).getWord());
+		map.put(tableHeaders[1], new TextCleaner(meaning.getValue()).getWord());
 		map.put(tableHeaders[2], box.getValue());
 
 		return map;
