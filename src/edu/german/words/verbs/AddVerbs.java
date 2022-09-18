@@ -3,6 +3,7 @@ package edu.german.words.verbs;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private JTabbedPane tb;
 	private VerbIndikativ indikativ;
 	private VerbKonjunktiv konjunktiv;
-	private VerbImperativPartizip iperativAndPartizip;
+	private VerbImperativAndImpersonal iperativAndPartizip;
 	private List<Map<String, List<Map<String, String>>>> verbList;
 	private ExecutorService es;
 
@@ -50,7 +51,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 
 		indikativ = new VerbIndikativ("INDIKATIV");
 		konjunktiv = new VerbKonjunktiv("KONJUNKTIV");
-		iperativAndPartizip = new VerbImperativPartizip("IMPERATIV UND UNPERSÖNLICHE FORMEN");
+		iperativAndPartizip = new VerbImperativAndImpersonal("IMPERATIV UND UNPERSÖNLICHE FORMEN");
 
 		tb = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 		new Titles();
@@ -75,8 +76,27 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addToListBtn) {
-			Map<String, List<Map<String, String>>> map = indikativ.getMap();
-			verbList.add(map);
+			Map<String, List<Map<String, String>>> indikativMap = indikativ.getMap();
+			if (indikativMap != null)
+				verbList.add(indikativMap);
+
+			Map<String, List<Map<String, String>>> konjunktivMapI = konjunktiv.getMapOne();
+			if (konjunktivMapI != null)
+				verbList.add(konjunktivMapI);
+
+			Map<String, List<Map<String, String>>> konjunktivMapII = konjunktiv.getMapTwo();
+			if (konjunktivMapII != null)
+				verbList.add(konjunktivMapII);
+
+			Map<String, List<Map<String, String>>> imperative = iperativAndPartizip.getMapImperativ();
+			if (imperative != null)
+				verbList.add(imperative);
+
+			Map<String, List<Map<String, String>>> impersonal = iperativAndPartizip.getMapImpersonal();
+			if (impersonal != null)
+				verbList.add(impersonal);
+
+			showList();
 			clearAllEditFields();
 		}
 
@@ -96,8 +116,28 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 
 	}
 
+	private void showList() {
+		verbList.forEach(map -> {
+			map.forEach((key, map2) -> {
+				map2.forEach(value -> showMap(key, value));
+			});
+		});
+	}
+
+	private void showMap(String modus, Map<String, String> value) {
+		String tens = "";
+		if (value.containsKey("TENS")) {
+			tens = value.get("TENS");
+			System.out.println("MODUS: " + modus + ", TENS: " + tens);
+			value.remove("TENS");
+		}
+		value.forEach((k, v) -> System.out.println("PERSON: " + k + ", VERB: " + v));
+	}
+
 	private void clearAllEditFields() {
 		indikativ.clearEditFields();
+		konjunktiv.clearEditFields();
+		iperativAndPartizip.clearEditFields();
 	}
 
 }

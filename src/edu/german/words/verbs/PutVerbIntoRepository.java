@@ -25,7 +25,6 @@ public class PutVerbIntoRepository implements Runnable {
 	}
 
 	private void prepareVerb(String modus, Map<String, String> map) {
-		//TODO check the whitespace before and after the word
 		String tens = map.get("TENS");
 		String ich = map.get("ICH");
 		String ja = map.get("JA");
