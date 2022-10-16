@@ -70,17 +70,33 @@ public class VerbIndikativ extends JPanel {
 
 	public Map<String, List<Map<String, String>>> getMap() {
 		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
-		list.add(vPresent.getMap());
-		list.add(vPreterite.getMap());
-		list.add(vPerfekt.getMap());
-		list.add(vPlusquamperfekt.getMap());
-		list.add(vFutur1.getMap());
-		list.add(vFutur2.getMap());
+
+		if (vPresent.getMap() != null)
+			list.add(vPresent.getMap());
+
+		if (vPreterite.getMap() != null)
+			list.add(vPreterite.getMap());
+
+		if (vPerfekt.getMap() != null)
+			list.add(vPerfekt.getMap());
+
+		if (vPlusquamperfekt.getMap() != null)
+			list.add(vPlusquamperfekt.getMap());
+
+		if (vFutur1.getMap() != null)
+			list.add(vFutur1.getMap());
+
+		if (vFutur2.getMap() != null)
+			list.add(vFutur2.getMap());
 
 		Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
 		modusMap.put(modus, list);
 
 		return modusMap;
+	}
+
+	public String getMainWord() {
+		return vPresent.getMainWord();
 	}
 
 }

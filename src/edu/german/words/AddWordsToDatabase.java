@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import edu.german.sql.QueryContractor;
-import edu.german.tools.GetQuery;
+import edu.german.sql.SqlQuery;
 import edu.german.tools.MyProperties;
 import edu.german.tools.ReplaceSpaces;
 
@@ -46,7 +46,7 @@ public class AddWordsToDatabase {
 			}
 
 			if (!checkIfExistInMainTable(word)) {
-				String sql = new GetQuery().getSql("add_new_word");
+				String sql = new SqlQuery().getSql("add_new_word");
 				addNewWord(sql, word, meaning);
 			}
 
@@ -64,14 +64,14 @@ public class AddWordsToDatabase {
 	}
 
 	public boolean checkIfExistInMainTable(String word) {
-		if (new QueryContractor().getId(new GetQuery().getSql("check_word"), word, genus) > -1)
+		if (new QueryContractor().getId(new SqlQuery().getSql("check_word"), word, genus) > -1)
 			return true;
 
 		return false;
 	}
 
 	public boolean checkIfExistInSpecificTable(String word, String genus) {
-		if (new QueryContractor().getId(new GetQuery().getSql("check_" + tableName), word) > -1)
+		if (new QueryContractor().getId(new SqlQuery().getSql("check_" + tableName), word) > -1)
 			return true;
 
 		return false;

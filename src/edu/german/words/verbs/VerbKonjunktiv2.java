@@ -48,14 +48,28 @@ public class VerbKonjunktiv2 extends JPanel {
 
 	public Map<String, List<Map<String, String>>> getMap() {
 		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
-		list.add(vPreterite.getMap());
-		list.add(vPlusquamperfekt.getMap());
-		list.add(vFutur1.getMap());
-		list.add(vFutur2.getMap());
 
-		Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
-		modusMap.put(modus, list);
-		return modusMap;
+		if (vPreterite.getMap() != null)
+			list.add(vPreterite.getMap());
+
+		if (vPlusquamperfekt.getMap() != null)
+			list.add(vPlusquamperfekt.getMap());
+
+		if (vFutur1.getMap() != null)
+			list.add(vFutur1.getMap());
+
+		if (vFutur2.getMap() != null)
+			list.add(vFutur2.getMap());
+
+		System.out.println("List size: " + list.size());
+
+		if (list.size() > 0) {
+			Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
+			modusMap.put(modus, list);
+			return modusMap;
+		}
+
+		return null;
 	}
 
 	public void clearEditFields() {

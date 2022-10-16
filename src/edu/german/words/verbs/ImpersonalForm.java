@@ -33,16 +33,19 @@ public class ImpersonalForm extends JPanel {
 
 	public Map<String, String> getMap() {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("PRESENT_INFINITIVE", new TextCleaner(presentInfinitive.getFirst()).getWord());
-		map.put("CZAS_TERAZNIEJSZ_BEZOKOLICZNIK", new TextCleaner(presentInfinitive.getSecond()).getWord());
-		map.put("INFINITIVE_PERFECT", new TextCleaner(InfinitivePerfect.getFirst()).getWord());
-		map.put("CZAS_DOKONANY_BEZOKOLICZNIK", new TextCleaner(InfinitivePerfect.getSecond()).getWord());
-		map.put("PARTICIPLE_I", new TextCleaner(participleOne.getFirst()).getWord());
-		map.put("IMIESLOW_I", new TextCleaner(participleOne.getSecond()).getWord());
-		map.put("PARTICIPLE_II", new TextCleaner(participleTwo.getFirst()).getWord());
-		map.put("IMIESLOW_II", new TextCleaner(participleTwo.getSecond()).getWord());
-		map.put("TENS", tens);
-		return map;
+		if (!presentInfinitive.getFirst().isBlank()) {
+			map.put("PRESENT_INFINITIVE", new TextCleaner(presentInfinitive.getFirst()).getWord());
+			map.put("CZAS_TERAZNIEJSZ", new TextCleaner(presentInfinitive.getSecond()).getWord());
+			map.put("INFINITIVE_PERFECT", new TextCleaner(InfinitivePerfect.getFirst()).getWord());
+			map.put("CZAS_DOKONANY", new TextCleaner(InfinitivePerfect.getSecond()).getWord());
+			map.put("PARTICIPLE_I", new TextCleaner(participleOne.getFirst()).getWord());
+			map.put("IMIESLOW_I", new TextCleaner(participleOne.getSecond()).getWord());
+			map.put("PARTICIPLE_II", new TextCleaner(participleTwo.getFirst()).getWord());
+			map.put("IMIESLOW_II", new TextCleaner(participleTwo.getSecond()).getWord());
+			map.put("TENS", getTens());
+			return map;
+		}
+		return null;
 	}
 
 	public String getTens() {

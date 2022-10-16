@@ -29,7 +29,7 @@ public class TextCleaner {
 		int i = 1;
 		for (String s : ar) {
 			sb.append(removeSpace(s));
-			if (i == 1 && wordParts.length > 1)
+			if (wordParts.length > 1 && i < wordParts.length)
 				sb.append(" ");
 			i += 1;
 		}

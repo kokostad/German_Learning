@@ -3,7 +3,7 @@ package edu.german.services;
 import java.util.List;
 
 import edu.german.sentences.AddSenteceToDatabase;
-import edu.german.tools.GetQuery;
+import edu.german.sql.SqlQuery;
 import edu.german.tools.MyProgressBar;
 
 public class ExecutorSentenceTask implements Runnable {
@@ -42,6 +42,6 @@ public class ExecutorSentenceTask implements Runnable {
 	private void addSentenceToMainTab(String[] array) {
 		AddSenteceToDatabase astdb = new AddSenteceToDatabase();
 		if (!astdb.checkIfExist(array[0], type, null, null, null))
-			astdb.addNewSentence(new GetQuery().getSql("add_new_sentence"), array[0], array[1], type);
+			astdb.addNewSentence(new SqlQuery().getSql("add_new_sentence"), array[0], array[1], type);
 	}
 }

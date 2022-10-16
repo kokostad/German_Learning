@@ -84,14 +84,16 @@ public class QueryContractor {
 		}
 	}
 
-	public int getId(String sql, String word, String param) {
+	public int getId(String sql, String word, String genus) {
 		int id = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
-			ps.setString(2, param);
+			ps.setString(2, genus);
+
+			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -102,6 +104,51 @@ public class QueryContractor {
 			e.printStackTrace();
 			return id;
 		}
+	}
+
+	public int getId(String sql, String word, String genus, int woid) {
+		int id = -1;
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, word);
+			ps.setString(2,  genus);
+			ps.setInt(3, woid);
+
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+				id = rs.getInt(1);
+
+			return id;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return id;
+		}
+	}
+
+	public int getId(String sql, String mainWord, int woid, String param, String param2) {
+		int id = -1;
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, mainWord);
+			ps.setString(2, param);
+			ps.setString(3, param2);
+			ps.setInt(4, woid);
+			System.out.println(ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+				return rs.getInt(1);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return id;
+		}
+		return id;
 	}
 
 	public List<String[]> getWordsList(String sql) {
@@ -389,7 +436,7 @@ public class QueryContractor {
 		return state;
 	}
 
-	public void addVerb(String sql, String modus, String tens, String ich, String ja, String du, String ty,
+	public void addVerb(String sql, String modus, int woid, String tens, String ich, String ja, String du, String ty,
 			String erSieEs, String onOnaOno, String wir, String my, String ihr, String wy, String sieSie,
 			String oniPanstwo) {
 
@@ -413,14 +460,88 @@ public class QueryContractor {
 			ps.setString(12, wy);
 			ps.setString(13, sieSie);
 			ps.setString(14, oniPanstwo);
-			ps.setString(15, wir);
+			ps.setInt(15, woid);
 
-			i = ps.executeUpdate();
+			System.out.println(ps.toString());
+			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			dbc.closeConnection(con);
 		}
+	}
+
+	public void addVerb(String sql, int woid, String modus, String tens, String presentInfinitiveGe,
+			String presentInfinitivePl, String infinitivePerfectGe, String infinitivePerfectPl, String participleIGe,
+			String participleIPl, String participleIIGe, String participleIIPl) {
+
+		int i = -1;
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, woid);
+			ps.setString(2, modus);
+			ps.setString(3, tens);
+			ps.setString(4, presentInfinitiveGe);
+			ps.setString(5, presentInfinitivePl);
+			ps.setString(6, infinitivePerfectGe);
+			ps.setString(7, infinitivePerfectPl);
+			ps.setString(8, participleIGe);
+			ps.setString(9, participleIPl);
+			ps.setString(10, participleIIGe);
+			ps.setString(11, participleIIPl);
+
+			System.out.println(ps.toString());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+	}
+
+	public void addNewWord(String sql, String mainWord, String meaning, String genus) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, mainWord);
+			ps.setString(2, meaning);
+			ps.setString(3, genus);
+
+			System.out.println(ps.toString());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+	}
+
+	public int getVerbId(String sql, int woid, String tens) {
+		int oid = -1;
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, woid);
+			ps.setString(2, tens);
+			System.out.println(ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				oid = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return oid;
 	}
 
 }

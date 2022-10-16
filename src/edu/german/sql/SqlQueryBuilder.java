@@ -2,9 +2,9 @@ package edu.german.sql;
 
 import edu.german.tools.MyProperties;
 
-public class QueryBuilder {
+public class SqlQueryBuilder {
 
-	public QueryBuilder() {
+	public SqlQueryBuilder() {
 	}
 
 	public String prepareInsertQueryWithTableNames(String tableName) {

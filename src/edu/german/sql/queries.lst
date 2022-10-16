@@ -7,11 +7,11 @@ INSERT INTO ge.all_words_objects (word, meaning, genus) VALUES(?, ?, ?);
 EOSQL
 
 [check_word]
-SELECT woid FROM ge.all_words_objects awo WHERE awo.word = ? AND awo.genus = ? LIMIT 1;
+SELECT awo.woid FROM ge.all_words_objects awo WHERE awo.word = ? AND awo.genus = ? LIMIT 1;
 EOSQL
 
 [check_adjectives_old]
-SELECT oid FROM ge.adjectives a WHERE a.word = ? LIMIT 1;
+SELECT a.oid FROM ge.adjectives a WHERE a.word = ? LIMIT 1;
 EOSQL
 
 [check_adjectives]
@@ -19,7 +19,27 @@ SELECT a.oid FROM ge.adjective_graduation a WHERE a.equal_degree_ge = ? LIMIT 1;
 EOSQL
 
 [check_verbs_conjugation]
-SELECT v.oid FROM ge.verbs_conjugation v WHERE v.wir = ? AND v.tens = ? LIMIT 1;
+SELECT v.oid FROM ge.verbs_conjugation v WHERE v.woid = ? AND v.tens = ? ;
+EOSQL
+
+[add_new_verbs_conjugation]
+INSERT INTO ge.verbs_conjugation(modus, tens, ich, ja, du, ty, er_sie_es, on_ona_ono, wir, my,
+ ihr, wy, sie_sie, oni_panstwo, woid)
+ VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+EOSQL
+
+[add_verbs_imperative]
+INSERT INTO FROM ge.verbs_conjugation (woid, modus, tens, present_infinitive, czas_terazniejszy_bezokolicznik,
+ infinitive_perfect, czas_dokonany_bezokolicznik, participle_i, imieslow_i, participle_ii, imieslow_ii)
+ VALUES(?,?,?,?,?,?,?,?,?,?,?) ;
+EOSQL
+
+[check_verbs_impersonal]
+SELECT v.oid from ge.verbs_conjugation v WHERE v.wir = ? AND v.modus = ? AND v.tens = ? AND v.woid = ? ;
+EOSQL
+
+[check_verbs_imperative_and_impersonal]
+SELECT v.oid from ge.verbs_conjugation v WHERE v.modus = ? AND v.wir = ? AND  v.tens = ? ;
 EOSQL
 
 [add_new_sentence]
@@ -80,9 +100,4 @@ INSERT INTO ge.adjective_graduation(equal_degree_ge,equal_degree_pl,comparative_
 highest_degree_ge,highest_degree_pl,woid)
  VALUES(?,?,?,?,?,?,(SELECT a.woid FROM ge.all_words_objects a
  WHERE a.word = ? LIMIT 1));
-EOSQL
-
-[add_verbs_conjugation]
-INSERT INTO ge.verbs_conjugation(modus,tens,ich,ja,du,ty,er_sie_es,on_ona_ono,wir,my,ihr,wy,sie_sie,oni_panstwo,woid)
- VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,(SELECT a.woid FROM ge.all_words_objects a WHERE a.word = ? AND a.genus = 'das Verb' LIMIT 1));
 EOSQL

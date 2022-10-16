@@ -191,7 +191,7 @@ public class Learning extends JFrame implements ActionListener {
 		}
 
 		else if (src == miImport || src == importBtn) {
-			ImportFromFile iff = new ImportFromFile(dsk.getHeight(), dsk.getWidth());
+			ImportFromFile iff = new ImportFromFile(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("IMPORT"));
 			dsk.add(iff);
 			dsk.moveToFront(iff);
 			dsk.repaint();

@@ -3,14 +3,15 @@ package edu.german.sentences;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.german.sql.SqlQuery;
 import edu.german.sql.QueryContractor;
-import edu.german.tools.GetQuery;
+
 
 public class AddSenteceToDatabase {
-	private GetQuery query;
+	private SqlQuery query;
 
 	public AddSenteceToDatabase() {
-		this.query = new GetQuery();
+		this.query = new SqlQuery();
 	}
 
 	public boolean checkIfExist(String sentence, String type, String category, String tens, String mode) {

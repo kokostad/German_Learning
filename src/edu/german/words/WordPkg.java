@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.german.sql.GetSqlFromConfigFile;
+import edu.german.sql.SqlQuery;
 import edu.german.sql.QueryContractor;
 import edu.german.words.model.Noun;
 import edu.german.words.model.Word;
@@ -20,7 +20,7 @@ public class WordPkg {
 	}
 
 	private List<Noun> prepareNounList() {
-		String query = new GetSqlFromConfigFile("get_all_nouns").getSql();
+		String query = new SqlQuery().getSql("get_all_nouns");
 		return new QueryContractor().getAllNounsList(query);
 	}
 
@@ -65,7 +65,7 @@ public class WordPkg {
 //	}
 
 	public List<Noun> getNounList(int number) {
-		String query = new GetSqlFromConfigFile("get_limit_" + "nouns").getSql();
+		String query = new SqlQuery().getSql("get_limit_" + "nouns");
 //		List<Noun> list = new QueryContractor().getNounsList(query, number);
 
 		// NOTICE you need make case when word is getting from specific table
@@ -77,7 +77,7 @@ public class WordPkg {
 	}
 
 	public List<Noun> getNounList() {
-		String query = new GetSqlFromConfigFile("get_all_" + "nouns").getSql();
+		String query = new SqlQuery().getSql("get_all_" + "nouns");
 		List<Noun> list = new QueryContractor().getAllNounsList(query);
 		return list;
 	}

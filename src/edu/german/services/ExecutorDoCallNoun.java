@@ -1,13 +1,11 @@
 package edu.german.services;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import edu.german.sql.GetSqlFromConfigFile;
+import edu.german.sql.SqlQuery;
 import edu.german.sql.QueryContractor;
 import edu.german.words.model.Noun;
-import edu.german.words.model.Word;
 
 public class ExecutorDoCallNoun implements Callable<List<Noun>> {
 
@@ -18,7 +16,7 @@ public class ExecutorDoCallNoun implements Callable<List<Noun>> {
 	}
 
 	public List<Noun> getNounList() {
-		String query = new GetSqlFromConfigFile("get_all_" + "nouns").getSql();
+		String query = new SqlQuery().getSql("get_all_" + "nouns");
 		return list = new QueryContractor().getAllNounsList(query);
 	}
 

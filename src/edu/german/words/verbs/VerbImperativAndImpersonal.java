@@ -34,20 +34,28 @@ public class VerbImperativAndImpersonal extends JPanel {
 
 	public Map<String, List<Map<String, String>>> getMapImperativ() {
 		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
-		list.add(imperative.getMap());
+		if (imperative.getMap() != null)
+			list.add(imperative.getMap());
 
-		Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
-		modusMap.put(imperative.getTens(), list);
-		return modusMap;
+		if (!list.isEmpty()) {
+			Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
+			modusMap.put(imperative.getTens(), list);
+			return modusMap;
+		}
+		return null;
 	}
 
 	public Map<String, List<Map<String, String>>> getMapImpersonal() {
 		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
-		list.add(impersonal.getMap());
+		if (impersonal.getMap() != null)
+			list.add(impersonal.getMap());
 
-		Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
-		modusMap.put(impersonal.getTens(), list);
-		return modusMap;
+		if (!list.isEmpty()) {
+			Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
+			modusMap.put(impersonal.getTens(), list);
+			return modusMap;
+		}
+		return null;
 	}
 
 	public void clearEditFields() {

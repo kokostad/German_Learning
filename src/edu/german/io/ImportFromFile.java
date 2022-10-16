@@ -42,8 +42,8 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	private String type;
 	private MyProgressBar bar;
 
-	public ImportFromFile(int height, int width) {
-		super(height, width, Titles.setTitel("IMPORT"));
+	public ImportFromFile(int height, int width, String titel) {
+		super(height, width, titel);
 		es = Executors.newSingleThreadExecutor();
 		type = null;
 

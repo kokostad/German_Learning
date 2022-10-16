@@ -28,9 +28,10 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private JTabbedPane tb;
 	private VerbIndikativ indikativ;
 	private VerbKonjunktiv konjunktiv;
-	private VerbImperativAndImpersonal iperativAndPartizip;
+	private VerbImperativAndImpersonal imperativAndPartizip;
 	private List<Map<String, List<Map<String, String>>>> verbList;
 	private ExecutorService es;
+	private String mainWord;
 
 	public AddVerbs(int height, int width, String setTitel) {
 		super(height, width, setTitel);
@@ -51,13 +52,13 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 
 		indikativ = new VerbIndikativ("INDIKATIV");
 		konjunktiv = new VerbKonjunktiv("KONJUNKTIV");
-		iperativAndPartizip = new VerbImperativAndImpersonal("IMPERATIV UND UNPERSÖNLICHE FORMEN");
+		imperativAndPartizip = new VerbImperativAndImpersonal("IMPERATIV UND UNPERSÖNLICHE FORMEN");
 
 		tb = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
 		new Titles();
 		tb.add("INDIKATIV", indikativ);
 		tb.add("KONJUNKTIV", konjunktiv);
-		tb.add("IMPERATIV UND UNPERSÖNLICHE FORMEN", iperativAndPartizip);
+		tb.add("IMPERATIV UND UNPERSÖNLICHE FORMEN", imperativAndPartizip);
 
 		setLayout(new BorderLayout());
 		add(tb, BorderLayout.CENTER);
@@ -76,28 +77,38 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addToListBtn) {
+			setMainWord(indikativ.getMainWord());
+
 			Map<String, List<Map<String, String>>> indikativMap = indikativ.getMap();
-			if (indikativMap != null)
+			if (indikativMap != null && indikativMap.size() > 0)
 				verbList.add(indikativMap);
 
 			Map<String, List<Map<String, String>>> konjunktivMapI = konjunktiv.getMapOne();
-			if (konjunktivMapI != null)
+			if (konjunktivMapI != null  && konjunktivMapI.size() > 0)
 				verbList.add(konjunktivMapI);
 
 			Map<String, List<Map<String, String>>> konjunktivMapII = konjunktiv.getMapTwo();
 			if (konjunktivMapII != null)
 				verbList.add(konjunktivMapII);
 
-			Map<String, List<Map<String, String>>> imperative = iperativAndPartizip.getMapImperativ();
+			Map<String, List<Map<String, String>>> imperative = imperativAndPartizip.getMapImperativ();
 			if (imperative != null)
 				verbList.add(imperative);
 
-			Map<String, List<Map<String, String>>> impersonal = iperativAndPartizip.getMapImpersonal();
+			Map<String, List<Map<String, String>>> impersonal = imperativAndPartizip.getMapImpersonal();
 			if (impersonal != null)
 				verbList.add(impersonal);
 
-			showList();
-			clearAllEditFields();
+//			showList();
+//			clearAllEditFields();
+		}
+
+		else if (src == addListToRepoBtn) {
+			if (!getMainWord().isBlank() && !verbList.isEmpty())
+				es.submit(new PutVerbIntoRepository(getMainWord(), verbList));
+
+//			verbList.clear();
+//			clearAllEditFields();
 		}
 
 		else if (src == showListBtn) {
@@ -108,12 +119,14 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			verbList.clear();
 		}
 
-		else if (src == addListToRepoBtn) {
-			es.submit(new PutVerbIntoRepository(verbList));
-			verbList.clear();
-			clearAllEditFields();
-		}
+	}
 
+	public String getMainWord() {
+		return mainWord;
+	}
+
+	public void setMainWord(String mainWord) {
+		this.mainWord = mainWord;
 	}
 
 	private void showList() {
@@ -137,7 +150,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private void clearAllEditFields() {
 		indikativ.clearEditFields();
 		konjunktiv.clearEditFields();
-		iperativAndPartizip.clearEditFields();
+		imperativAndPartizip.clearEditFields();
 	}
 
 }

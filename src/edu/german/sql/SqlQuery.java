@@ -1,4 +1,4 @@
-package edu.german.tools;
+package edu.german.sql;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class GetQuery {
+public class SqlQuery {
 	private String FILE_CFG = "src/edu/german/sql/queries.lst";
 	private static String rgxStart = "[";
 	private static String rgxEnd = "]";

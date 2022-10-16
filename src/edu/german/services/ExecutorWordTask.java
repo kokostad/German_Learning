@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.german.tools.GetQuery;
+import edu.german.sql.SqlQuery;
 import edu.german.tools.MyProgressBar;
 import edu.german.words.AddWordsToDatabase;
 
@@ -55,11 +55,11 @@ public class ExecutorWordTask implements Runnable {
 				 * specific table if not exist write down to the appropriate tables
 				 */
 				if (!awtdb.checkIfExistInSpecificTable(array[1].toString(), genus))
-					awtdb.addNewWord(new GetQuery().getSql("add_new_word"), array[1], array[0], genus);
+					awtdb.addNewWord(new SqlQuery().getSql("add_new_word"), array[1], array[0], genus);
 		} else {
 			if (!(array[0].toString()).isBlank())
 				if (!awtdb.checkIfExistInSpecificTable(array[0].toString(), genus))
-					awtdb.addNewWord(new GetQuery().getSql("add_new_word"), array[0], array[1], genus);
+					awtdb.addNewWord(new SqlQuery().getSql("add_new_word"), array[0], array[1], genus);
 		}
 	}
 

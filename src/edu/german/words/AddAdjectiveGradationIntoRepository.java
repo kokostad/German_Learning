@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import edu.german.sql.SqlQuery;
 import edu.german.sql.QueryContractor;
-import edu.german.tools.GetQuery;
 
 public class AddAdjectiveGradationIntoRepository {
 
@@ -13,7 +13,7 @@ public class AddAdjectiveGradationIntoRepository {
 	}
 
 	public void putIntoRepo(String word, HashMap<String, String> hm) {
-		String sql = new GetQuery().getSql("add_adjective_graduation");
+		String sql = new SqlQuery().getSql("add_adjective_graduation");
 		String[] array = { "EQUAL_DEGREE_GE", "EQUAL_DEGREE_PL", "COMPARATIVE_GE", "COMPARATIVE_PL",
 				"HIGHEST_DEGREE_GE", "HIGHEST_DEGREE_PL" };
 		String[] goal = new String[array.length];

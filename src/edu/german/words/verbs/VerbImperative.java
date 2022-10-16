@@ -33,16 +33,19 @@ public class VerbImperative extends JPanel {
 
 	public Map<String, String> getMap() {
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("DU", new TextCleaner(youS.getFirst()).getWord());
-		map.put("TY", new TextCleaner(youS.getSecond()).getWord());
-		map.put("WIR", new TextCleaner(we.getFirst()).getWord());
-		map.put("MY", new TextCleaner(we.getSecond()).getWord());
-		map.put("IHR", new TextCleaner(youP.getFirst()).getWord());
-		map.put("WY", new TextCleaner(youP.getSecond()).getWord());
-		map.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
-		map.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
-		map.put("TENS", tens);
-		return map;
+		if (!youS.getFirst().isBlank()) {
+			map.put("DU", new TextCleaner(youS.getFirst()).getWord());
+			map.put("TY", new TextCleaner(youS.getSecond()).getWord());
+			map.put("WIR", new TextCleaner(we.getFirst()).getWord());
+			map.put("MY", new TextCleaner(we.getSecond()).getWord());
+			map.put("IHR", new TextCleaner(youP.getFirst()).getWord());
+			map.put("WY", new TextCleaner(youP.getSecond()).getWord());
+			map.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
+			map.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
+			map.put("TENS", getTens());
+			return map;
+		}
+		return null;
 	}
 
 	public String getTens() {

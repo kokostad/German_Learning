@@ -2,7 +2,7 @@ package edu.german.tools;
 
 import java.util.HashMap;
 
-import edu.german.sql.GetSqlFromConfigFile;
+import edu.german.sql.SqlQuery;
 import edu.german.sql.QueryContractor;
 
 public class WriteRulesToRepository {
@@ -33,7 +33,7 @@ public class WriteRulesToRepository {
 	}
 
 	private void prepareData(String titles, String contents, String refers) {
-		String query = new GetSqlFromConfigFile("add_rules").getSql();
+		String query = new SqlQuery().getSql("add_rules");
 		if (new QueryContractor().executeQuery(query, titles, contents, refers))
 			new ShowMessage("The rule has been added");
 	}
