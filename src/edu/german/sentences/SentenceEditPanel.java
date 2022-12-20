@@ -10,6 +10,7 @@ import edu.german.tools.MyComboBox;
 import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditableField;
 import edu.german.tools.Titles;
+import edu.german.tools.Translate;
 
 public class SentenceEditPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -28,13 +29,12 @@ public class SentenceEditPanel extends JPanel {
 		this.boxList1 = boxList1;
 		this.boxList2 = boxList2;
 
-		String labelInfo1 = "Wpisz zdanie niemieckie";
-		String labelInfo2 = "Wpisz polskie znaczenie";
+		sentence = new OneEditableField(Translate.setText("write_german_sentence"),
+				Translate.setText("write_in_german"), 17, 50);
+		meaning = new OneEditableField(Translate.setText("write_polish_meaning"), Translate.setText("write_in_polish"),
+				17, 50);
 
-		sentence = new OneEditableField(labelInfo1, null, 16, 50);
-		meaning = new OneEditableField(labelInfo2, null, 16, 50);
-
-		word = new OneEditableField("Słowo kluczowe", "słowo klucz, według którego nastąpi wyszukiwanie", 14, 17);
+		word = new OneEditableField(Translate.setText("key_word"), Translate.setText("search_word"), 17, 15);
 
 		GridLayout gl = new GridLayout(3, 1);
 		JPanel editFieldsPan = new JPanel();
@@ -142,7 +142,7 @@ public class SentenceEditPanel extends JPanel {
 //	word.setValue(var);
 	public void showData(Map<String, String> map) {
 		map.entrySet().forEach(entry -> {
-			System.out.println(entry.getKey() + " " + entry.getValue());
+//			System.out.println(entry.getKey() + " " + entry.getValue());
 			if ((entry.getKey().toUpperCase()).equals("SENTENCE"))
 				sentence.setValue(entry.getValue());
 			if ((entry.getKey().toUpperCase()).equals("MENING"))

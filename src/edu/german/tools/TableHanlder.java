@@ -11,8 +11,8 @@ import javax.swing.table.TableModel;
 
 /**
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class to handle
- *         a simple table the class presents a list of objects according to the
- *         header table
+ * a simple table the class presents a list of objects according to the
+ * header table
  */
 public class TableHanlder extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -141,11 +141,6 @@ public class TableHanlder extends JTable {
 		}
 
 		return list;
-	}
-
-	public List<HashMap<String, String>> getDataAsMap() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public Map<String, String> getSelectedRowAsMap() {

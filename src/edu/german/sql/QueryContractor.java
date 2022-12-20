@@ -13,8 +13,6 @@ import java.util.Map;
 
 import edu.german.dao.DbConnect;
 import edu.german.tools.PrepareArrayFromString;
-import edu.german.tools.Translator;
-import edu.german.words.WordPkg;
 import edu.german.words.model.Noun;
 import edu.german.words.model.Word;
 
@@ -93,8 +91,6 @@ public class QueryContractor {
 			ps.setString(1, word);
 			ps.setString(2, genus);
 
-			System.out.println(ps.toString());
-
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 				id = rs.getInt(1);
@@ -113,10 +109,8 @@ public class QueryContractor {
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
-			ps.setString(2,  genus);
+			ps.setString(2, genus);
 			ps.setInt(3, woid);
-
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -139,7 +133,7 @@ public class QueryContractor {
 			ps.setString(2, param);
 			ps.setString(3, param2);
 			ps.setInt(4, woid);
-			System.out.println(ps.toString());
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 				return rs.getInt(1);
@@ -267,6 +261,7 @@ public class QueryContractor {
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, limit);
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Noun noun = new Noun();
@@ -297,6 +292,7 @@ public class QueryContractor {
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				noun.setWoid(rs.getInt("woid"));
@@ -325,6 +321,7 @@ public class QueryContractor {
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Noun noun = new Noun();
@@ -355,6 +352,7 @@ public class QueryContractor {
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Word word = new Word();
@@ -382,6 +380,7 @@ public class QueryContractor {
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
+
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int numOfCol = rsmd.getColumnCount();
@@ -462,7 +461,6 @@ public class QueryContractor {
 			ps.setString(14, oniPanstwo);
 			ps.setInt(15, woid);
 
-			System.out.println(ps.toString());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -493,7 +491,6 @@ public class QueryContractor {
 			ps.setString(10, participleIIGe);
 			ps.setString(11, participleIIPl);
 
-			System.out.println(ps.toString());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -512,7 +509,6 @@ public class QueryContractor {
 			ps.setString(2, meaning);
 			ps.setString(3, genus);
 
-			System.out.println(ps.toString());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -530,7 +526,7 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, woid);
 			ps.setString(2, tens);
-			System.out.println(ps.toString());
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				oid = rs.getInt(1);
@@ -542,6 +538,27 @@ public class QueryContractor {
 		}
 
 		return oid;
+	}
+
+	public void addSentenceToDatabase(String sql, String sentence, String meaning, String category, String tens,
+			String word) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, sentence);
+			ps.setString(2, meaning);
+			ps.setString(3, category);
+			ps.setString(4, tens);
+			ps.setString(5, word);
+
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
 	}
 
 }

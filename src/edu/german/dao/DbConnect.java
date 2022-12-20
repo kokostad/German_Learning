@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DbConnect {
-	private static final String IP = "localhost";
+	private static final String IP = "192.168.2.99";
 	private static final String DRV = "jdbc:postgresql://";
 	private static final String DB = "language";
 	private static final String PORT = ":5432/";

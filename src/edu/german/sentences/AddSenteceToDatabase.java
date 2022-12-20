@@ -43,19 +43,25 @@ public class AddSenteceToDatabase {
 		for (HashMap<String, String> map : mapList) {
 			String sentence = null;
 			String meaning = null;
-			String mode = null;
+			String category = null;
+			String word = null;
+			String tens = null;
 
 			if (map.containsKey("SENTENCE"))
 				sentence = map.get("SENTENCE");
 			if (map.containsKey("MEANING"))
 				meaning = map.get("MEANING");
 			if (map.containsKey("MODE"))
-				mode = map.get("MODE");
+				category = map.get("MODE");
+			if (map.containsKey("WORD"))
+				word = map.get("WORD");
+			if (map.containsKey("TIME"))
+				tens = map.get("TIME");				
 
-			if (sentence != null && mode != null && meaning != null) {
-				if (!checkIfExist(sentence, null, null, null, mode)) {
+			if (sentence != null && category != null && meaning != null) {
+				if (!checkIfExist(sentence, null, null, null, category)) {
 					String sql = query.getSql("add_sentence_with_mode");
-					new QueryContractor().executeQuery(sql, sentence, meaning, mode);
+					new QueryContractor().addSentenceToDatabase(sql, sentence, meaning, category, tens, word);
 				}
 			}
 		}

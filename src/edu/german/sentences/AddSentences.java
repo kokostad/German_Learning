@@ -92,22 +92,15 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == editRowBtn) {
-//			String[] array = st.getSelectedRowAsArray();
-//			edit.showData(array[0].toString(), array[1].toString(), array[2].toString(), array[3].toString(),
-//					array[4].toString());
-
-			Map<String, String> map = st.getSelectedRowAsMap();
-
-			edit.showData(map);
+			edit.showData(st.getSelectedRowAsMap());
 			if (st.getIdx() > -1)
 				st.removeRow();
 		}
 
 		else if (src == addToRepoBtn) {
-			mapList = st.getDataAsMap();
+			mapList = st.getDataAsMapList();
 			if (!mapList.isEmpty()) {
-				AddSenteceToDatabase addToRepo = new AddSenteceToDatabase();
-				addToRepo.addList(mapList);
+				new AddSenteceToDatabase().addList(mapList);
 				st.clearWordsList();
 				st.clearTable();
 				mapList.clear();
