@@ -61,8 +61,8 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 
 	public GuessTheMeaning(int height, int width, String titel) {
 		super(height, width, titel);
-		int fontSize = Integer.parseInt(new MyProperties(SCREEN_PARAM_FILE).getValue("DEFAULT_FONT_SIZE"));
-		int gamesWordfontSize = Integer.parseInt(new MyProperties(SCREEN_PARAM_FILE).getValue("WORD_FOR_GAME"));
+		int fontSize = Integer.parseInt(new MyProperties(SCREEN_PARAM_FILE).getText("DEFAULT_FONT_SIZE"));
+		int gamesWordfontSize = Integer.parseInt(new MyProperties(SCREEN_PARAM_FILE).getText("WORD_FOR_GAME"));
 		showImage = new ShowResultAsImage(200, 200);
 
 		allWordList = tryToGetList();

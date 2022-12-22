@@ -21,7 +21,7 @@ public class Translator {
 	}
 
 	public String translate(String name) {
-		String var = prop.getValue(name.toString());
+		String var = prop.getText(name.toString());
 		return var;
 	}
 

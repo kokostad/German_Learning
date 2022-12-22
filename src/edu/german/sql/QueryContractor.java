@@ -29,18 +29,19 @@ public class QueryContractor {
 	}
 
 	public boolean executeQuery(String sql) {
-		boolean state = false;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
+
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			state = ps.execute();
-			dbc.closeConnection(con);
-			return state;
+			return ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return state;
+		} finally {
+			dbc.closeConnection(con);
 		}
+
+		return false;
 	}
 
 	public boolean executeQuery(String sql, String str1, String str2, String str3) {
@@ -55,8 +56,11 @@ public class QueryContractor {
 			return ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false;
+		} finally {
+			dbc.closeConnection(con);
 		}
+
+		return false;
 	}
 
 	public void closeConnection() {
@@ -64,49 +68,53 @@ public class QueryContractor {
 	}
 
 	public int getId(String sql, String word) {
-		int id = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
+
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
-			System.out.println(ps.toString());
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
-				id = rs.getInt(1);
+				return rs.getInt(1);
 
-			return id;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return id;
+		} finally {
+			dbc.closeConnection(con);
 		}
+
+		return -1;
 	}
 
 	public int getId(String sql, String word, String genus) {
-		int id = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
+
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
 			ps.setString(2, genus);
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
-				id = rs.getInt(1);
+				return rs.getInt(1);
 
-			return id;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return id;
+		} finally {
+			dbc.closeConnection(con);
 		}
+
+		return -1;
 	}
 
 	public int getId(String sql, String word, String genus, int woid) {
-		int id = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
+
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
 			ps.setString(2, genus);
@@ -114,20 +122,22 @@ public class QueryContractor {
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
-				id = rs.getInt(1);
+				return rs.getInt(1);
 
-			return id;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return id;
+		} finally {
+			dbc.closeConnection(con);
 		}
+
+		return -1;
 	}
 
 	public int getId(String sql, String mainWord, int woid, String param, String param2) {
-		int id = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
+
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, mainWord);
 			ps.setString(2, param);
@@ -140,9 +150,11 @@ public class QueryContractor {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return id;
+		} finally {
+			dbc.closeConnection(con);
 		}
-		return id;
+
+		return -1;
 	}
 
 	public List<String[]> getWordsList(String sql) {
@@ -170,6 +182,8 @@ public class QueryContractor {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
 		}
 
 		return list;
@@ -195,6 +209,8 @@ public class QueryContractor {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
 		}
 
 		return list;
@@ -223,22 +239,23 @@ public class QueryContractor {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
 		}
 
 		return wordMap;
 	}
 
 	public int getWoidByWord(String sql, String word) {
-		int woid = -1;
 		loadDriver();
-
 		dbc = new DbConnect();
 		con = dbc.getConnection();
+
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				woid = rs.getInt("woid");
+				return rs.getInt("woid");
 			}
 
 		} catch (SQLException e) {
@@ -247,7 +264,7 @@ public class QueryContractor {
 			dbc.closeConnection(con);
 		}
 
-		return woid;
+		return -1;
 	}
 
 	public List<Noun> getNounsList(String sql, int number) {

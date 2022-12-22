@@ -15,40 +15,59 @@ import edu.german.tools.buttons.ButtonsPanel;
 
 public class AddRule extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static String FILE_CFG = "object_list.properties";
 	private static String SCR_CFG = "screen.properties";
 	private ButtonsPanel bp;
 	private JButton clearBtn;
 	private JButton addBtn;
 	private JTextArea area;
-	private OneEditableField titles;
-	private MyComboBox box;
+	private OneEditField titles;
+	private OneEditField tips;
+	private int editFieldWidth = 440;
+	private int editFieldHeight = 30;
 
 	public AddRule(int height, int width, String titel) {
 		super(height, width, titel);
+		MyProperties scr = new MyProperties(SCR_CFG);
 		bp = new ButtonsPanel("CLEAR_EDIT_FIELD", "ADD_TO_REPOSITORY");
 		clearBtn = bp.getB1();
 		clearBtn.addActionListener(this);
 		addBtn = bp.getB2();
 		addBtn.addActionListener(this);
 
-		int panelWidth = width / Integer.parseInt(new MyProperties(SCR_CFG).getValue("EDIT_FIELD_FACTOR"));
-		titles = new OneEditableField("Podaj tytuł reguły", "Czego reguła dotyczy", 16, panelWidth);
-		String[] tableHeaders = new MyProperties(FILE_CFG).getValuesArray("ALL_OBJECTS");
-		box = new MyComboBox("Czego dotyczy: ", tableHeaders);
+		editFieldHeight = scr.getIntValue("EDIT_FIELD_WIDTH");
+		editFieldHeight = scr.getIntValue("EDIT_FIELD_HEIGHT");
+		int fontSize = scr.getIntValue("DEFAULT_FONT_SIZE");
+		double factor = scr.getDoubleValue("VIEW_FACTOR");
+		
+		titles = new OneEditField.Builder()
+				.setTitle("Podaj tytuł reguły")
+				.setHint(null)
+				.setFontSize(fontSize)
+				.setWidth(editFieldWidth)
+				.setHeight(editFieldHeight)
+				.build();
+				
+		tips = new OneEditField.Builder()
+				.setTitle("Wskazówka")
+				.setHint("Czego dotyczy")
+				.setFontSize(fontSize)
+				.setWidth(editFieldWidth)
+				.setHeight(editFieldHeight)
+				.build();
 
 		JPanel upPanel = new JPanel();
 		upPanel.add(titles);
-		upPanel.add(box);
+		upPanel.add(tips);
 
 		area = new JTextArea();
-		area.setBounds(10, 30, 200, 200);
+		area.setFont(new MyFont().myFont(fontSize));
 
 		JScrollPane scp = new JScrollPane(area);
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, upPanel, scp);
+		sp.setResizeWeight(factor);
 
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
@@ -60,15 +79,16 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 	private void clearEditFiles() {
 		area.setText(null);
 		titles.clearField();
+		tips.clearField();
 	}
 
 	private HashMap<String, String> getData() {
 		HashMap<String, String> map = new HashMap<String, String>();
 		if (testData(titles.getValue()))
-			map.put("TITLES", titles.getValue());
+			map.put("TITLE", titles.getValue());
 
-		if (testData(box.getValue()))
-			map.put("REFERS_TO_1", box.getValue());
+		if (testData(tips.getValue()))
+			map.put("TIPS", tips.getValue());
 
 		if (testData(area.getText()))
 			map.put("CONTENTS", area.getText());
@@ -92,18 +112,15 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addBtn) {
-			if (!testData(titles.getValue()) || !testData(box.getValue()) || !testData(area.getText())) {
+			HashMap<String, String> map = getData();
+			if (map.size() < 2) {
 				new ShowMessage("EMPTY_FIELDS");
-			} else {
-				HashMap<String, String> map = getData();
-
-				if (!map.isEmpty()) {
-					new WriteRulesToRepository().addToRepo(map);
-				}
+			} else if (!map.isEmpty()) {
+				new WriteRulesToRepository().addToRepo(map);
 				clearEditFiles();
 			}
-		}
 
+		}
 	}
 
 }

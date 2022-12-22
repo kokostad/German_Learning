@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -63,10 +62,11 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, edit, scp);
-		sp.setResizeWeight(0.5);
+		sp.setResizeWeight(new MyProperties("screen.properties").getDoubleValue("VIEW_FACTOR"));
 
 		rulesBtn = new RulesButton();
 		rulesBtn.addActionListener(this);
+
 		toolBar.addSeparator();
 		toolBar.add(rulesBtn);
 		this.add(bp, BorderLayout.EAST);

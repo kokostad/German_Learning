@@ -30,7 +30,7 @@ public class MyProperties {
 		return (HashMap<Object, Object>) myMap;
 	}
 
-	public String getValue(String pattern) {
+	public String getText(String pattern) {
 		Properties properties = null;
 		try {
 			properties = loadProps();
@@ -39,6 +39,17 @@ public class MyProperties {
 		}
 
 		return properties.getProperty(pattern);
+	}
+
+	public int getIntValue(String pattern) {
+		Properties properties = null;
+		try {
+			properties = loadProps();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return Integer.parseInt(properties.getProperty(pattern));
 	}
 
 	/**
@@ -58,13 +69,12 @@ public class MyProperties {
 		else
 			pattern = new ReplaceSpaces().replaceUnderscoreWithSpace(pattern);
 
-		System.out.println(pattern);
 		return properties.getProperty(pattern);
 	}
 
 	public String[] getValuesArray(String pattern) {
-		if (getValue(pattern) != null)
-			return (getValue(pattern)).split(",");
+		if (getText(pattern) != null)
+			return (getText(pattern)).split(",");
 
 		return null;
 	}
@@ -77,5 +87,16 @@ public class MyProperties {
 		Properties properties = new Properties();
 		properties.load(new InputStreamReader(new FileInputStream(FILE), Charset.forName("UTF-8")));
 		return properties;
+	}
+
+	public double getDoubleValue(String pattern) {
+		Properties properties = null;
+		try {
+			properties = loadProps();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return Double.parseDouble(properties.getProperty(pattern));
 	}
 }

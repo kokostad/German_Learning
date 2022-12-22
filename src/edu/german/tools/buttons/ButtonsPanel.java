@@ -33,7 +33,7 @@ public class ButtonsPanel extends JPanel {
 	}
 
 	private String setTitel(Object pattern) {
-		return new MyProperties(CFG_FILE).getValue(pattern.toString());
+		return new MyProperties(CFG_FILE).getText(pattern.toString());
 	}
 
 	public ButtonsPanel(Object t1) {

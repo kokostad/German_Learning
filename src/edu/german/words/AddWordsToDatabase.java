@@ -23,7 +23,7 @@ public class AddWordsToDatabase {
 
 	private String getTableName(String genus) {
 		genus = new ReplaceSpaces().replaceSpaceWithUnderscore(genus);
-		return new MyProperties("table_name.properties").getValue(genus);
+		return new MyProperties("table_name.properties").getText(genus);
 	}
 
 	public void addWordsList(List<HashMap<String, String>> list) {

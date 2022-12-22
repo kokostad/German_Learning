@@ -65,7 +65,7 @@ public class TableHanlder extends JTable {
 	}
 
 	private String translate(String str) {
-		return new MyProperties(FILE_CFG).getValue(str);
+		return new MyProperties(FILE_CFG).getText(str);
 	}
 
 	private String[] translateArray(String[] arr) {

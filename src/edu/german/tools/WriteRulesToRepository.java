@@ -6,36 +6,31 @@ import edu.german.sql.SqlQuery;
 import edu.german.sql.QueryContractor;
 
 public class WriteRulesToRepository {
+	private String title = null;
+	private String contents = null;
+	private String tips = null;
 
 	public WriteRulesToRepository() {
 	}
 
 	public void addToRepo(HashMap<String, String> map) {
-
 		map.entrySet().forEach(entry -> {
-			String titles = "";
-			String contents = "";
-			String refers = "";
-
-			if (entry.getKey().equals("TITLES"))
-				titles = entry.getValue();
+			if (entry.getKey().equals("TITLE"))
+				title = entry.getValue();
 
 			if (entry.getKey().equals("CONTENTS"))
 				contents = entry.getValue();
 
-			if (entry.getKey().equals("REFERS_TO_1"))
-				refers = entry.getValue();
-
-			if (!titles.contains("") && !contents.contains("") && !refers.contains(""))
-				prepareData(titles, contents, refers);
-
+			if (entry.getKey().equals("TIPS"))
+				tips = entry.getValue();
 		});
+
+		prepareData(title, contents, tips);
 	}
 
-	private void prepareData(String titles, String contents, String refers) {
-		String query = new SqlQuery().getSql("add_rules");
-		if (new QueryContractor().executeQuery(query, titles, contents, refers))
-			new ShowMessage("The rule has been added");
+	private void prepareData(String title, String contents, String tips) {
+		if (new QueryContractor().executeQuery(new SqlQuery().getSql("add_rules"), title, contents, tips))
+			new ShowMessage("ADDED_SUCCESSFULLY");
 	}
 
 }

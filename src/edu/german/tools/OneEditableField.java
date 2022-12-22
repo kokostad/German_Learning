@@ -35,6 +35,7 @@ public class OneEditableField extends JPanel {
 		GroupLayout.SequentialGroup sg = gl.createSequentialGroup();
 		sg.addComponent(label).addGap(2).addComponent(getTextField(), GroupLayout.DEFAULT_SIZE,
 				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);
+		
 
 	}
 
