@@ -15,7 +15,6 @@ import edu.german.tools.buttons.ButtonsPanel;
 
 public class AddRule extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private static String SCR_CFG = "screen.properties";
 	private ButtonsPanel bp;
 	private JButton clearBtn;
 	private JButton addBtn;
@@ -27,26 +26,25 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 
 	public AddRule(int height, int width, String titel) {
 		super(height, width, titel);
-		MyProperties scr = new MyProperties(SCR_CFG);
+		ScreenSetup scr = new ScreenSetup();
 		bp = new ButtonsPanel("CLEAR_EDIT_FIELD", "ADD_TO_REPOSITORY");
 		clearBtn = bp.getB1();
 		clearBtn.addActionListener(this);
 		addBtn = bp.getB2();
 		addBtn.addActionListener(this);
 
-		editFieldHeight = scr.getIntValue("EDIT_FIELD_WIDTH");
-		editFieldHeight = scr.getIntValue("EDIT_FIELD_HEIGHT");
-		int fontSize = scr.getIntValue("DEFAULT_FONT_SIZE");
-		double factor = scr.getDoubleValue("VIEW_FACTOR");
-		
+		editFieldHeight = scr.EDIT_FIELD_WIDTH;
+		editFieldHeight = scr.EDIT_FIELD_HEIGHT;
+		int fontSize = scr.DEFAULT_FONT_SIZE;
+		double factor = scr.SPLIT_PANE_FACTOR;
+
 		titles = new OneEditField.Builder()
 				.setTitle("Podaj tytuł reguły")
-				.setHint(null)
-				.setFontSize(fontSize)
+				.setHint(null).setFontSize(fontSize)
 				.setWidth(editFieldWidth)
 				.setHeight(editFieldHeight)
 				.build();
-				
+
 		tips = new OneEditField.Builder()
 				.setTitle("Wskazówka")
 				.setHint("Czego dotyczy")

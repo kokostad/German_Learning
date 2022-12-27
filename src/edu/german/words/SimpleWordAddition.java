@@ -12,6 +12,7 @@ import javax.swing.JSplitPane;
 
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
+import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.Titles;
@@ -33,13 +34,14 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
 	private EditWordsPanel editPanel;
-	private String[] tableHeaders;
 	private TableHanlder st;
 
 	public SimpleWordAddition(int height, int width, String title) {
 		super(height, width, title);
-		bp = new ButtonsPanel("CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
-				"ADD_TO_REPOSITORY");
+		ScreenSetup scr = new ScreenSetup();
+		MyProperties prop = new MyProperties(FILE_NAME);
+		bp = new ButtonsPanel("CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST",
+				"EDIT_ROW", "ADD_TO_REPOSITORY");
 		bp.setFontSize(20);
 		clearEditFieldsBtn = bp.getB1();
 		clearEditFieldsBtn.addActionListener(this);
@@ -54,18 +56,19 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 		addToRepoBtn = bp.getB6();
 		addToRepoBtn.addActionListener(this);
 
-		tableHeaders = new MyProperties(FILE_NAME).getValuesArray("SIMPLE_WORDS_TABLE_HEADERS");
+		st = new TableHanlder(prop.getValuesArray("SIMPLE_WORDS_TABLE_HEADERS"), true);
 
-		st = new TableHanlder(tableHeaders, true);
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		String[] selectionList = new MyProperties(FILE_NAME).getValuesArray("GENUS_LIST");
-		editPanel = new EditWordsPanel("Wpisz słowo", "Wpisz znaczenie", selectionList);
+		editPanel = new EditWordsPanel(Titles.setTitel("WRITE_WORD"),
+				Titles.setTitel("WRITE_MEANING"),
+				prop.getValuesArray("GENUS_LIST"));
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editPanel, scp);
+		sp.setResizeWeight(scr.SPLIT_PANE_FACTOR);
 
 		add(sp, BorderLayout.CENTER);
 		add(bp, BorderLayout.EAST);

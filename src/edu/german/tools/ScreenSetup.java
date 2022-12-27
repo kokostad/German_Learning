@@ -20,4 +20,11 @@ public class ScreenSetup {
 	public static final int ICON_WIDTH = 20;
 	public static final int ICON_HEIGHT = 20;
 
+	public double SPLIT_PANE_FACTOR = 0.15;
+
+	public int EDIT_FIELD_WIDTH = 420;
+	public int EDIT_FIELD_HEIGHT = 30;
+
+	public int DEFAULT_FONT_SIZE = 16;
+
 }

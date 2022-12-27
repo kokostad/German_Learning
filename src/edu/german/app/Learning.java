@@ -2,18 +2,17 @@ package edu.german.app;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.JToolBar;
 
 import edu.german.games.GuessArticle;
 import edu.german.games.GuessTheMeaning;
@@ -25,9 +24,7 @@ import edu.german.tools.AddRule;
 import edu.german.tools.MyToolbar;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.Titles;
-import edu.german.tools.buttons.ExitButton;
-import edu.german.tools.buttons.ExportButton;
-import edu.german.tools.buttons.ImportButton;
+import edu.german.tools.buttons.ModelButton;
 import edu.german.words.AddAdjective;
 import edu.german.words.SimpleWordAddition;
 import edu.german.words.WordAddition;
@@ -53,10 +50,11 @@ public class Learning extends JFrame implements ActionListener {
 	private JMenu mGuessing;
 	private JMenuItem miWhatKind;
 	private JMenuItem guessTheMeaning;
-	private JToolBar toolbar;
-	private JButton importBtn;
-	private JButton exportBtn;
-	private JButton exitBtn;
+	private MyToolbar toolbar;
+	private ModelButton importBtn;
+	private ModelButton exportBtn;
+	private ModelButton exitBtn;
+	private ModelButton addRulesBtn;
 
 	public Learning() {
 		ScreenSetup sp = new ScreenSetup();
@@ -123,19 +121,42 @@ public class Learning extends JFrame implements ActionListener {
 		mGames.add(mGuessing);
 
 		// NOTICE Buttons settings
-		exitBtn = new ExitButton();
+		exitBtn = new ModelButton.Builder()
+				.setTitle("Exit")
+				.setIconName("exit.png")
+				.setHint(Titles.setTitel("EXIT"))
+				.build();
 		exitBtn.addActionListener(this);
-		importBtn = new ImportButton();
+		importBtn = new ModelButton.Builder()
+				.setTitle("Import")
+				.setIconName("import.png")
+				.setHint(Titles.setTitel("IMPORT"))
+				.build();
 		importBtn.addActionListener(this);
-		exportBtn = new ExportButton();
+		exportBtn = new ModelButton.Builder()
+				.setTitle("Export")
+				.setIconName("export.png")
+				.setHint(Titles.setTitel("EXPORT"))
+				.build();
 		exportBtn.addActionListener(this);
+		addRulesBtn = new ModelButton.Builder()
+				.setTitle("Rules")
+				.setIconName("rules.png")
+				.setHint(Titles.setTitel("ADD_RULES"))
+				.build();
+		addRulesBtn.addActionListener(this);
 
 		toolbar = new MyToolbar();
 		toolbar.add(exitBtn);
 		toolbar.addSeparator();
 		toolbar.add(importBtn);
 		toolbar.add(exportBtn);
-		this.add(toolbar, BorderLayout.BEFORE_FIRST_LINE);
+		toolbar.addSeparator();
+		toolbar.add(addRulesBtn);
+		toolbar.addSeparator();
+
+		Container con = this.getContentPane();
+		con.add(toolbar, BorderLayout.BEFORE_FIRST_LINE);
 
 		mbar = new JMenuBar();
 		mbar.add(mOption);
@@ -235,7 +256,7 @@ public class Learning extends JFrame implements ActionListener {
 			dsk.repaint();
 		}
 
-		else if (src == miAddRules) {
+		else if (src == miAddRules || src == addRulesBtn) {
 			AddRule addRule = new AddRule(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("ADD_RULES"));
 			dsk.add(addRule);
 			dsk.moveToFront(addRule);

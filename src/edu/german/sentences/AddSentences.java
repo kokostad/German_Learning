@@ -10,13 +10,10 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import edu.german.tools.AddRule;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
 import edu.german.tools.TableHanlder;
-import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.tools.buttons.RulesButton;
 
 public class AddSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +26,6 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private JButton editRowBtn;
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
-	private RulesButton rulesBtn;
 	private TableHanlder st;
 	private String[] tableHeaders;
 	private List<HashMap<String, String>> mapList;
@@ -64,11 +60,8 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, edit, scp);
 		sp.setResizeWeight(new MyProperties("screen.properties").getDoubleValue("VIEW_FACTOR"));
 
-		rulesBtn = new RulesButton();
-		rulesBtn.addActionListener(this);
-
 		toolBar.addSeparator();
-		toolBar.add(rulesBtn);
+//		toolBar.add(rulesBtn);
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
 		setVisible(true);
@@ -107,14 +100,14 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 			}
 		}
 
-		else if (src == rulesBtn) {
-			int hight = this.getParent().getHeight();
-			int width = this.getParent().getWidth();
-			AddRule ar = new AddRule(hight, width, Titles.setTitel("ADD_RULES"));
-			getDesktopPane().add(ar);
-			getDesktopPane().moveToFront(ar);
-			getDesktopPane().repaint();
-		}
+//		else if (src == rulesBtn) {
+//			int hight = this.getParent().getHeight();
+//			int width = this.getParent().getWidth();
+//			AddRule ar = new AddRule(hight, width, Titles.setTitel("ADD_RULES"));
+//			getDesktopPane().add(ar);
+//			getDesktopPane().moveToFront(ar);
+//			getDesktopPane().repaint();
+//		}
 	}
 
 	private void clearEditFiles() {

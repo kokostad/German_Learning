@@ -8,21 +8,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.ContextNotEmptyException;
 import javax.swing.JButton;
-import javax.swing.JDesktopPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
-import edu.german.tools.AddRule;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditableField;
 import edu.german.tools.TableHanlder;
-import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.tools.buttons.RulesButton;
-import edu.german.words.AddWordsToDatabase;
 
 public class AddPurposefulSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -39,7 +33,6 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 	private JButton editRowBtn;
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
-	private RulesButton rulesBtn;
 	private List<String[]> sentenceList;
 	private List<HashMap<String, String>> mapList;
 
@@ -74,10 +67,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, sentenceEditPanel, scp);
 		sp.setResizeWeight(0.5);
 
-		rulesBtn = new RulesButton();
-		rulesBtn.addActionListener(this);
 		toolBar.addSeparator();
-		toolBar.add(rulesBtn);
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
 		setVisible(true);
@@ -127,15 +117,6 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 				st.clearTable();
 				mapList.clear();
 			}
-		}
-
-		else if (src == rulesBtn) {
-			int hight = this.getParent().getHeight();
-			int width = this.getParent().getWidth();
-			AddRule ar = new AddRule(hight, width, Titles.setTitel("ADD_RULES"));
-			getDesktopPane().add(ar);
-			getDesktopPane().moveToFront(ar);
-			getDesktopPane().repaint();
 		}
 
 	}

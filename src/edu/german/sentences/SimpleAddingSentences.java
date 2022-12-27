@@ -6,12 +6,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import edu.german.tools.AddRule;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.TableHanlder;
-import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.tools.buttons.RulesButton;
 
 public class SimpleAddingSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -23,7 +20,6 @@ public class SimpleAddingSentences extends MyInternalFrame implements ActionList
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
 	private TableHanlder st;
-	private RulesButton rulesBtn;
 
 	public SimpleAddingSentences(int height, int width, String titel) {
 		super(height, width, titel);
@@ -43,12 +39,8 @@ public class SimpleAddingSentences extends MyInternalFrame implements ActionList
 		addToRepoBtn = bp.getB6();
 		addToRepoBtn.addActionListener(this);
 
-		
-		rulesBtn = new RulesButton();
-		rulesBtn.addActionListener(this);
 		toolBar.addSeparator();
-		toolBar.add(rulesBtn);
-		
+
 		add(bp, BorderLayout.EAST);
 		setVisible(true);
 		repaint();
@@ -57,16 +49,6 @@ public class SimpleAddingSentences extends MyInternalFrame implements ActionList
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
-		
-		if (src == rulesBtn) {
-			int hight = this.getParent().getHeight();
-			int width = this.getParent().getWidth();
-			AddRule ar = new AddRule(hight, width, Titles.setTitel("ADD_RULES"));
-			getDesktopPane().add(ar);
-			getDesktopPane().moveToFront(ar);
-			getDesktopPane().repaint();
-		}
-
 
 	}
 

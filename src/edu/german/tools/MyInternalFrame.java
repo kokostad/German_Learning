@@ -6,13 +6,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
-import javax.swing.JToolBar;
 
-import edu.german.tools.buttons.ExitButton;
+import edu.german.tools.buttons.ModelButton;
 
 public class MyInternalFrame extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
-	protected JToolBar toolBar;
+	protected MyToolbar toolBar;
 
 	public MyInternalFrame(int height, int width, String titel) {
 		String myIcon = "src/edu/german/img/tak3.gif";
@@ -26,7 +25,8 @@ public class MyInternalFrame extends JInternalFrame {
 		this.setSize(width, height - ScreenSetup.BOTTOM_BORDER);
 		this.setResizable(true);
 
-		ExitButton bExit = new ExitButton();
+		ModelButton bExit = new ModelButton.Builder().setTitle("Exit").setIconName("exit.png")
+				.setHint(Titles.setTitel("EXIT")).build();
 		bExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -35,8 +35,7 @@ public class MyInternalFrame extends JInternalFrame {
 			}
 		});
 
-		toolBar = new JToolBar();
-		toolBar.setRollover(true);
+		toolBar = new MyToolbar();
 		toolBar.add(bExit);
 
 		this.add(toolBar, BorderLayout.BEFORE_FIRST_LINE);
