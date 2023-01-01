@@ -578,4 +578,35 @@ public class QueryContractor {
 		}
 	}
 
+	public List<Noun> getAllNounsFromView(String sql) {
+		List<Noun> list = new LinkedList<>();
+		loadDriver();
+
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Noun noun = new Noun();
+				noun.setNoun(rs.getString("word").split(" "));
+				noun.setWord(rs.getString("word"));
+//				String[] article = rs.getString("word").split(" ", 1);
+				String[] article = rs.getString("word").split(" ");
+				noun.setArticle(article[0]);
+				noun.setMeaning(rs.getString("meaning"));
+				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
+				list.add(noun);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return list;
+	}
+
 }

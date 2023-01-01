@@ -193,7 +193,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 
 	private void positiveScoreUpdate() {
 		goodAnswer = goodAnswer + 1;
-		resultPan.setYourAnswer(choosenWord + ", " + Titles.setTitel("MEANING") + ": " + meaning);
 		resultPan.setGoodAnswerNumber(String.valueOf(goodAnswer));
 		actualScore = actualScore + 1;
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
@@ -209,7 +208,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		wrongAnswer = 0;
 
 		resultPan.setYourScoreLab(String.valueOf(actualDraw + 0));
-		resultPan.setYourAnswer("");
 		resultPan.setGoodAnswerNumber(String.valueOf(goodAnswer));
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
 		resultPan.setWrongAnswerNumber(String.valueOf(wrongAnswer));
@@ -252,7 +250,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 			meaning = var.getMeaning();
 			meanings = var.getMeanings();
 			choosenWordLabel.setText(information + choosenWord);
-			resultPan.setYourAnswer(choosenWord);
 			resultPan.setYourScoreLab(String.valueOf(actualDraw + 1));
 		} else
 			new ShowMessage("NO_MORE_WORDS");

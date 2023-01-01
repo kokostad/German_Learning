@@ -16,8 +16,9 @@ public class ExecutorDoCallNoun implements Callable<List<Noun>> {
 	}
 
 	public List<Noun> getNounList() {
-		String query = new SqlQuery().getSql("get_all_" + "nouns");
-		return list = new QueryContractor().getAllNounsList(query);
+//		String sql = new SqlQuery().getSql("select * from ge.wordgames w ;");
+		String sql = "select * from ge.wordgames w ;";
+		return list = new QueryContractor().getAllNounsFromView(sql);
 	}
 
 	@Override

@@ -26,5 +26,12 @@ public class ScreenSetup {
 	public int EDIT_FIELD_HEIGHT = 30;
 
 	public int DEFAULT_FONT_SIZE = 16;
+	public int GAME_FONT_SIZE = 18;
+	public int GAME_BIG_FONT_SIZE = 26;
+
+	public int EDIT_FIELD_FACTOR = 30;
+
+	public String STANDART_FONT_ART = "Serif";
+	public String GAME_FONT_ART = "MV Boli";
 
 }
