@@ -557,8 +557,8 @@ public class QueryContractor {
 		return oid;
 	}
 
-	public void addSentenceToDatabase(String sql, String sentence, String meaning, String category, String tens,
-			String word) {
+	public void addSentenceToDatabase(String sql, String sentence, String meaning, String type, String category,
+			String tens, String word) {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -566,9 +566,12 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, sentence);
 			ps.setString(2, meaning);
-			ps.setString(3, category);
-			ps.setString(4, tens);
-			ps.setString(5, word);
+			ps.setString(3, type);
+			ps.setString(4, category);
+			ps.setString(5, tens);
+			ps.setString(6, word);
+
+			System.out.println(ps.toString());
 
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -592,7 +595,6 @@ public class QueryContractor {
 				Noun noun = new Noun();
 				noun.setNoun(rs.getString("word").split(" "));
 				noun.setWord(rs.getString("word"));
-//				String[] article = rs.getString("word").split(" ", 1);
 				String[] article = rs.getString("word").split(" ");
 				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));

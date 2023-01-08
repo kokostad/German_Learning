@@ -14,19 +14,11 @@ public class AddSenteceToDatabase {
 		this.query = new SqlQuery();
 	}
 
-	public boolean checkIfExist(String sentence, String type, String category, String tens, String mode) {
-		if (!sentence.isBlank() && type != null) {
+	public boolean checkIfSentenceExist(String sentence, String category) {
+		if (!sentence.isBlank() && category != null) {
 			String sql = query.getSql("check_sentence");
 			QueryContractor qc = new QueryContractor();
-			int id = qc.getId(sql, sentence, type);
-			if (id > -1)
-				return true;
-		}
-
-		if (!sentence.isBlank() && mode != null) {
-			String sql = query.getSql("check_sentence_mode");
-			QueryContractor qc = new QueryContractor();
-			int id = qc.getId(sql, sentence, type);
+			int id = qc.getId(sql, sentence, category);
 			if (id > -1)
 				return true;
 		}
@@ -43,26 +35,27 @@ public class AddSenteceToDatabase {
 		for (HashMap<String, String> map : mapList) {
 			String sentence = null;
 			String meaning = null;
+			String type = null;
 			String category = null;
-			String word = null;
 			String tens = null;
+			String word = null;
 
 			if (map.containsKey("SENTENCE"))
 				sentence = map.get("SENTENCE");
 			if (map.containsKey("MEANING"))
 				meaning = map.get("MEANING");
-			if (map.containsKey("MODE"))
-				category = map.get("MODE");
+			if (map.containsKey("TYPE"))
+				type = map.get("TYPE");
+			if (map.containsKey("CATEGORY"))
+				category = map.get("CATEGORY");
+			if (map.containsKey("TENS"))
+				tens = map.get("TENS");
 			if (map.containsKey("WORD"))
 				word = map.get("WORD");
-			if (map.containsKey("TIME"))
-				tens = map.get("TIME");				
 
-			if (sentence != null && category != null && meaning != null) {
-				if (!checkIfExist(sentence, null, null, null, category)) {
-					String sql = query.getSql("add_sentence_with_mode");
-					new QueryContractor().addSentenceToDatabase(sql, sentence, meaning, category, tens, word);
-				}
+			if (!checkIfSentenceExist(sentence, category)) {
+				String sql = query.getSql("add_sentence_with_mode");
+				new QueryContractor().addSentenceToDatabase(sql, sentence, meaning, type, category, tens, word);
 			}
 		}
 

@@ -44,7 +44,6 @@ public class Learning extends JFrame implements ActionListener {
 	private JMenuItem miAddAdjective;
 	private JMenuItem miAddVerbs;
 	private JMenuItem miSentencesAddition;
-	private JMenuItem miAddPurposefulSentences;
 	private JMenuItem miAddRules;
 	private JMenu mGames;
 	private JMenu mGuessing;
@@ -55,6 +54,7 @@ public class Learning extends JFrame implements ActionListener {
 	private ModelButton exportBtn;
 	private ModelButton exitBtn;
 	private ModelButton addRulesBtn;
+	private ModelButton addSentenceBtn;
 
 	public Learning() {
 		ScreenSetup sp = new ScreenSetup();
@@ -84,8 +84,6 @@ public class Learning extends JFrame implements ActionListener {
 		miSentencesAddition.addActionListener(this);
 		miAddWords = new JMenu(Titles.setTitel("WORDS_ADDITION"));
 		miAddWords.addActionListener(this);
-		miAddPurposefulSentences = new JMenuItem(Titles.setTitel("PURPOSEFUL_SENTENCES"));
-		miAddPurposefulSentences.addActionListener(this);
 
 		miAddAdjective = new JMenuItem(Titles.setTitel("ADD_ADJECTIVE"));
 		miAddAdjective.addActionListener(this);
@@ -104,7 +102,6 @@ public class Learning extends JFrame implements ActionListener {
 		mAddition.add(miAddWords);
 		mAddition.add(new JSeparator());
 		mAddition.add(miSentencesAddition);
-		mAddition.add(miAddPurposefulSentences);
 		mAddition.add(new JSeparator());
 		mAddition.add(miAddRules);
 
@@ -127,18 +124,21 @@ public class Learning extends JFrame implements ActionListener {
 				.setHint(Titles.setTitel("EXIT"))
 				.build();
 		exitBtn.addActionListener(this);
+
 		importBtn = new ModelButton.Builder()
 				.setTitle("Import")
 				.setIconName("import.png")
 				.setHint(Titles.setTitel("IMPORT"))
 				.build();
 		importBtn.addActionListener(this);
+
 		exportBtn = new ModelButton.Builder()
 				.setTitle("Export")
 				.setIconName("export.png")
 				.setHint(Titles.setTitel("EXPORT"))
 				.build();
 		exportBtn.addActionListener(this);
+
 		addRulesBtn = new ModelButton.Builder()
 				.setTitle("Rules")
 				.setIconName("rules.png")
@@ -146,6 +146,13 @@ public class Learning extends JFrame implements ActionListener {
 				.build();
 		addRulesBtn.addActionListener(this);
 
+		addSentenceBtn = new ModelButton.Builder()
+				.setTitle("Add Sentence")
+				.setIconName("add_sentence.png")
+				.setHint(Titles.setTitel("ADD_SENTENCE"))
+				.build();
+		addSentenceBtn.addActionListener(this);
+		
 		toolbar = new MyToolbar();
 		toolbar.add(exitBtn);
 		toolbar.addSeparator();
@@ -154,6 +161,7 @@ public class Learning extends JFrame implements ActionListener {
 		toolbar.addSeparator();
 		toolbar.add(addRulesBtn);
 		toolbar.addSeparator();
+		toolbar.add(addSentenceBtn);
 
 		Container con = this.getContentPane();
 		con.add(toolbar, BorderLayout.BEFORE_FIRST_LINE);
@@ -204,7 +212,7 @@ public class Learning extends JFrame implements ActionListener {
 			dsk.repaint();
 		}
 
-		else if (src == miSentencesAddition) {
+		else if (src == miSentencesAddition || src == addSentenceBtn) {
 			AddSentences ssa = new AddSentences(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("SENTENCES_ADDITION"));
 			dsk.add(ssa);
 			dsk.moveToFront(ssa);
@@ -245,14 +253,6 @@ public class Learning extends JFrame implements ActionListener {
 					Titles.setTitel("GUESS_THE_MEANING"));
 			dsk.add(guessMeaning);
 			dsk.moveToFront(guessMeaning);
-			dsk.repaint();
-		}
-
-		else if (src == miAddPurposefulSentences) {
-			AddPurposefulSentences addPSent = new AddPurposefulSentences(dsk.getHeight(), dsk.getWidth(),
-					Titles.setTitel("PURPOSEFUL_SENTENCES"));
-			dsk.add(addPSent);
-			dsk.moveToFront(addPSent);
 			dsk.repaint();
 		}
 

@@ -80,32 +80,32 @@ public class OneEditField extends JPanel {
 		private int width;
 		private int height;
 
-		public Builder setValue(String value) {
+		public Builder withValue(String value) {
 			this.value = value;
 			return this;
 		}
 
-		public Builder setHeight(int height) {
+		public Builder withHeight(int height) {
 			this.height = height;
 			return this;
 		}
 
-		public Builder setWidth(int width) {
+		public Builder withWidth(int width) {
 			this.width = width;
 			return this;
 		}
 
-		public Builder setFontSize(int fontSize) {
+		public Builder withFontSize(int fontSize) {
 			this.fontSize = fontSize;
 			return this;
 		}
 
-		public Builder setTitle(String title) {
+		public Builder withTitle(String title) {
 			this.title = title;
 			return this;
 		}
 
-		public Builder setHint(String hint) {
+		public Builder withHint(String hint) {
 			this.hint = hint;
 			return this;
 		}

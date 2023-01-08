@@ -11,28 +11,28 @@ import javax.swing.table.TableModel;
 
 /**
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class to handle
- * a simple table the class presents a list of objects according to the
- * header table
+ *         a simple table the class presents a list of objects according to the
+ *         header table
  */
 public class TableHanlder extends JTable {
 	private static final long serialVersionUID = 1L;
 	private static final String FILE_CFG = "translation_table.properties";
 	private DefaultTableModel model;
-	private String[] headers;
+	private String[] header;
 	private List<String[]> wordsList;
 
 	/**
-	 * @param headers
+	 * @param header
 	 * @param translate
 	 */
-	public TableHanlder(String[] headers, boolean translate) {
-		this.headers = headers;
+	public TableHanlder(String[] header, boolean translate) {
+		this.header = header;
 		wordsList = new LinkedList<String[]>();
 		model = new DefaultTableModel();
 		if (translate)
-			model.setColumnIdentifiers(translateArray(headers));
+			model.setColumnIdentifiers(translateArray(header));
 		else
-			model.setColumnIdentifiers(headers);
+			model.setColumnIdentifiers(header);
 
 		setModel(model);
 	}
@@ -48,8 +48,8 @@ public class TableHanlder extends JTable {
 
 	public void showMap(Map<String, String> map) {
 		int i = 0;
-		String[] row = new String[headers.length];
-		for (String str : headers)
+		String[] row = new String[header.length];
+		for (String str : header)
 			if (map.containsKey(str))
 				row[i++] = map.get(str);
 
@@ -84,9 +84,9 @@ public class TableHanlder extends JTable {
 
 	public String[] getSelectedRowAsArray() {
 		int idx = getIdx();
-		String[] array = new String[headers.length];
+		String[] array = new String[header.length];
 
-		for (int i = 0; i < headers.length; i++)
+		for (int i = 0; i < header.length; i++)
 			array[i] = (String) this.getValueAt(idx, i);
 
 		return array;
@@ -110,7 +110,7 @@ public class TableHanlder extends JTable {
 		for (int i = 0; model.getRowCount() > i; i++) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			for (int j = 0; j < model.getColumnCount(); j++) {
-				map.put(headers[j].toUpperCase(), (String) model.getValueAt(i, j));
+				map.put(header[j].toUpperCase(), (String) model.getValueAt(i, j));
 			}
 
 			list.add(map);
@@ -125,7 +125,7 @@ public class TableHanlder extends JTable {
 		for (int i = 0; model.getRowCount() > i; i++) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			for (int j = 0; j < model.getColumnCount(); j++) {
-				map.put(headers[j].toUpperCase(), (String) model.getValueAt(i, j));
+				map.put(header[j].toUpperCase(), (String) model.getValueAt(i, j));
 			}
 
 			if (sign.equals("WORD")) {
@@ -147,10 +147,20 @@ public class TableHanlder extends JTable {
 		int idx = getIdx();
 		HashMap<String, String> map = new HashMap<String, String>();
 
-		for (int i = 0; i < headers.length; i++)
-			map.put(headers[i], (String) this.getValueAt(idx, i));
+		for (int i = 0; i < header.length; i++)
+			map.put(header[i], (String) this.getValueAt(idx, i));
 
 		return map;
+	}
+
+	public void showObjectMap(Map<Object, Object> map) {
+		int i = 0;
+		String[] row = new String[header.length];
+		for (Object obj : header)
+			if (map.containsKey((obj.toString()).toUpperCase()))
+				row[i++] = (String) map.get((obj.toString()).toUpperCase());
+
+		showRow(row);
 	}
 
 }
