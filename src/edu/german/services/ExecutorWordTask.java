@@ -7,7 +7,7 @@ import java.util.List;
 
 import edu.german.sql.SqlQuery;
 import edu.german.tools.MyProgressBar;
-import edu.german.words.AddWordsToDatabase;
+import edu.german.words.AddNewWordIntoDatabase;
 
 public class ExecutorWordTask implements Runnable {
 	private String sign;
@@ -35,7 +35,7 @@ public class ExecutorWordTask implements Runnable {
 		if (!list.isEmpty()) {
 			int i = 0;
 			for (String line : list) {
-				addWordToMainTab(formatString(line));
+				putWordIntoMainTab(formatString(line));
 				i += 1;
 				int result = ((i * 100) / sum);
 				bar.fill(result);
@@ -46,20 +46,20 @@ public class ExecutorWordTask implements Runnable {
 		}
 	}
 
-	private void addWordToMainTab(String[] array) {
-		AddWordsToDatabase awtdb = new AddWordsToDatabase();
+	private void putWordIntoMainTab(String[] array) {
+//		AddNewWordIntoDatabase awtdb = new AddNewWordIntoDatabase();
 		if (order) {
-			if (!(array[1].toString()).isBlank())
+//			if (!(array[1].toString()).isBlank())
 				/*
 				 * TODO check if word exist in main table in database check if word exist in
 				 * specific table if not exist write down to the appropriate tables
 				 */
-				if (!awtdb.checkIfExistInSpecificTable(array[1].toString(), genus))
-					awtdb.addNewWord(new SqlQuery().getSql("add_new_word"), array[1], array[0], genus);
+//				if (!awtdb.checkIfExistInSpecificTable(array[1].toString(), genus))
+//					awtdb.addNewWord(new SqlQuery().getSql("add_new_word"), array[1], array[0], genus);
 		} else {
-			if (!(array[0].toString()).isBlank())
-				if (!awtdb.checkIfExistInSpecificTable(array[0].toString(), genus))
-					awtdb.addNewWord(new SqlQuery().getSql("add_new_word"), array[0], array[1], genus);
+//			if (!(array[0].toString()).isBlank())
+//				if (!awtdb.checkIfExistInSpecificTable(array[0].toString(), genus))
+//					awtdb.addNewWord(new SqlQuery().getSql("add_new_word"), array[0], array[1], genus);
 		}
 	}
 

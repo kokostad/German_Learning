@@ -89,7 +89,7 @@ public class AddAdjective extends MyInternalFrame implements ActionListener {
 
 		else if (src == addToRepoBtn) {
 			List<HashMap<String, String>> list = ag.getDataAsMapList("WORD");
-			AddWordsToDatabase addToRepo = new AddWordsToDatabase("das Adjektiv");
+			AddNewWordIntoDatabase addToRepo = new AddNewWordIntoDatabase();
 			addToRepo.addWordsList(list);
 			ag.clearWordsList();
 			ag.clearTable();
