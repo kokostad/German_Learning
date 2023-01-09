@@ -17,8 +17,8 @@ public class ScreenSetup {
 	public int SCR_DEFAULT_HEIGHT = SCR_HEIGHT - DECREASE_HEIGHT;
 
 	public static final int BOTTOM_BORDER = 31;
-	public static final int ICON_WIDTH = 20;
-	public static final int ICON_HEIGHT = 20;
+	public final int ICON_WIDTH = 20;
+	public final int ICON_HEIGHT = 20;
 
 	public double SPLIT_PANE_FACTOR = 0.15;
 	public double STANDARD_SPLIT_PANE_FACTOR = 0.25;
