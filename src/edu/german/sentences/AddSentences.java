@@ -6,11 +6,14 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
+import edu.german.services.ExecutorPutSentenceIntoDatabase;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
 import edu.german.tools.ScreenSetup;
@@ -32,9 +35,12 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private TableHanlder st;
 	private String[] header;
 	private List<HashMap<String, String>> mapList;
+	private ExecutorService es;
 
 	public AddSentences(int height, int width, String titel) {
 		super(height, width, titel);
+		es = Executors.newSingleThreadExecutor();
+
 		bp = new ButtonsPanel("CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
 				"ADD_TO_REPOSITORY");
 		clearEditFieldsBtn = bp.getB1();
@@ -98,7 +104,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		else if (src == addToRepoBtn) {
 			mapList = st.getDataAsMapList();
 			if (!mapList.isEmpty()) {
-				new AddSenteceToDatabase().addList(mapList);
+				es.submit(new ExecutorPutSentenceIntoDatabase(mapList));
 				st.clearWordsList();
 				st.clearTable();
 				mapList.clear();

@@ -571,8 +571,6 @@ public class QueryContractor {
 			ps.setString(5, tens);
 			ps.setString(6, word);
 
-			System.out.println(ps.toString());
-
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
