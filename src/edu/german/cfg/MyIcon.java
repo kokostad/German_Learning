@@ -18,4 +18,6 @@ public class MyIcon {
 	public static String import_export = "import_export.png";
 	public static String importItem = "import.png";
 	public static String exportItem = "export.png";
+	
+	public static String add_sentence = ""; 
 }

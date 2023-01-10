@@ -39,18 +39,18 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 		double factor = scr.SPLIT_PANE_FACTOR;
 
 		titles = new OneEditField.Builder()
-				.setTitle("Podaj tytuł reguły")
-				.setHint(null).setFontSize(fontSize)
-				.setWidth(editFieldWidth)
-				.setHeight(editFieldHeight)
+				.withTitle("Podaj tytuł reguły")
+				.withHint(null).withFontSize(fontSize)
+				.withWidth(editFieldWidth)
+				.withHeight(editFieldHeight)
 				.build();
 
 		tips = new OneEditField.Builder()
-				.setTitle("Wskazówka")
-				.setHint("Czego dotyczy")
-				.setFontSize(fontSize)
-				.setWidth(editFieldWidth)
-				.setHeight(editFieldHeight)
+				.withTitle("Wskazówka")
+				.withHint("Czego dotyczy")
+				.withFontSize(fontSize)
+				.withWidth(editFieldWidth)
+				.withHeight(editFieldHeight)
 				.build();
 
 		JPanel upPanel = new JPanel();

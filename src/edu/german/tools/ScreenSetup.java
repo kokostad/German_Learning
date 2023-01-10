@@ -21,12 +21,15 @@ public class ScreenSetup {
 	public static final int ICON_HEIGHT = 20;
 
 	public double SPLIT_PANE_FACTOR = 0.15;
+	public double STANDARD_SPLIT_PANE_FACTOR = 0.25;
+	public double BIGGER_SPLIT_PANE_FACTOR = 0.35;
+	public double MOST_BIG_SPLIT_PANE_FACTOR = 0.45;
 
-	public int EDIT_FIELD_WIDTH = 420;
+	public int EDIT_FIELD_WIDTH = SCR_DEFAULT_WIDTH /2 ;
 	public int EDIT_FIELD_HEIGHT = 30;
 
 	public int DEFAULT_FONT_SIZE = 16;
-	public int GAME_FONT_SIZE = 18;
+	public int GAME_FONT_SIZE = 20;
 	public int GAME_BIG_FONT_SIZE = 26;
 
 	public int EDIT_FIELD_FACTOR = 30;

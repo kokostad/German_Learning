@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -12,6 +13,8 @@ import javax.swing.JSplitPane;
 
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
+import edu.german.tools.ScreenSetup;
+import edu.german.tools.ShowMessage;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.buttons.ButtonsPanel;
 
@@ -27,7 +30,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
 	private TableHanlder st;
-	private String[] tableHeaders;
+	private String[] header;
 	private List<HashMap<String, String>> mapList;
 
 	public AddSentences(int height, int width, String titel) {
@@ -47,10 +50,10 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		addToRepoBtn = bp.getB6();
 		addToRepoBtn.addActionListener(this);
 
-		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
-		st = new TableHanlder(tableHeaders, false);
+		header = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
+		st = new TableHanlder(header, true);
 
-		edit = new SentenceEditPanel(tableHeaders.length, "CHOOSE_SENTENCE_GENUS_LIST", "TIMES");
+		edit = new SentenceEditPanel(header, "CHOOSE_SENTENCE_TYPE_LIST", "TENS");
 
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
@@ -58,10 +61,10 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, edit, scp);
-		sp.setResizeWeight(new MyProperties("screen.properties").getDoubleValue("VIEW_FACTOR"));
+		sp.setResizeWeight(new ScreenSetup().MOST_BIG_SPLIT_PANE_FACTOR);
 
 		toolBar.addSeparator();
-//		toolBar.add(rulesBtn);
+
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
 		setVisible(true);
@@ -77,11 +80,13 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addToListBtn) {
-			String[] var = edit.getValuesAsArray();
-			if (var != null) {
-				st.showRow(var);
+			Map<Object, Object> map = edit.getValueAsMap();
+
+			if (map.containsKey("SENTENCE") && map.containsKey("MEANING")) {
+				st.showObjectMap(map);
 				clearEditFiles();
-			}
+			} else
+				new ShowMessage("EMPTY_FIELDS");
 		}
 
 		else if (src == editRowBtn) {
@@ -99,15 +104,6 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 				mapList.clear();
 			}
 		}
-
-//		else if (src == rulesBtn) {
-//			int hight = this.getParent().getHeight();
-//			int width = this.getParent().getWidth();
-//			AddRule ar = new AddRule(hight, width, Titles.setTitel("ADD_RULES"));
-//			getDesktopPane().add(ar);
-//			getDesktopPane().moveToFront(ar);
-//			getDesktopPane().repaint();
-//		}
 	}
 
 	private void clearEditFiles() {

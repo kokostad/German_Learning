@@ -20,9 +20,15 @@ public class Translator {
 		return array;
 	}
 
+	public String[] changeArrayContents(Object[] array) {
+		String[] newArray = new String[array.length];
+		for (int i = 0; i < array.length; i++) {
+			newArray[i] = translate(array[i].toString());
+		}
+		return newArray;
+	}
 	public String translate(String name) {
-		String var = prop.getText(name.toString());
-		return var;
+		return prop.getText(name.toString());
 	}
 
 	public String getName() {

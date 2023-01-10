@@ -18,7 +18,6 @@ import edu.german.games.GuessArticle;
 import edu.german.games.GuessTheMeaning;
 import edu.german.io.ExportToFile;
 import edu.german.io.ImportFromFile;
-import edu.german.sentences.AddPurposefulSentences;
 import edu.german.sentences.AddSentences;
 import edu.german.tools.AddRule;
 import edu.german.tools.MyToolbar;
@@ -34,20 +33,14 @@ public class Learning extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JDesktopPane dsk;
 	private JMenuBar mbar;
-	private JMenu mOption;
 	private JMenuItem miImport;
 	private JMenuItem miExport;
 	private JMenuItem exit;
-	private JMenu mAddition;
 	private JMenuItem miSimpleWordsAddition;
-	private JMenu miAddWords;
 	private JMenuItem miAddAdjective;
 	private JMenuItem miAddVerbs;
 	private JMenuItem miSentencesAddition;
-	private JMenuItem miAddPurposefulSentences;
 	private JMenuItem miAddRules;
-	private JMenu mGames;
-	private JMenu mGuessing;
 	private JMenuItem miWhatKind;
 	private JMenuItem guessTheMeaning;
 	private MyToolbar toolbar;
@@ -55,6 +48,7 @@ public class Learning extends JFrame implements ActionListener {
 	private ModelButton exportBtn;
 	private ModelButton exitBtn;
 	private ModelButton addRulesBtn;
+	private ModelButton addSentenceBtn;
 
 	public Learning() {
 		ScreenSetup sp = new ScreenSetup();
@@ -72,7 +66,7 @@ public class Learning extends JFrame implements ActionListener {
 
 		exit = new JMenuItem(Titles.setTitel("EXIT"));
 		exit.addActionListener(this);
-		mOption = new JMenu(Titles.setTitel("OPTION"));
+		JMenu mOption = new JMenu(Titles.setTitel("OPTION"));
 		mOption.add(miImport);
 		mOption.add(miExport);
 		mOption.addSeparator();
@@ -82,29 +76,23 @@ public class Learning extends JFrame implements ActionListener {
 		miSimpleWordsAddition.addActionListener(this);
 		miSentencesAddition = new JMenuItem(Titles.setTitel("SENTENCES_ADDITION"));
 		miSentencesAddition.addActionListener(this);
-		miAddWords = new JMenu(Titles.setTitel("WORDS_ADDITION"));
-		miAddWords.addActionListener(this);
-		miAddPurposefulSentences = new JMenuItem(Titles.setTitel("PURPOSEFUL_SENTENCES"));
-		miAddPurposefulSentences.addActionListener(this);
 
+		JMenu mAddWords = new JMenu(Titles.setTitel("WORDS_ADDITION"));
 		miAddAdjective = new JMenuItem(Titles.setTitel("ADD_ADJECTIVE"));
 		miAddAdjective.addActionListener(this);
-
 		miAddVerbs = new JMenuItem(Titles.setTitel("ADD_VERBS"));
 		miAddVerbs.addActionListener(this);
-
-		miAddWords.add(miAddAdjective);
-		miAddWords.add(miAddVerbs);
+		mAddWords.add(miAddAdjective);
+		mAddWords.add(miAddVerbs);
 
 		miAddRules = new JMenuItem(Titles.setTitel("ADD_RULES"));
 		miAddRules.addActionListener(this);
 
-		mAddition = new JMenu(Titles.setTitel("MENU_ADDITION"));
+		JMenu mAddition = new JMenu(Titles.setTitel("MENU_ADDITION"));
 		mAddition.add(miSimpleWordsAddition);
-		mAddition.add(miAddWords);
+		mAddition.add(mAddWords);
 		mAddition.add(new JSeparator());
 		mAddition.add(miSentencesAddition);
-		mAddition.add(miAddPurposefulSentences);
 		mAddition.add(new JSeparator());
 		mAddition.add(miAddRules);
 
@@ -113,32 +101,34 @@ public class Learning extends JFrame implements ActionListener {
 		miWhatKind = new JMenuItem(Titles.setTitel("WHAT_ARTICLE"));
 		miWhatKind.addActionListener(this);
 
-		mGuessing = new JMenu(Titles.setTitel("QUESSING"));
+		JMenu mGuessing = new JMenu(Titles.setTitel("QUESSING"));
 		mGuessing.add(miWhatKind);
 		mGuessing.add(guessTheMeaning);
 
-		mGames = new JMenu(Titles.setTitel("LEARNING_GAMES"));
+		JMenu mGames = new JMenu(Titles.setTitel("LEARNING_GAMES"));
 		mGames.add(mGuessing);
 
-		// NOTICE Buttons settings
 		exitBtn = new ModelButton.Builder()
 				.setTitle("Exit")
 				.setIconName("exit.png")
 				.setHint(Titles.setTitel("EXIT"))
 				.build();
 		exitBtn.addActionListener(this);
+
 		importBtn = new ModelButton.Builder()
 				.setTitle("Import")
 				.setIconName("import.png")
 				.setHint(Titles.setTitel("IMPORT"))
 				.build();
 		importBtn.addActionListener(this);
+
 		exportBtn = new ModelButton.Builder()
 				.setTitle("Export")
 				.setIconName("export.png")
 				.setHint(Titles.setTitel("EXPORT"))
 				.build();
 		exportBtn.addActionListener(this);
+
 		addRulesBtn = new ModelButton.Builder()
 				.setTitle("Rules")
 				.setIconName("rules.png")
@@ -146,6 +136,13 @@ public class Learning extends JFrame implements ActionListener {
 				.build();
 		addRulesBtn.addActionListener(this);
 
+		addSentenceBtn = new ModelButton.Builder()
+				.setTitle("Add Sentence")
+				.setIconName("add_sentence.png")
+				.setHint(Titles.setTitel("ADD_SENTENCE"))
+				.build();
+		addSentenceBtn.addActionListener(this);
+		
 		toolbar = new MyToolbar();
 		toolbar.add(exitBtn);
 		toolbar.addSeparator();
@@ -154,6 +151,7 @@ public class Learning extends JFrame implements ActionListener {
 		toolbar.addSeparator();
 		toolbar.add(addRulesBtn);
 		toolbar.addSeparator();
+		toolbar.add(addSentenceBtn);
 
 		Container con = this.getContentPane();
 		con.add(toolbar, BorderLayout.BEFORE_FIRST_LINE);
@@ -204,7 +202,7 @@ public class Learning extends JFrame implements ActionListener {
 			dsk.repaint();
 		}
 
-		else if (src == miSentencesAddition) {
+		else if (src == miSentencesAddition || src == addSentenceBtn) {
 			AddSentences ssa = new AddSentences(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("SENTENCES_ADDITION"));
 			dsk.add(ssa);
 			dsk.moveToFront(ssa);
@@ -225,7 +223,7 @@ public class Learning extends JFrame implements ActionListener {
 			dsk.repaint();
 		}
 
-		else if (src == miAddWords) {
+		else if (src == miSimpleWordsAddition) {
 			WordAddition wAdd = new WordAddition(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("WORDS_ADDITION"));
 			dsk.add(wAdd);
 			dsk.moveToFront(wAdd);
@@ -245,14 +243,6 @@ public class Learning extends JFrame implements ActionListener {
 					Titles.setTitel("GUESS_THE_MEANING"));
 			dsk.add(guessMeaning);
 			dsk.moveToFront(guessMeaning);
-			dsk.repaint();
-		}
-
-		else if (src == miAddPurposefulSentences) {
-			AddPurposefulSentences addPSent = new AddPurposefulSentences(dsk.getHeight(), dsk.getWidth(),
-					Titles.setTitel("PURPOSEFUL_SENTENCES"));
-			dsk.add(addPSent);
-			dsk.moveToFront(addPSent);
 			dsk.repaint();
 		}
 

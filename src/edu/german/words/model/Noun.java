@@ -35,6 +35,17 @@ public class Noun extends Word {
 			return -1;
 	}
 
+	public String getExample() {
+		getObjectFromList("SENTENCE").toString();
+		return null;
+	}
+
+	public void setExample(String sentence) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("SENTENCE", sentence);
+		propertyList.add(map);
+	}
+
 	public String getWord() {
 		return getObjectFromList("WORD").toString();
 	}
@@ -63,7 +74,7 @@ public class Noun extends Word {
 	}
 
 	public void setMeanings(String[] meanings) {
-			setObjectToList("MEANINGS", meanings);
+		setObjectToList("MEANINGS", meanings);
 	}
 
 	public int getWoid() {
@@ -120,6 +131,11 @@ public class Noun extends Word {
 
 	public void setWoid(int woid) {
 		setObjectToList("WOID", woid);
+	}
+
+	public void setExample1(String string) {
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("SENTENCE", string);
 	}
 
 }

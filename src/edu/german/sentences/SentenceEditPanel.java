@@ -8,85 +8,124 @@ import javax.swing.JPanel;
 
 import edu.german.tools.MyComboBox;
 import edu.german.tools.MyProperties;
-import edu.german.tools.OneEditableField;
+import edu.german.tools.OneEditField;
+import edu.german.tools.ScreenSetup;
+import edu.german.tools.ShowMessage;
 import edu.german.tools.Titles;
 import edu.german.tools.Translate;
 
 public class SentenceEditPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private String CFG_FILE = "sentence.properties";
-	private OneEditableField sentence;
-	private OneEditableField meaning;
-	private OneEditableField word;
-	private String boxList1;
-	private String boxList2;
-	private MyComboBox modeBox;
-	private MyComboBox timeBox;
-	private int mapSize;
+	private OneEditField sentence;
+	private OneEditField meaning;
+	private OneEditField word;
+	private String typeList;
+	private String tensList;
+	private MyComboBox typeBox;
+	private MyComboBox tensBox;
+	private MyComboBox categoryBox;
+	private String[] header;
 
-	public SentenceEditPanel(int mapSize, String boxList1, String boxList2) {
-		this.mapSize = mapSize;
-		this.boxList1 = boxList1;
-		this.boxList2 = boxList2;
+	public SentenceEditPanel(String[] header, String typeList, String tensList) {
+		this.header = header;
+		this.typeList = typeList;
+		this.tensList = tensList;
+		ScreenSetup ss = new ScreenSetup();
 
-		sentence = new OneEditableField(Translate.setText("write_german_sentence"),
-				Translate.setText("write_in_german"), 17, 50);
-		meaning = new OneEditableField(Translate.setText("write_polish_meaning"), Translate.setText("write_in_polish"),
-				17, 50);
+		sentence = new OneEditField.Builder()
+				.withTitle(Translate.setText("write_german_sentence"))
+				.withHint(Translate.setText("write_in_german"))
+				.withFontSize(ss.DEFAULT_FONT_SIZE)
+				.withWidth( ss.EDIT_FIELD_WIDTH - 50)
+				.withHeight(ss.EDIT_FIELD_FACTOR)
+				.build();
 
-		word = new OneEditableField(Translate.setText("key_word"), Translate.setText("search_word"), 17, 15);
+		meaning = new OneEditField.Builder()
+				.withTitle(Translate.setText("write_polish_meaning"))
+				.withHint(Translate.setText("write_in_polish"))
+				.withFontSize(ss.DEFAULT_FONT_SIZE)
+				.withWidth( ss.EDIT_FIELD_WIDTH - 50)
+				.withHeight(ss.EDIT_FIELD_FACTOR)
+				.build();
 
-		GridLayout gl = new GridLayout(3, 1);
+		word = new OneEditField.Builder()
+				.withTitle(Translate.setText("key_word"))
+				.withHint(Translate.setText("search_word"))
+				.withFontSize(ss.DEFAULT_FONT_SIZE)
+				.withWidth(ss.EDIT_FIELD_WIDTH / 2)
+				.withHeight(ss.EDIT_FIELD_HEIGHT)
+				.build();
+
+		GridLayout gl = new GridLayout(2, 1);
 		JPanel editFieldsPan = new JPanel();
 		editFieldsPan.setLayout(gl);
 		editFieldsPan.add(sentence);
 		editFieldsPan.add(meaning);
 
+		GridLayout gl2 = new GridLayout(2, 2);
 		JPanel boxPanel = new JPanel();
 
-		if (boxList1 != null) {
-			String[] selectionList = new MyProperties(CFG_FILE).getValuesArray(boxList1);
-			modeBox = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_MODE"), selectionList);
-			boxPanel.add(modeBox);
-		}
-
-		if (boxList2 != null) {
-			String[] times = new MyProperties(CFG_FILE).getValuesArray(boxList2);
-			timeBox = new MyComboBox(Titles.setTitel("CHOOSE_TIME"), times);
-			boxPanel.add(timeBox);
-		}
-
+		boxPanel.setLayout(gl2);
 		boxPanel.add(word);
+
+		if (typeList != null) {
+			String[] selectionList = new MyProperties(CFG_FILE).getValuesArray(typeList);
+			typeBox = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_MODE"), selectionList);
+			boxPanel.add(typeBox);
+		}
+
+		if (tensList != null) {
+			String[] tenses = new MyProperties(CFG_FILE).getValuesArray(tensList);
+			tensBox = new MyComboBox(Titles.setTitel("CHOOSE_TENS"), tenses);
+			boxPanel.add(tensBox);
+		}
+
+		String[] mode = new MyProperties(CFG_FILE).getValuesArray("CATEGORY");
+		categoryBox = new MyComboBox(Titles.setTitel("CHOOSE_SENTENCE_GENUS"), mode);
+		boxPanel.add(categoryBox);
 
 		this.add(editFieldsPan);
 		this.add(boxPanel);
 	}
 
-	Map<Object, Object> getValuesAsMap() {
+	Map<Object, Object> getValueAsMap() {
 		Map<Object, Object> map = new HashMap<>();
-		map.put("SENTENCE", sentence.getValue());
-		map.put("MEANING", meaning.getValue());
-		if (boxList1 != null)
-			map.put("MODE", modeBox.getValue());
-		if (boxList2 != null)
-			map.put("TIME", timeBox.getValue());
+		if (!sentence.getValue().isBlank())
+			map.put("SENTENCE", sentence.getValue());
+		else
+			new ShowMessage("Empty field!");
+
+		if (!meaning.getValue().isEmpty())
+			map.put("MEANING", meaning.getValue());
+		else
+			new ShowMessage("Empty field!");
+
+		if (typeList != null)
+			map.put("TYPE", typeBox.getValue());
+
+		if (categoryBox.getValue() != null)
+			map.put("CATEGORY", categoryBox.getValue());
+
+		if (tensList != null)
+			map.put("TENS", tensBox.getValue());
+
 		if (word.getValue() != null)
 			map.put("WORD", word.getValue());
+
 		return map;
 	}
 
 	String[] getValuesAsArray() {
-		String[] array = new String[mapSize];
+		String[] array = new String[header.length];
 		int i = 0;
-		if (sentence.getValue() != null && meaning.getValue() != null) {
+		if (sentence.getValue() != null || meaning.getValue() != null) {
 			array[i++] = sentence.getValue();
 			array[i++] = meaning.getValue();
-			if (boxList1 != null)
-				array[i++] = modeBox.getValue();
-			if (boxList2 != null)
-				array[i++] = timeBox.getValue();
-			if (word.getValue() != null)
-				array[i] = word.getValue();
+			array[i++] = categoryBox.getValue();
+			array[i++] = typeBox.getValue();
+			array[i++] = tensBox.getValue();
+			array[i] = word.getValue();
 
 			return array;
 		}
@@ -97,63 +136,42 @@ public class SentenceEditPanel extends JPanel {
 	void clearEditFields() {
 		sentence.clearField();
 		meaning.clearField();
-		modeBox.clearField();
-		timeBox.clearField();
+		typeBox.clearField();
+		categoryBox.clearField();
+		tensBox.clearField();
 		word.clearField();
 	}
 
-	public void showData(String newSentence, String newMeaning, String mode, String time, String var) {
-		sentence.setValue(newSentence);
-		meaning.setValue(newMeaning);
-		modeBox.setValue(mode);
-		timeBox.setValue(time);
-		word.setValue(var);
+	public void showData(String newSentence, String newMeaning, String type, String category, String tens, String var) {
+		if (!newSentence.isBlank())
+			sentence.setValue(newSentence);
+		if (!newMeaning.isBlank())
+			meaning.setValue(newMeaning);
+		if (!category.isBlank())
+			categoryBox.setValue(category);
+		if (type.isBlank())
+			typeBox.setValue(type);
+		if (!tens.isBlank())
+			tensBox.setValue(tens);
+		if (!var.isBlank())
+			word.setValue(var);
 	}
 
-	public void showData(String newSentence, String newMeaning, String mode, String var) {
-		sentence.setValue(newSentence);
-		meaning.setValue(newMeaning);
-		modeBox.setValue(mode);
-		word.setValue(var);
-	}
-
-	public void showData(String newSentence, String newMeaning, String var) {
-		sentence.setValue(newSentence);
-		meaning.setValue(newMeaning);
-		word.setValue(var);
-	}
-
-	public void showData(String[] array) {
-		if (array.length == 3)
-			showData(array[0], array[2], array[2]);
-
-		if (array.length == 4)
-			showData(array[0], array[1], array[2], array[3]);
-
-		if (array.length == 5)
-			showData(array[0], array[1], array[2], array[3], array[4]);
-
-	}
-
-//	sentence.setValue(newSentence);
-//	meaning.setValue(newMeaning);
-//	box.setValue(mode);
-//	timeBox.setValue(time);
-//	word.setValue(var);
 	public void showData(Map<String, String> map) {
 		map.entrySet().forEach(entry -> {
-//			System.out.println(entry.getKey() + " " + entry.getValue());
 			if ((entry.getKey().toUpperCase()).equals("SENTENCE"))
 				sentence.setValue(entry.getValue());
-			if ((entry.getKey().toUpperCase()).equals("MENING"))
+			if ((entry.getKey().toUpperCase()).equals("MEANING"))
 				meaning.setValue(entry.getValue());
-			if ((entry.getKey().toUpperCase()).equals("MODE"))
-				modeBox.setValue(entry.getValue());
-			if ((entry.getKey().toUpperCase()).equals("TIME"))
-				timeBox.setValue(entry.getValue());
+			if ((entry.getKey().toUpperCase()).equals("TYPE"))
+				typeBox.setValue(entry.getValue());
+			if ((entry.getKey().toUpperCase()).equals("CATEGORY"))
+				categoryBox.setValue(entry.getValue());
+			if ((entry.getKey().toUpperCase()).equals("TENS"))
+				tensBox.setValue(entry.getValue());
 			if ((entry.getKey().toUpperCase()).equals("WORD"))
 				word.setValue(entry.getValue());
 		});
-
 	}
+
 }

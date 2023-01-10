@@ -57,7 +57,7 @@ public class AddPurposefulSentences extends MyInternalFrame implements ActionLis
 		tableHeaders = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER_PURP");
 		st = new TableHanlder(tableHeaders, false);
 
-		sentenceEditPanel = new SentenceEditPanel(tableHeaders.length, null, null);
+		sentenceEditPanel = new SentenceEditPanel(tableHeaders, null, null);
 
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
