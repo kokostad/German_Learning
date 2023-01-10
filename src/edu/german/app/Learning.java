@@ -38,7 +38,6 @@ public class Learning extends JFrame implements ActionListener {
 	private JMenuItem miExport;
 	private JMenuItem exit;
 	private JMenuItem miSimpleWordsAddition;
-	private JMenuItem miAddWords;
 	private JMenuItem miAddAdjective;
 	private JMenuItem miAddVerbs;
 	private JMenuItem miSentencesAddition;
@@ -82,30 +81,26 @@ public class Learning extends JFrame implements ActionListener {
 		mOption.add(miExport);
 		mOption.addSeparator();
 		mOption.add(exit);
-
+		
 		miSimpleWordsAddition = new JMenuItem(Titles.setTitel("SIMPLE_WORDS_ADDITION"));
 		miSimpleWordsAddition.addActionListener(this);
 		miSentencesAddition = new JMenuItem(Titles.setTitel("SENTENCES_ADDITION"));
 		miSentencesAddition.addActionListener(this);
-		
-		miAddWords = new JMenu(Titles.setTitel("WORDS_ADDITION"));
-		miAddWords.addActionListener(this);
 
-		miAddAdjective = new JMenuItem(Titles.setTitel("ADD_ADJECTIVE"));
-		miAddAdjective.addActionListener(this);
-
+		JMenu mAddWords = new JMenu(Titles.setTitel("WORDS_ADDITION"));
 		miAddVerbs = new JMenuItem(Titles.setTitel("ADD_VERBS"));
 		miAddVerbs.addActionListener(this);
-
-		miAddWords.add(miAddAdjective);
-		miAddWords.add(miAddVerbs);
+		miAddAdjective = new JMenuItem(Titles.setTitel("ADD_ADJECTIVE"));
+		miAddAdjective.addActionListener(this);
+		mAddWords.add(miAddAdjective);
+		mAddWords.add(miAddVerbs);
 
 		miAddRules = new JMenuItem(Titles.setTitel("ADD_RULES"));
 		miAddRules.addActionListener(this);
 
 		JMenu mAddition = new JMenu(Titles.setTitel("MENU_ADDITION"));
 		mAddition.add(miSimpleWordsAddition);
-		mAddition.add(miAddWords);
+		mAddition.add(mAddWords);
 		mAddition.add(new JSeparator());
 		mAddition.add(miSentencesAddition);
 		mAddition.add(new JSeparator());
@@ -235,13 +230,6 @@ public class Learning extends JFrame implements ActionListener {
 			ExportToFile etf = new ExportToFile(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("EXPORT"));
 			dsk.add(etf);
 			dsk.moveToFront(etf);
-			dsk.repaint();
-		}
-
-		else if (src == miAddWords) {
-			WordAddition wAdd = new WordAddition(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("WORDS_ADDITION"));
-			dsk.add(wAdd);
-			dsk.moveToFront(wAdd);
 			dsk.repaint();
 		}
 

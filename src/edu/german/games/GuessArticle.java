@@ -21,7 +21,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 
 import edu.german.services.ExecutorDoCallNoun;
-import edu.german.services.ExecPrepareNounView;
+import edu.german.services.ExecutorPrepareNounView;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.ResultsPanel;
 import edu.german.tools.ScreenSetup;
@@ -50,6 +50,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private String wordMeaning;
 	private String controlWord;
 	private String newWord;
+	private String example;
 	private int bigFontSize;
 	private String fontArt;
 	private ShowResultAsImage showImage;
@@ -67,21 +68,20 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 
 	public GuessArticle(int height, int width, String setTitel) {
 		super(height, width, setTitel);
-		listToRemove = new LinkedList<>();
+		ScreenSetup ss = new ScreenSetup();
 
+		listToRemove = new LinkedList<>();
 		severalNouns = new LinkedList<Noun>();
 
 		es = Executors.newSingleThreadExecutor();
-		es.submit(new ExecPrepareNounView());
-
-		ScreenSetup ss = new ScreenSetup();
+		es.submit(new ExecutorPrepareNounView());
 
 		bigFontSize = ss.GAME_BIG_FONT_SIZE;
 		fontArt = ss.GAME_FONT_ART;
 
 		showImage = new ShowResultAsImage(200, 200);
 
-		bp = new ButtonsPanel("NEW_DRAW", "NEXT");
+		bp = new ButtonsPanel("NEW_ROUND", "NEW_DRAW");
 		drawBtn = bp.getB1();
 		drawBtn.addActionListener(this);
 		nextBtn = bp.getB2();
@@ -138,6 +138,8 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, selectionPan, centralPan);
 
+		setInitialParams();
+
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
 		this.setVisible(true);
@@ -159,8 +161,12 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private void nextWord(int number) {
 		if (number < severalNouns.size())
 			setGameWord(number, severalNouns);
-		else
+		else if (number == severalNouns.size())
+			gameWordLbl.setText("Koniec rundy");
+		else if (number > severalNouns.size())
 			new ShowMessage("NO_MORE_WORDS");
+		else
+			new ShowMessage("Unidentified error");
 	}
 
 	private void setGameWord(int actuelNumber, List<Noun> nounList) {
@@ -173,6 +179,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		article = noun[0];
 		gameWord = noun[1];
 		wordMeaning = nounFromList.getMeaning();
+		example = nounFromList.getExample();
 		gameWordLbl.setText(" " + gameWord + " ");
 	}
 
@@ -236,6 +243,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	}
 
 	private void setInitialParams() {
+		allNounList = tryToGetList();
 		article = null;
 		wordMeaning = null;
 	}
@@ -243,10 +251,9 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private List<Noun> getSeveral(int number) {
 		List<Noun> list = new LinkedList<>();
 		for (int i = 0; i < number; i++) {
-			list.add(allNounList.get(i));
-			allNounList.remove(i);
+			if (allNounList.size() > i)
+				list.add(allNounList.get(i));
 		}
-
 		return list;
 	}
 
@@ -260,6 +267,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		resultPan.setGoodAnswerNumber(" " + goodAnswer);
 		resultPan.setOverallResultLab(" " + actualScore);
 		answerPanel.setMeaning(wordMeaning);
+		answerPanel.setExample(example);
 		nextWord(getActualDraw());
 	}
 
@@ -278,15 +286,13 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 
 		if (src == drawBtn) {
 			showImage.showIndifference();
-			allNounList = tryToGetList();
 
 			if (severalNouns.isEmpty()) {
 				setNumberOfWords((int) selectionPan.getNumber());
 				severalNouns = getSeveral(getNumberOfWords());
 				setActualDraw(0);
 				actualScore = 0;
-			} else
-				setInitialParams();
+			}
 
 			nextWord(getActualDraw());
 
@@ -297,17 +303,18 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		else if (src == nextBtn) {
 			listToRemove.clear();
 			showImage.showIndifference();
-			if (!severalNouns.isEmpty()) {
-				severalNouns.forEach((el) -> listToRemove.add(deleteElement(el)));
 
-				System.out.println(listToRemove.size());
-				listToRemove.forEach((x) -> System.out.println(x));
+			System.out.println("allNounList: " + allNounList.size());
 
-				if (listToRemove.size() > 0) {
-					listToRemove.forEach((i) -> allNounList.remove(listToRemove.get(i)));
-					severalNouns.clear();
-				}
+			for (int i = 0; i < severalNouns.size(); i++) {
+				System.out.println("usuwam: " + allNounList.size() + "-1");
+				allNounList.remove(0);
 			}
+
+			if (!severalNouns.isEmpty()) {
+				severalNouns.clear();
+			}
+
 			severalNouns = getSeveral(getNumberOfWords());
 			setActualDraw(0);
 			actualScore = 0;
@@ -343,19 +350,6 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 				negativeScoreUpdate();
 		}
 
-	}
-
-	private Integer deleteElement(Noun el) {
-		int element = -1;
-		for (int i = 0; i < allNounList.size(); i++) {
-			String var = allNounList.get(i).getWord();
-			if ((el.getWord()).contains(var)) {
-				System.out.println("position: " + i + " word: " + var);
-//				listToRemove.add(i);
-				return i;
-			}
-		}
-		return element;
 	}
 
 }

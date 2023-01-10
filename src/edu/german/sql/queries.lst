@@ -100,3 +100,17 @@ highest_degree_ge,highest_degree_pl,woid)
  VALUES(?,?,?,?,?,?,(SELECT a.woid FROM ge.all_words_objects a
  WHERE a.word = ? LIMIT 1));
 EOSQL
+
+[prepare_view_nouns_for_game]
+create or replace recursive view game_nouns(word, meaning, sentence) as (
+ with
+ lists as ( SELECT T.word, T.sentence
+ FROM (SELECT a.*, ROW_NUMBER() OVER (PARTITION BY word ORDER BY word DESC) AS rnk
+ FROM ge.sentences as a ) T WHERE T.rnk = 1 ),
+ listw as ( select awo.woid, awo.word, awo.meaning from ge.all_words_objects awo  where awo.genus = 'das Substantiv')
+ select w.word, w.meaning, s.sentence from listw w left join lists s on w.word = s.word) ;
+EOSQL
+
+[get_nouns_view_for_game]
+select word, meaning, sentence from game_nouns ;
+EOSQL

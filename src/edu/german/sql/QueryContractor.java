@@ -571,6 +571,8 @@ public class QueryContractor {
 			ps.setString(5, tens);
 			ps.setString(6, word);
 
+			System.out.println(ps.toString());
+
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -587,8 +589,8 @@ public class QueryContractor {
 		con = dbc.getConnection();
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-
 			ResultSet rs = ps.executeQuery();
+
 			while (rs.next()) {
 				Noun noun = new Noun();
 				noun.setNoun(rs.getString("word").split(" "));
@@ -597,6 +599,10 @@ public class QueryContractor {
 				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
 				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
+
+				if (rs.getString("sentence") != null)
+					noun.setExample(rs.getString("sentence"));
+
 				list.add(noun);
 			}
 

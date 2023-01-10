@@ -15,7 +15,7 @@ public class WordSelectionPanel extends JPanel {
 	private String[] selectionList;
 
 	public WordSelectionPanel(boolean setWordKinds) {
-		String[] numbers = { "10", "15", "20", "50" };
+		String[] numbers = { "10", "15", "20", "30", "50" };
 		boxNumber = new MyComboBox(Titles.setTitel("WORDS_NUMBER"), numbers);
 
 		if (setWordKinds) {

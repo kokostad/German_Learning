@@ -24,6 +24,7 @@ import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditableField;
 import edu.german.tools.ResultsPanel;
+import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
@@ -61,8 +62,10 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 
 	public GuessTheMeaning(int height, int width, String titel) {
 		super(height, width, titel);
-		int fontSize = Integer.parseInt(new MyProperties(SCREEN_PARAM_FILE).getText("DEFAULT_FONT_SIZE"));
-		int gamesWordfontSize = Integer.parseInt(new MyProperties(SCREEN_PARAM_FILE).getText("WORD_FOR_GAME"));
+		ScreenSetup ss = new ScreenSetup();
+		int fontSize = ss.GAME_FONT_SIZE;
+		String fontArt = ss.GAME_FONT_ART;
+		
 		showImage = new ShowResultAsImage(200, 200);
 
 		allWordList = tryToGetList();
@@ -81,7 +84,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		JPanel leftPanel = new JPanel();
 		leftPanel.add(showImage);
 
-		answer = new OneEditableField("Twoja odpowiedź", "wpisz polskie znaczenie", gamesWordfontSize, fontSize);
+		answer = new OneEditableField("Twoja odpowiedź", "wpisz polskie znaczenie", fontSize, fontSize);
 		textField = answer.getTextField();
 		textField.addActionListener(new ActionListener() {
 
@@ -92,12 +95,12 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		});
 
 		communique = new JLabel();
-		communique.setFont(new Font("MV Boli", Font.ITALIC, gamesWordfontSize));
+		communique.setFont(new Font(fontArt, Font.ITALIC, fontSize));
 		communique.setForeground(Color.red);
 		communique.setText("");
 
 		choosenWordLabel = new JLabel();
-		choosenWordLabel.setFont(new Font("Serif", Font.BOLD, gamesWordfontSize));
+		choosenWordLabel.setFont(new Font(fontArt, Font.BOLD, fontSize));
 		choosenWordLabel.setText(information);
 
 		JPanel labelPanel = new JPanel();
