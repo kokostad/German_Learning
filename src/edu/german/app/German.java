@@ -1,5 +1,9 @@
 package edu.german.app;
 
+/**
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ *
+ */
 public class German {
 
 	public static void main(String[] args) {

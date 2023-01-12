@@ -16,6 +16,10 @@ import edu.german.tools.PrepareArrayFromString;
 import edu.german.words.model.Noun;
 import edu.german.words.model.Word;
 
+/**
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ *
+ */
 public class QueryContractor {
 	private DbConnect dbc;
 	private Connection con;

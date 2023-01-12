@@ -31,12 +31,16 @@ import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.WordSelectionPanel;
 import edu.german.words.model.Noun;
 
+
+/**
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ *
+ */
 public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private WordSelectionPanel selectionPan;
 	private ButtonsPanel bp;
 	private JButton drawBtn;
-	private JButton nextBtn;
 	private ButtonsPanel bpAnswer;
 	private JButton derBtn;
 	private JButton dieBtn;
@@ -64,28 +68,24 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private ResultsPanel resultPan;
 	private AnswerPanel answerPanel;
 	private ExecutorService es;
-	private List<Integer> listToRemove;
 
 	public GuessArticle(int height, int width, String setTitel) {
 		super(height, width, setTitel);
-		ScreenSetup ss = new ScreenSetup();
+		ScreenSetup scr = new ScreenSetup();
 
-		listToRemove = new LinkedList<>();
 		severalNouns = new LinkedList<Noun>();
 
 		es = Executors.newSingleThreadExecutor();
 		es.submit(new ExecutorPrepareNounView());
 
-		bigFontSize = ss.GAME_BIG_FONT_SIZE;
-		fontArt = ss.GAME_FONT_ART;
+		bigFontSize = scr.GAME_BIG_FONT_SIZE;
+		fontArt = scr.GAME_FONT_ART;
 
 		showImage = new ShowResultAsImage(200, 200);
 
-		bp = new ButtonsPanel("NEW_ROUND", "NEW_DRAW");
+		bp = new ButtonsPanel("NEW_DRAW");
 		drawBtn = bp.getB1();
 		drawBtn.addActionListener(this);
-		nextBtn = bp.getB2();
-		nextBtn.addActionListener(this);
 
 		selectionPan = new WordSelectionPanel(false);
 
@@ -162,11 +162,11 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		if (number < severalNouns.size())
 			setGameWord(number, severalNouns);
 		else if (number == severalNouns.size())
-			gameWordLbl.setText("Koniec rundy");
+			gameWordLbl.setText(Titles.setTitel("END_OF_ROUND"));
 		else if (number > severalNouns.size())
 			new ShowMessage("NO_MORE_WORDS");
 		else
-			new ShowMessage("Unidentified error");
+			new ShowMessage("UNIDENTIFIED_ERROR");
 	}
 
 	private void setGameWord(int actuelNumber, List<Noun> nounList) {
@@ -287,37 +287,34 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		if (src == drawBtn) {
 			showImage.showIndifference();
 
-			if (severalNouns.isEmpty()) {
+			if (allNounList.size() == 0) {
+				new ShowMessage("EMPTY_LIST");
+			}
+
+			else if (severalNouns.isEmpty()) {
 				setNumberOfWords((int) selectionPan.getNumber());
 				severalNouns = getSeveral(getNumberOfWords());
-				setActualDraw(0);
-				actualScore = 0;
+				setInitScore();
+
+				for (int i = 0; i < severalNouns.size(); i++) {
+					allNounList.remove(0);
+				}
 			}
 
-			nextWord(getActualDraw());
+			else if (!severalNouns.isEmpty()) {
+				setNumberOfWords((int) selectionPan.getNumber());
+				severalNouns = getSeveral(getNumberOfWords());
+				setInitScore();
 
-			if (getActualDraw() > 0 && getActualDraw() < getNumberOfWords() && controlWord.equals(newWord))
+				for (int i = 0; i < severalNouns.size(); i++) {
+					allNounList.remove(0);
+				}
+			}
+
+			if (severalNouns.size() > 0)
+				nextWord(getActualDraw());
+			else if (getActualDraw() > 0 && getActualDraw() < getNumberOfWords() && controlWord.equals(newWord))
 				new ShowMessage("THE_SAME_WORD");
-		}
-
-		else if (src == nextBtn) {
-			listToRemove.clear();
-			showImage.showIndifference();
-
-			System.out.println("allNounList: " + allNounList.size());
-
-			for (int i = 0; i < severalNouns.size(); i++) {
-				System.out.println("usuwam: " + allNounList.size() + "-1");
-				allNounList.remove(0);
-			}
-
-			if (!severalNouns.isEmpty()) {
-				severalNouns.clear();
-			}
-
-			severalNouns = getSeveral(getNumberOfWords());
-			setActualDraw(0);
-			actualScore = 0;
 		}
 
 		else if (src == derBtn) {
@@ -350,6 +347,11 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 				negativeScoreUpdate();
 		}
 
+	}
+
+	private void setInitScore() {
+		setActualDraw(0);
+		actualScore = 0;
 	}
 
 }
