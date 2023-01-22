@@ -65,7 +65,8 @@ public class OneEditField extends JPanel {
 	}
 
 	public String getValue() {
-		return editField.getText();
+		String str = editField.getText();
+		return str;
 	}
 
 	public void setValue(String value) {

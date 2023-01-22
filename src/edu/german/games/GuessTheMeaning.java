@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 
 import edu.german.services.ExecutorDoCallWord;
 import edu.german.tools.MyInternalFrame;
-import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditableField;
 import edu.german.tools.ResultsPanel;
 import edu.german.tools.ScreenSetup;
@@ -33,7 +32,6 @@ import edu.german.words.model.Word;
 
 public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private final String SCREEN_PARAM_FILE = "screen.properties";
 	private List<Word> allWordList;
 	private List<Word> severalWords;
 	private ButtonsPanel bp;

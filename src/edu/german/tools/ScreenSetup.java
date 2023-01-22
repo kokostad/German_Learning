@@ -25,6 +25,7 @@ public class ScreenSetup {
 	public double BIGGER_SPLIT_PANE_FACTOR = 0.35;
 	public double MOST_BIG_SPLIT_PANE_FACTOR = 0.45;
 
+	public int WORD_FIELD_WIDTH = SCR_DEFAULT_WIDTH /6 ;
 	public int EDIT_FIELD_WIDTH = SCR_DEFAULT_WIDTH /2 ;
 	public int EDIT_FIELD_HEIGHT = 30;
 

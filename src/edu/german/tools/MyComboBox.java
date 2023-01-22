@@ -25,14 +25,12 @@ public class MyComboBox extends JPanel {
 	 */
 	public MyComboBox(String labelInfo, Object[] array) {
 		JPanel boxPanel = new JPanel();
-//		boxPanel.setLayout(new BoxLayout(boxPanel, BoxLayout.X_AXIS));
-//		boxPanel.add(Box.createHorizontalStrut(16));
-		
 		JLabel label = new JLabel(labelInfo);
+
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		label.setFont(new MyFont().myFont(fontSize));
 		boxPanel.add(label);
-		boxPanel.add(Box.createRigidArea(new Dimension(10, 10)));
+		boxPanel.add(Box.createRigidArea(new Dimension(5, 5)));
 		if (array != null) {
 			box = new JComboBox<Object>(array);
 			box.setFont(new MyFont().myFont(fontSize));
@@ -40,7 +38,7 @@ public class MyComboBox extends JPanel {
 			boxPanel.add(box);
 		}
 
-		setLayout(new GridLayout(1, 1, 15, 15));
+		setLayout(new GridLayout(1, 1, 5, 5));
 		add(boxPanel);
 	}
 

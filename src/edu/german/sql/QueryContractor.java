@@ -557,7 +557,7 @@ public class QueryContractor {
 		return oid;
 	}
 
-	public void addSentenceToDatabase(String sql, String sentence, String meaning, String type, String category,
+	public void addSentenceToDatabase(String sql, String sentence, String meaning, String genus, String mode,
 			String tens, String word) {
 		loadDriver();
 		dbc = new DbConnect();
@@ -566,12 +566,10 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, sentence);
 			ps.setString(2, meaning);
-			ps.setString(3, type);
-			ps.setString(4, category);
+			ps.setString(3, genus);
+			ps.setString(4, mode);
 			ps.setString(5, tens);
 			ps.setString(6, word);
-
-			System.out.println(ps.toString());
 
 			ps.executeUpdate();
 		} catch (SQLException e) {

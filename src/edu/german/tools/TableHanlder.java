@@ -10,9 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com 
- * The class to handle a simple table 
- * The class presents a list of objects according to the header table
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class to handle
+ *         a simple table The class presents a list of objects according to the
+ *         header table
  */
 public class TableHanlder extends JTable {
 	private static final long serialVersionUID = 1L;
@@ -29,8 +29,9 @@ public class TableHanlder extends JTable {
 		this.header = header;
 		wordsList = new LinkedList<String[]>();
 		model = new DefaultTableModel();
-		if (translate)
+		if (translate) {
 			model.setColumnIdentifiers(translateArray(header));
+		}
 		else
 			model.setColumnIdentifiers(header);
 
@@ -132,7 +133,7 @@ public class TableHanlder extends JTable {
 					if (!map.containsKey("WORD"))
 						map.put("WORD", (String) model.getValueAt(i, 0));
 					if (!map.containsKey("MEANING"))
-						map.put("MEANING", (String) model.getValueAt(i, 1));
+						map.put("WORD_MEANING", (String) model.getValueAt(i, 1));
 				}
 			}
 
@@ -147,7 +148,7 @@ public class TableHanlder extends JTable {
 		HashMap<String, String> map = new HashMap<String, String>();
 
 		for (int i = 0; i < header.length; i++)
-			map.put(header[i], (String) this.getValueAt(idx, i));
+			map.put(header[i].toUpperCase(), (String) this.getValueAt(idx, i));
 
 		return map;
 	}
@@ -160,6 +161,15 @@ public class TableHanlder extends JTable {
 				row[i++] = (String) map.get((obj.toString()).toUpperCase());
 
 		showRow(row);
+	}
+
+	public void showList(List<Map<Object, Object>> list) {
+		Map<Object, Object> mapTmp = new HashMap<Object, Object>();
+		for (Map<Object, Object> map : list) {
+			if(map != null)
+				map.forEach((key, value) -> mapTmp.put(key, value));
+		}
+		showObjectMap(mapTmp);
 	}
 
 }

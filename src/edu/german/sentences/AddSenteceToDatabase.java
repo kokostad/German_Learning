@@ -4,19 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.german.sql.SqlQuery;
+import edu.german.words.model.Word;
 import edu.german.sql.QueryContractor;
 
-
 public class AddSenteceToDatabase {
-	private SqlQuery query;
 
 	public AddSenteceToDatabase() {
-		this.query = new SqlQuery();
 	}
 
 	public boolean checkIfSentenceExist(String sentence, String category) {
 		if (!sentence.isBlank() && category != null) {
-			String sql = query.getSql("check_sentence");
+			String sql = new SqlQuery().getSql("check_sentence");
 			QueryContractor qc = new QueryContractor();
 			int id = qc.getId(sql, sentence, category);
 			if (id > -1)
@@ -35,27 +33,36 @@ public class AddSenteceToDatabase {
 		for (HashMap<String, String> map : mapList) {
 			String sentence = null;
 			String meaning = null;
-			String type = null;
-			String category = null;
+			String genus = null;
+			String mode = null;
 			String tens = null;
 			String word = null;
+			String wordMeaning = null;
+			String wordGenus = null;
 
 			if (map.containsKey("SENTENCE"))
 				sentence = map.get("SENTENCE");
 			if (map.containsKey("MEANING"))
 				meaning = map.get("MEANING");
-			if (map.containsKey("TYPE"))
-				type = map.get("TYPE");
-			if (map.containsKey("CATEGORY"))
-				category = map.get("CATEGORY");
+			if (map.containsKey("GENUS"))
+				genus = map.get("GENUS");
+			if (map.containsKey("MODE"))
+				mode = map.get("MODE");
 			if (map.containsKey("TENS"))
 				tens = map.get("TENS");
 			if (map.containsKey("WORD"))
 				word = map.get("WORD");
+			if (map.containsKey("WORD_MEANING"))
+				wordMeaning = map.get("WORD_MEANING");
+			if (map.containsKey("WORD_GENUS"))
+				wordGenus = map.get("WORD_GENUS");
 
-			if (!checkIfSentenceExist(sentence, category)) {
-				String sql = query.getSql("add_sentence_with_mode");
-				new QueryContractor().addSentenceToDatabase(sql, sentence, meaning, type, category, tens, word);
+			if (!checkIfSentenceExist(sentence, wordGenus)) {
+				String sql = new SqlQuery().getSql("add_sentence_with_mode");
+				Word newWord = new Word();
+				if (!newWord.isExist(word, wordGenus))
+					newWord.putIntoRepository(word, wordMeaning, wordGenus);
+				new QueryContractor().addSentenceToDatabase(sql, sentence, meaning, genus, mode, tens, word);
 			}
 		}
 

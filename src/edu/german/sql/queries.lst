@@ -54,8 +54,10 @@ EOSQL
 SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.mode = ? ;
 EOSQL
 
+// Sentence,Meaning,Genus,Mode,Tens,Word,Word_Meaning,Word_genus
+## INSERT INTO ge.sentences (sentence,meaning,genus,mode,tens,word,word_meaning,word_genus) VALUES(?, ?, ?, ?, ?, ?);
 [add_sentence_with_mode]
-INSERT INTO ge.sentences (sentence, meaning, type, category, tens, word) VALUES(?, ?, ?, ?, ?, ?);
+INSERT INTO ge.sentences (sentence,meaning,type,category,tens,word) VALUES(?, ?, ?, ?, ?, ?);
 EOSQL
 
 [get_all_words_by_genus]
