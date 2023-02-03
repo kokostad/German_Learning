@@ -3,6 +3,10 @@ package edu.german.words.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.management.Query;
+
+import edu.german.sql.QueryContractor;
+import edu.german.sql.SqlQuery;
 import edu.german.tools.PrepareArrayFromString;
 
 public class Word implements WordModel {
@@ -110,4 +114,18 @@ public class Word implements WordModel {
 		wordMap.put("WORD", word);
 	}
 
+	@Override
+	public boolean isExist(String word, String genus) {
+		String query = new SqlQuery().getSql("check_word");
+		if (new QueryContractor().getId(query, word, genus) > 0)
+			return true;
+
+		return false;
+	}
+
+	@Override
+	public void putIntoRepository(String word, String meaning, String genus) {
+		String query = new SqlQuery().getSql("add_new_word");
+		new QueryContractor().addNewWord(query, word, meaning, genus);
+	}
 }

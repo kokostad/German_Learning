@@ -31,7 +31,6 @@ import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.WordSelectionPanel;
 import edu.german.words.model.Noun;
 
-
 /**
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
  *
@@ -55,8 +54,6 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private String controlWord;
 	private String newWord;
 	private String example;
-	private int bigFontSize;
-	private String fontArt;
 	private ShowResultAsImage showImage;
 	private List<Noun> allNounList;
 	private List<Noun> severalNouns;
@@ -78,8 +75,8 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		es = Executors.newSingleThreadExecutor();
 		es.submit(new ExecutorPrepareNounView());
 
-		bigFontSize = scr.GAME_BIG_FONT_SIZE;
-		fontArt = scr.GAME_FONT_ART;
+		int bigFontSize = scr.GAME_BIG_FONT_SIZE;
+		String fontArt = scr.GAME_FONT_ART;
 
 		showImage = new ShowResultAsImage(200, 200);
 
@@ -137,6 +134,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		centralPan.add(resultPan);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, selectionPan, centralPan);
+		sp.setResizeWeight(new ScreenSetup().SPLIT_PANE_FACTOR);
 
 		setInitialParams();
 

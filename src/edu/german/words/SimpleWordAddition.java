@@ -74,7 +74,7 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 				prop.getValuesArray("GENUS_LIST"));
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editPanel, scp);
-		sp.setResizeWeight(scr.SPLIT_PANE_FACTOR);
+		sp.setResizeWeight(scr.MOST_BIG_SPLIT_PANE_FACTOR);
 
 		add(sp, BorderLayout.CENTER);
 		add(bp, BorderLayout.EAST);

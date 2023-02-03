@@ -1,6 +1,8 @@
 package edu.german.tools;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
@@ -14,23 +16,29 @@ public class OneEditField extends JPanel {
 	private String title;
 	private String value;
 	private String hint;
-	private int fontSize;
 	private int width;
 	private int height;
+	private Font font;
+	private Color color;
 
-	public OneEditField(String title, String hint, int fontSize, int width, int height) {
+	public OneEditField() {
+	}
+
+	public OneEditField(String title, String hint, Font font, Color color, int width, int height) {
 		this.height = height;
 		this.width = width;
-		this.fontSize = fontSize;
 		this.title = title;
 		this.hint = hint;
+		this.font = font;
+		this.color = color;
 
-		label = new JLabel(title + ": ");
-		label.setFont(new MyFont().myFont(fontSize));
+		label = new JLabel(title);
+		label.setFont(font);
 
 		editField = new JTextField();
 		editField.setPreferredSize(new Dimension(width, height));
-		editField.setFont(new MyFont().myFont(fontSize));
+		editField.setFont(font);
+		editField.setFont(getFont());
 		if (hint != null)
 			editField.setToolTipText(hint);
 
@@ -52,10 +60,6 @@ public class OneEditField extends JPanel {
 		this.width = width;
 	}
 
-	public void setFontSize(int fontSize) {
-		this.fontSize = fontSize;
-	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -65,20 +69,26 @@ public class OneEditField extends JPanel {
 	}
 
 	public String getValue() {
-		return editField.getText();
+		String str = editField.getText();
+		return str;
 	}
 
 	public void setValue(String value) {
 		editField.setText(value);
 	}
 
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	public static class Builder {
 		private String title;
 		private String value;
 		private String hint;
-		private int fontSize;
 		private int width;
 		private int height;
+		private Font font;
+		private Color color;
 
 		public Builder withValue(String value) {
 			this.value = value;
@@ -95,11 +105,6 @@ public class OneEditField extends JPanel {
 			return this;
 		}
 
-		public Builder withFontSize(int fontSize) {
-			this.fontSize = fontSize;
-			return this;
-		}
-
 		public Builder withTitle(String title) {
 			this.title = title;
 			return this;
@@ -110,12 +115,24 @@ public class OneEditField extends JPanel {
 			return this;
 		}
 
+		public Builder withColor(Color color) {
+			this.color = color;
+			return this;
+		}
+
+		public Builder withFont(Font font) {
+			this.font = font;
+			return this;
+		}
+		
 		public Builder() {
 		}
 
 		public OneEditField build() {
-			return new OneEditField(title, hint, fontSize, width, height);
+			return new OneEditField(title, hint, font, color, width, height);
 		}
+
+
 
 	}
 

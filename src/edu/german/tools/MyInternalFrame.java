@@ -22,16 +22,18 @@ public class MyInternalFrame extends JInternalFrame {
 		this.setResizable(true);
 		this.setMaximizable(true);
 		this.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-		this.setSize(width, height - ScreenSetup.BOTTOM_BORDER);
+		this.setSize(width, height);
 		this.setResizable(true);
 
-		ModelButton bExit = new ModelButton.Builder().setTitle("Exit").setIconName("exit.png")
-				.setHint(Titles.setTitel("EXIT")).build();
+		ModelButton bExit = new ModelButton.Builder()
+				.setTitle("Exit")
+				.setIconName("exit.png")
+				.setHint(Titles.setTitel("EXIT"))
+				.build();
 		bExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
-
 			}
 		});
 

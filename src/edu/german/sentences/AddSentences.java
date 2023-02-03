@@ -1,15 +1,18 @@
 package edu.german.sentences;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
@@ -19,12 +22,13 @@ import edu.german.tools.MyProperties;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.TableHanlder;
+import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
+import edu.german.words.EditWordsPanel;
 
 public class AddSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private String CFG_FILE = "sentence.properties";
-	private SentenceEditPanel edit;
 	private ButtonsPanel bp;
 	private JButton clearEditFieldsBtn;
 	private JButton clearListBtn;
@@ -36,6 +40,9 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private String[] header;
 	private List<HashMap<String, String>> mapList;
 	private ExecutorService es;
+	private SentenceEditPanel editSentence;
+	private SentenceParamPanel sentenceParam;
+	private EditWordsPanel editWordsPanel;
 
 	public AddSentences(int height, int width, String titel) {
 		super(height, width, titel);
@@ -59,7 +66,15 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		header = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
 		st = new TableHanlder(header, true);
 
-		edit = new SentenceEditPanel(header, "CHOOSE_SENTENCE_TYPE_LIST", "TENS");
+		JPanel edit = new JPanel();
+		edit.setLayout(new GridLayout(3, 1, 2, 2));
+		editSentence = new SentenceEditPanel();
+		sentenceParam = new SentenceParamPanel();
+		editWordsPanel = new EditWordsPanel(Titles.setTitel("WRITE_WORD"), Titles.setTitel("MEANING"),
+				new MyProperties("word.properties").getValuesArray("MODE_LIST"));
+		edit.add(editSentence);
+		edit.add(sentenceParam);
+		edit.add(editWordsPanel);
 
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(st);
@@ -67,7 +82,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, edit, scp);
-		sp.setResizeWeight(new ScreenSetup().MOST_BIG_SPLIT_PANE_FACTOR);
+		sp.setResizeWeight(new ScreenSetup().BIGGER_SPLIT_PANE_FACTOR);
 
 		toolBar.addSeparator();
 
@@ -86,17 +101,28 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addToListBtn) {
-			Map<Object, Object> map = edit.getValueAsMap();
+			List<Map<Object, Object>> list = new LinkedList<>();
+			list.add(editSentence.getSentence());
+			list.add(editSentence.getMeaning());
+			list.add(sentenceParam.getModeMap());
+			list.add(sentenceParam.getGenusMap());
+			list.add(sentenceParam.getTensMap());
+			list.add(editWordsPanel.getWord());
+			list.add(editWordsPanel.getMeaning());
+			list.add(editWordsPanel.getBoxValue());
 
-			if (map.containsKey("SENTENCE") && map.containsKey("MEANING")) {
-				st.showObjectMap(map);
+			if (!list.isEmpty()) {
+				st.showList(list);
 				clearEditFiles();
 			} else
 				new ShowMessage("EMPTY_FIELDS");
 		}
 
 		else if (src == editRowBtn) {
-			edit.showData(st.getSelectedRowAsMap());
+			Map<String, String> var = st.getSelectedRowAsMap();
+			editSentence.showData(var);
+			sentenceParam.showData(var);
+			editWordsPanel.showData(var);
 			if (st.getIdx() > -1)
 				st.removeRow();
 		}
@@ -107,13 +133,13 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 				es.submit(new ExecutorPutSentenceIntoDatabase(mapList));
 				st.clearWordsList();
 				st.clearTable();
-				mapList.clear();
 			}
 		}
 	}
 
 	private void clearEditFiles() {
-		edit.clearEditFields();
+		editSentence.clearEditFields();
+		editWordsPanel.clearEditFields();
 	}
 
 }

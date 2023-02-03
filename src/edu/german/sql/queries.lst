@@ -54,8 +54,10 @@ EOSQL
 SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.mode = ? ;
 EOSQL
 
+// Sentence,Meaning,Genus,Mode,Tens,Word,Word_Meaning,Word_genus
+## INSERT INTO ge.sentences (sentence,meaning,genus,mode,tens,word,word_meaning,word_genus) VALUES(?, ?, ?, ?, ?, ?);
 [add_sentence_with_mode]
-INSERT INTO ge.sentences (sentence, meaning, type, category, tens, word) VALUES(?, ?, ?, ?, ?, ?);
+INSERT INTO ge.sentences (sentence,meaning,type,category,tens,word) VALUES(?, ?, ?, ?, ?, ?);
 EOSQL
 
 [get_all_words_by_genus]
@@ -113,4 +115,13 @@ EOSQL
 
 [get_nouns_view_for_game]
 select word, meaning, sentence from game_nouns ;
+EOSQL
+
+[prepare_view_words_for_game]
+create or replace recursive view game_words(word, meaning, sentence) as (
+ with lists as ( SELECT T.word, T.sentence from
+	(SELECT a.*, ROW_NUMBER() OVER (PARTITION BY word ORDER BY word DESC) AS rnk
+		FROM ge.sentences as a ) T WHERE T.rnk = 1 ),
+ listw as ( select awo.woid, awo.word, awo.meaning from ge.all_words_objects awo)
+ select distinct w.word, w.meaning, s.sentence from listw w left join lists s on w.word = s.word) ;
 EOSQL

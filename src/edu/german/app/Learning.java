@@ -27,7 +27,6 @@ import edu.german.tools.Titles;
 import edu.german.tools.buttons.ModelButton;
 import edu.german.words.AddAdjective;
 import edu.german.words.SimpleWordAddition;
-import edu.german.words.WordAddition;
 import edu.german.words.verbs.AddVerbs;
 
 public class Learning extends JFrame implements ActionListener {
@@ -84,6 +83,7 @@ public class Learning extends JFrame implements ActionListener {
 		
 		miSimpleWordsAddition = new JMenuItem(Titles.setTitel("SIMPLE_WORDS_ADDITION"));
 		miSimpleWordsAddition.addActionListener(this);
+
 		miSentencesAddition = new JMenuItem(Titles.setTitel("SENTENCES_ADDITION"));
 		miSentencesAddition.addActionListener(this);
 
