@@ -69,8 +69,7 @@ public class OneEditField extends JPanel {
 	}
 
 	public String getValue() {
-		String str = editField.getText();
-		return str;
+		return editField.getText();
 	}
 
 	public void setValue(String value) {
@@ -131,8 +130,6 @@ public class OneEditField extends JPanel {
 		public OneEditField build() {
 			return new OneEditField(title, hint, font, color, width, height);
 		}
-
-
 
 	}
 

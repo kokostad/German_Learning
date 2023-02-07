@@ -45,13 +45,11 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	private ButtonsPanel bp;
 	private JButton drawBtn;
 	private JButton checkBtn;
-	private JButton repeatBtn;
 	private WordSelectionPanel selectionPanel;
 	private ShowResultAsImage showImage;
-	private JPanel gamePanel;
+	private JPanel playPanel;
 	private JLabel choosenWordLabel;
 	private JLabel communique;
-//	private OneEditableField answer;
 	private OneEditField answer;
 	private String information = Titles.setTitel("WORD_TO_GUESS") + ": ";
 	private ResultsPanel resultPan;
@@ -60,14 +58,13 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	private String meaning;
 	private String[] meanings;
 	private int numberOfWords;
-	private int actualDraw = 0;
-	private int actualScore = 0;
-	private int goodAnswer = 0;
-	private int wrongAnswer = 0;
+	private int actualDraw;
+	private int actualScore;
+	private int goodAnswer;
+	private int wrongAnswer;
 	private int deal = 1;
-	private JTextField textField;
 	private AnswerPanel answerPanel;
-	private GuessTheMeaningGamePanel gamePanel2;
+	private GuessTheMeaningGamePanel gamePanel;
 	private ExecutorService es;
 
 	public GuessTheMeaning(int height, int width, String titel) {
@@ -75,30 +72,20 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		ScreenSetup scr = new ScreenSetup();
 		int fontSize = scr.GAME_FONT_SIZE;
 		String fontArt = scr.GAME_FONT_ART;
-
+		severalWords = new LinkedList<Word>();
 		showImage = new ShowResultAsImage(200, 200);
 
 		es = Executors.newSingleThreadExecutor();
 		es.submit(new ExecutorPrepareWordView());
-		
-		severalWords = new LinkedList<Word>();
 
-		bp = new ButtonsPanel("NEW_WORD", "CHECK_ANSWER", "NEW_ROUND");
+		bp = new ButtonsPanel("NEW_DEAL", "CHECK_ANSWER");
 		drawBtn = bp.getB1();
 		drawBtn.addActionListener(this);
 		checkBtn = bp.getB2();
 		checkBtn.addActionListener(this);
-		repeatBtn = bp.getB3();
-		repeatBtn.addActionListener(this);
 
 		selectionPanel = new WordSelectionPanel(true);
-
-		JPanel leftPanel = new JPanel();
-		leftPanel.add(showImage);
-
-		// String round, String answer, String infromation
-		gamePanel2 = new GuessTheMeaningGamePanel("0", null, null);
-
+		gamePanel = new GuessTheMeaningGamePanel();
 		answerPanel = new AnswerPanel();
 
 		answer = new OneEditField.Builder()
@@ -108,16 +95,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 				.withHeight(20)
 				.withWidth(30)
 				.build();
-
-		textField = new JTextField();
-		textField.setText("narazie nic");
-		textField.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				checkAnswer();
-			}
-		});
 
 		communique = new JLabel();
 		communique.setFont(new Font(fontArt, Font.ITALIC, fontSize));
@@ -134,15 +111,15 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		labelPanel.add(choosenWordLabel);
 		labelPanel.add(answer);
 
-		resultPan = new ResultsPanel(Titles.setTitel("YOUR_RESULTS"));
+		playPanel = new JPanel();
+		playPanel.add(showImage);
+		playPanel.add(gamePanel);
 
-		gamePanel = new JPanel();
-		gamePanel.add(leftPanel);
-		gamePanel.add(gamePanel2);
+		resultPan = new ResultsPanel(Titles.setTitel("YOUR_RESULTS"));
 
 		JPanel centralPan = new JPanel();
 		centralPan.setLayout(new GridLayout(3, 1, 10, 5));
-		centralPan.add(gamePanel);
+		centralPan.add(playPanel);
 		centralPan.add(answerPanel);
 		centralPan.add(resultPan);
 
@@ -174,17 +151,22 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
 		showImage.showScore(false);
 	}
-
+	
 	private void positiveScoreUpdate() {
 		goodAnswer = goodAnswer + 1;
 		resultPan.setGoodAnswerNumber(String.valueOf(goodAnswer));
 		actualScore = actualScore + 1;
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
 		showImage.showScore(true);
-		answer.clearField();
 		answerPanel.setMeaning(meaning);
 		answerPanel.setExample("example");
 		choosenWordLabel.setText(information);
+		clearFields();
+	}
+
+	private void clearFields() {
+		answer.clearField();
+		gamePanel.clearWord();
 	}
 
 	private void initData() {
@@ -193,25 +175,30 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		goodAnswer = 0;
 		wrongAnswer = 0;
 
-		resultPan.setYourScoreLab(String.valueOf(actualDraw + 0));
+		resultPan.setYourScoreLab(String.valueOf(actualDraw));
 		resultPan.setGoodAnswerNumber(String.valueOf(goodAnswer));
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
 		resultPan.setWrongAnswerNumber(String.valueOf(wrongAnswer));
 
 		showImage.showScore(true);
 		communique.setText("Runda: " + deal);
-		answer.clearField();
+		clearFields();
 	}
 
 	private boolean gameControler(String str) {
-		if (actualDraw > 0 && actualDraw < severalWords.size() && controlWord.equals(str)) {
+		if (str == null) {
+			new ShowMessage("NO_ANSWER");
+			return false;
+		}
+
+		if (actualDraw > 1 && actualDraw < severalWords.size() && controlWord.equals(str)) {
 			new ShowMessage("THE_SAME_WORD");
 			return false;
 		}
 
-		if (str == null) {
-			new ShowMessage("NO_ANSWER");
-			return false;
+		if (meaning != null) {
+			if ((str.toUpperCase()).equals(meaning.toUpperCase()))
+				return true;
 		}
 
 		if (meanings != null) {
@@ -219,9 +206,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 				if (str.equals(meanings[i].toString()))
 					return true;
 			}
-		} else if (str != null && meanings == null) {
-			if (str.equals(meaning))
-				return true;
 		}
 
 		return false;
@@ -229,18 +213,21 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 
 	private void setNextWord(int number) {
 		if (number < severalWords.size()) {
+//			actualDraw = +1;
 			Word var = severalWords.get(number);
 			choosenWord = var.getWord();
-			if (number == 0)
-				controlWord = choosenWord;
+			controlWord = choosenWord;
 			meaning = var.getMeaning();
 			meanings = var.getMeanings();
-			choosenWordLabel.setText(information + choosenWord);
-			resultPan.setYourScoreLab(String.valueOf(actualDraw + 1));
-		} else
+			gamePanel.setRound(actualDraw);
+			gamePanel.setWord(choosenWord);
+			resultPan.setYourScoreLab(String.valueOf(actualDraw));
+		} else {
+			controlWord = null;
 			new ShowMessage("NO_MORE_WORDS");
+		}
 	}
-
+	
 	private List<Word> getSeveral(Integer number) {
 		if (!allWordList.isEmpty()) {
 			List<Word> list = new LinkedList<>();
@@ -262,9 +249,10 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	}
 
 	private void checkAnswer() {
-		if (gameControler(answer.getValue())) {
+		String answer = gamePanel.getAnswer();
+		if (gameControler(answer)) {
+			actualDraw += 1;
 			positiveScoreUpdate();
-			actualDraw = actualDraw + 1;
 			setNextWord(actualDraw);
 		} else
 			negativeScoreUpdate();
@@ -276,18 +264,18 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 
 		if (src == drawBtn) {
 			showImage.showIndifference();
-			allWordList = tryToGetList();
+
 			if (severalWords.isEmpty()) {
+				allWordList = tryToGetList();
 				initData();
 				setNumberOfWords((int) selectionPanel.getNumber());
 				severalWords = getSeveral(getNumberOfWords());
 				setNextWord(actualDraw);
 			} else {
-				actualDraw = actualDraw + 1;
 				setNextWord(actualDraw);
 			}
 
-			if (actualDraw > 0 && actualDraw < severalWords.size() && controlWord.equals(choosenWord))
+			if (actualDraw > 1 && actualDraw < severalWords.size() && controlWord.equals(choosenWord))
 				new ShowMessage("THE_SAME_WORD");
 
 			showImage.showIndifference();
@@ -296,23 +284,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		else if (src == checkBtn) {
 			checkAnswer();
 		}
-
-		else if (src == repeatBtn) {
-			deal += 1;
-			severalWords.clear();
-			communique.setText("Runda: " + deal);
-			setNumberOfWords((int) selectionPanel.getNumber());
-			choosenWordLabel.setText(information);
-
-			if (allWordList.size() > getNumberOfWords()) {
-				severalWords = getSeveral(getNumberOfWords());
-			} else {
-				new ShowMessage("NO_MORE_WORDS");
-			}
-
-			initData();
-		}
-
 	}
 
 }

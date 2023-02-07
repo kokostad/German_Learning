@@ -21,16 +21,11 @@ public class GuessTheMeaningGamePanel extends JPanel {
 	private JLabel informationLabel;
 	private OneEditField answerField;
 	private String roundInfo = "Runda: ";
+	private int roundCount = 0;
 	private String answerInfo = "Wyraz do odgadniecia: ";
 	private String wordInfo = "Wpisz znaczenie wyrazu: ";
 
 	public GuessTheMeaningGamePanel() {
-		roundLabel = new JLabel();
-		informationLabel = new JLabel();
-		answerField = new OneEditField();
-	}
-
-	public GuessTheMeaningGamePanel(String round, String answer, String infromation) {
 		ScreenSetup ss = new ScreenSetup();
 		int fontSize = ss.GAME_FONT_SIZE;
 		String fontArt = ss.GAME_FONT_ART;
@@ -64,7 +59,7 @@ public class GuessTheMeaningGamePanel extends JPanel {
 				.build();
 		answerPane.add(answerField);
 
-		setRound(round);
+		setRound(0);
 		setInfromation(answerInfo);
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -77,10 +72,11 @@ public class GuessTheMeaningGamePanel extends JPanel {
 		this.add(answerPane);
 	}
 
-	public void setRound(String round) {
-		roundLabel.setText(roundInfo + round);
+	public void setRound(int count) {
+		roundCount = roundCount + count;
+		roundLabel.setText(roundInfo + roundCount);
 	}
-
+	
 	public String getAnswer() {
 		return answerField.getValue();
 	}
@@ -97,4 +93,11 @@ public class GuessTheMeaningGamePanel extends JPanel {
 		informationLabel.setText(infromation);
 	}
 
+	public void setWord(String choosenWord) {
+		informationLabel.setText(answerInfo + choosenWord);
+	}
+
+	public void clearWord() {
+		answerField.clearField();
+	}
 }
