@@ -1,5 +1,7 @@
 package edu.german.words.model;
 
+import java.util.List;
+
 public interface WordModel {
 
 	int getWoid();
@@ -29,4 +31,7 @@ public interface WordModel {
 	boolean isExist(String word, String genus);
 
 	void putIntoRepository(String word, String meaning, String genus);
+
+	List<Word> getAllWords();
+
 }

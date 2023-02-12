@@ -1,13 +1,11 @@
 package edu.german.words.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import javax.management.Query;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
-import edu.german.tools.PrepareArrayFromString;
 
 public class Word implements WordModel {
 	private Map<Object, Object> wordMap;
@@ -128,4 +126,12 @@ public class Word implements WordModel {
 		String query = new SqlQuery().getSql("add_new_word");
 		new QueryContractor().addNewWord(query, word, meaning, genus);
 	}
+
+	@Override
+	public List<Word> getAllWords() {
+		String query = new SqlQuery().getSql("get_all_words");
+		List<Word> list = new QueryContractor().getAllWordList(query);
+		return list;
+	}
+
 }

@@ -27,6 +27,7 @@ public class OneEditField extends JPanel {
 	public OneEditField(String title, String hint, Font font, Color color, int width, int height) {
 		this.height = height;
 		this.width = width;
+		this.font = font;
 		this.title = title;
 		this.hint = hint;
 		this.font = font;
@@ -38,7 +39,6 @@ public class OneEditField extends JPanel {
 		editField = new JTextField();
 		editField.setPreferredSize(new Dimension(width, height));
 		editField.setFont(font);
-		editField.setFont(getFont());
 		if (hint != null)
 			editField.setToolTipText(hint);
 
@@ -69,7 +69,10 @@ public class OneEditField extends JPanel {
 	}
 
 	public String getValue() {
-		return editField.getText();
+		if (!editField.getText().isBlank())
+			return editField.getText();
+
+		return null;
 	}
 
 	public void setValue(String value) {
@@ -84,9 +87,9 @@ public class OneEditField extends JPanel {
 		private String title;
 		private String value;
 		private String hint;
+		private Font font;
 		private int width;
 		private int height;
-		private Font font;
 		private Color color;
 
 		public Builder withValue(String value) {
@@ -114,16 +117,11 @@ public class OneEditField extends JPanel {
 			return this;
 		}
 
-		public Builder withColor(Color color) {
-			this.color = color;
-			return this;
-		}
-
 		public Builder withFont(Font font) {
 			this.font = font;
 			return this;
 		}
-		
+
 		public Builder() {
 		}
 

@@ -27,6 +27,7 @@ public class ScreenSetup {
 	public double BIGGER_SPLIT_PANE_FACTOR = 0.35;
 	public double MOST_BIG_SPLIT_PANE_FACTOR = 0.45;
 
+	public int WORD_FIELD_WIDTH = SCR_DEFAULT_WIDTH / 6;
 	public int EDIT_FIELD_WIDTH = SCR_DEFAULT_WIDTH / 2;
 	public int EDIT_FIELD_HEIGHT = 30;
 
@@ -35,16 +36,16 @@ public class ScreenSetup {
 	public int GAME_BIG_FONT_SIZE = 24;
 
 	public int EDIT_FIELD_FACTOR = 30;
-	public int WORD_FIELD_WIDTH = 130;
 
 	public String STANDART_FONT_ART = "Serif";
 	public String GAME_FONT_ART = "MV Boli";
 
+	public Font DEFAULT_FONT = new Font(STANDART_FONT_ART, Font.ITALIC, DEFAULT_FONT_SIZE);
+	public Font NORMAL_FONT = new Font(STANDART_FONT_ART, Font.PLAIN, DEFAULT_FONT_SIZE);
+	public Font GAME_FONT = new Font(GAME_FONT_ART, Font.BOLD | Font.ITALIC, GAME_FONT_SIZE);
+
 //	Color parameters
 	public Color LABEL_COLOR = new Color(139, 69, 19);
 	public Color LABEL_COLOR_2 = new Color(51, 51, 255);
-
-	public Font GAME_FONT = new Font(GAME_FONT_ART, Font.BOLD | Font.ITALIC, GAME_FONT_SIZE);
-	public Font NORMAL_FONT = new Font(STANDART_FONT_ART, Font.BOLD, DEFAULT_FONT_SIZE);
 
 }

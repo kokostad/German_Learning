@@ -23,7 +23,7 @@ public class SentenceEditPanel extends JPanel {
 		sentence = new OneEditField.Builder()
 				.withTitle(Translate.setText("write_german_sentence"))
 				.withHint(Translate.setText("write_in_german"))
-				.withFont(new ScreenSetup().GAME_FONT)
+//				.withFontSize(ss.DEFAULT_FONT_SIZE)
 				.withWidth(ss.EDIT_FIELD_WIDTH - 50)
 				.withHeight(ss.EDIT_FIELD_FACTOR)
 				.build();
@@ -31,7 +31,7 @@ public class SentenceEditPanel extends JPanel {
 		meaning = new OneEditField.Builder()
 				.withTitle(Translate.setText("write_polish_meaning"))
 				.withHint(Translate.setText("write_in_polish"))
-				.withFont(new ScreenSetup().GAME_FONT)
+//				.withFontSize(ss.DEFAULT_FONT_SIZE)
 				.withWidth(ss.EDIT_FIELD_WIDTH - 50)
 				.withHeight(ss.EDIT_FIELD_FACTOR)
 				.build();

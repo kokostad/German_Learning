@@ -1,6 +1,5 @@
 package edu.german.tools;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
@@ -10,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 public class MyCheckBox extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private JCheckBox jb;
 
 	public MyCheckBox(String information, String toChoose, String title) {
@@ -25,6 +25,10 @@ public class MyCheckBox extends JPanel {
 
 	public boolean result() {
 		return jb.isSelected();
+	}
+
+	public void clear() {
+		jb.setText("");
 	}
 
 }

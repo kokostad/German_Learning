@@ -40,7 +40,8 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 
 		titles = new OneEditField.Builder()
 				.withTitle("Podaj tytuł reguły")
-				.withHint(null).withFontSize(fontSize)
+				.withHint(null)
+//				.withFontSize(fontSize)
 				.withWidth(editFieldWidth)
 				.withHeight(editFieldHeight)
 				.build();
@@ -48,7 +49,7 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 		tips = new OneEditField.Builder()
 				.withTitle("Wskazówka")
 				.withHint("Czego dotyczy")
-				.withFontSize(fontSize)
+//				.withFontSize(fontSize)
 				.withWidth(editFieldWidth)
 				.withHeight(editFieldHeight)
 				.build();

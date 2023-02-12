@@ -40,8 +40,8 @@ public class SqlQueryBuilder {
 
 	public String getAllSentencesFromSpecyficTable(String category) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT * FROM ge.sentences ");
-		if (category.length() > 0)
+		sb.append("SELECT sentence, meaning FROM ge.sentences");
+		if (category != null)
 			sb.append("WHERE category = '" + category + "' ");
 
 		sb.append(";");

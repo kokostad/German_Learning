@@ -53,7 +53,7 @@ public class GuessTheMeaningGamePanel extends JPanel {
 				.withTitle(wordInfo)
 				.withHint("Wpisz odpowiedź")
 				.withFont(font)
-				.withColor(labClr)
+//				.withColor(labClr)
 				.withWidth(130)
 				.withHeight(30)
 				.build();

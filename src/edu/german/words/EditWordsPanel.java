@@ -30,7 +30,7 @@ public class EditWordsPanel extends JPanel {
 		word = new OneEditField.Builder()
 				.withTitle(Titles.setTitel("KEY_WORD"))
 				.withHint(Titles.setTitel("KEY_WORD"))
-				.withFont(new ScreenSetup().GAME_FONT)
+//				.withFontSize(ss.DEFAULT_FONT_SIZE)
 				.withWidth(ss.WORD_FIELD_WIDTH)
 				.withHeight(ss.EDIT_FIELD_HEIGHT)
 				.build();

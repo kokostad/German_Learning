@@ -6,6 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/kokos/git/German_Learning/lib/postgresql-42.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-42.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

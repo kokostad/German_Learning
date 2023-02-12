@@ -11,4 +11,9 @@ public class ShowMessage extends JFrame {
 		JOptionPane.showMessageDialog(this, new MyProperties(FILE_CFG).getValuesArray(pattern));
 	}
 
+	public ShowMessage(String pattern, String hint) {
+		String information = new MyProperties(FILE_CFG).getValue(pattern, false);
+		JOptionPane.showMessageDialog(this, information + " (" + hint + ")");
+	}
+
 }

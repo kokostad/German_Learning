@@ -1,27 +1,62 @@
 package edu.german.words.model;
 
-public class Verb implements WordModel {
-	private String genus = "das Verb";
-	// TODO make Builder inner class 
-	
+import java.util.List;
+
+import edu.german.sql.QueryContractor;
+import edu.german.sql.SqlQuery;
+
+public class Verb extends Word {
+	private final String genus = "das Verb";
+	// TODO make Builder inner class
+	private int woid;
+	private int oid;
+	private String word;
+	private String meaning;
+	private boolean irregular;
+
 	public Verb() {
 	}
-	
+
+	public Verb(int woid, int oid, String word, String meaning, boolean irregular) {
+		this.woid = woid;
+		this.oid = oid;
+		this.word = word;
+		this.meaning = meaning;
+		this.irregular = irregular;
+	}
 
 	public String getGenus() {
 		return genus;
 	}
 
+	public boolean isIrregular() {
+		return irregular;
+	}
+
+	public void setIrregular(boolean irregular) {
+		this.irregular = irregular;
+	}
+
 	@Override
 	public int getWoid() {
-		// TODO Auto-generated method stub
-		return 0;
+		if (woid > 0)
+			return woid;
+		else if (word != null) {
+			String sql = new SqlQuery().getSql("check_verb");
+			return new QueryContractor().getVerb(sql, word, "woid");
+		} else
+			return -1;
 	}
 
 	@Override
 	public int getOid() {
-		// TODO Auto-generated method stub
-		return 0;
+		if (oid > 0)
+			return oid;
+		else if (word != null) {
+			String sql = new SqlQuery().getSql("check_verb");
+			return new QueryContractor().getVerb(sql, word, "oid");
+		} else
+			return -1;
 	}
 
 	@Override
@@ -39,7 +74,7 @@ public class Verb implements WordModel {
 	@Override
 	public String getMeaning() {
 		// TODO Auto-generated method stub
-		return null;
+		return meaning;
 	}
 
 	@Override
@@ -94,6 +129,12 @@ public class Verb implements WordModel {
 	public void putIntoRepository(String word, String meaning, String genus) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public List<Verb> getAllVerbs() {
+		String query = new SqlQuery().getSql("get_all_verbs");
+		List<Verb> list = new QueryContractor().getVerbList(query);
+		return list;
 	}
 
 }

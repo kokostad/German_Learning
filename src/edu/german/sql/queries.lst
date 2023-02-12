@@ -18,6 +18,10 @@ EOSQL
 SELECT a.oid FROM ge.adjective_graduation a WHERE a.equal_degree_ge = ? LIMIT 1;
 EOSQL
 
+[check_verb]
+SELECT * FROM ge.verbs v WHERE v.word = ? LIMIT 1;
+EOSQL
+
 [check_verbs_conjugation]
 SELECT v.oid FROM ge.verbs_conjugation v WHERE v.woid = ? AND v.tens = ? ;
 EOSQL
@@ -64,6 +68,10 @@ EOSQL
 SELECT * FROM ge.all_words_objects awo WHERE awo.genus = ? LIMIT ? ;
 EOSQL
 
+[get_all_verbs]
+SELECT * from ge.verbs ;
+EOSQL
+
 [get_word_from_main_table_by_woid]
 SELECT awo.word, awo.meaning, awo.genus FROM ge.all_words_objects awo WHERE awo.woid = ? ;
 EOSQL
@@ -94,6 +102,10 @@ EOSQL
 
 [get_all_words]
 SELECT * from ge.all_words_objects;
+EOSQL
+
+[get_all_words_to_export]
+SELECT word, meaning, genus from ge.all_words_objects;
 EOSQL
 
 [add_adjective_graduation]

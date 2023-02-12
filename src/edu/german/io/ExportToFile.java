@@ -4,7 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,33 +24,33 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import edu.german.sentences.SentencesSetting;
+import org.json.JSONObject;
+
+import edu.german.services.GetWordsAsList;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
+import edu.german.tools.ScreenSetup;
+import edu.german.tools.SentenceJSONParser;
+import edu.german.tools.ShowMessage;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.words.WordsSetting;
 
 public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private WordsSetting wordSettingPanel;
-	private SentencesSetting sentenceSettingPanel;
 	private ButtonsPanel bp;
 	private JButton clearEditFieldBtn;
-	private JButton prepareDataBtn;
 	private JButton showBtn;
 	private JButton exportBtn;
 	private JTextArea txtArea;
 	private ExecutorService es;
 	private JTabbedPane tp;
-	private String type;
 	private MyProgressBar bar;
-	private List<String[]> wordList;
-	private List<String[]> sentenceList;
+	private List<String> toExport;
+	private String genos;
+	private ExportConfigPanel exportConfigPanel;
 
 	public ExportToFile(int height, int width, String titel) {
 		super(height, width, titel);
 		es = Executors.newSingleThreadExecutor();
-		type = null;
 
 		txtArea = new JTextArea(15, 70);
 		txtArea.setEditable(false);
@@ -53,27 +62,23 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		jp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		wordSettingPanel = new WordsSetting();
-		sentenceSettingPanel = new SentencesSetting();
+		exportConfigPanel = new ExportConfigPanel();
 
 		tp = new JTabbedPane();
-		tp.add("Konfiguracja parametrów wyrazów", wordSettingPanel);
-		tp.add("Konfiguracja parametrów zdań", sentenceSettingPanel);
+		tp.add("Konfiguracja parametrów eksportu", exportConfigPanel);
 
-		bp = new ButtonsPanel("CLEAR_EDIT_FIELD", "PREPARE_DATA", "SHOW_DATA", "EXPORT");
+		bp = new ButtonsPanel("CLEAR", "SHOW_DATA", "EXPORT");
 		bp.setFontSize(20);
 		clearEditFieldBtn = bp.getB1();
 		clearEditFieldBtn.addActionListener(this);
-		prepareDataBtn = bp.getB2();
-		prepareDataBtn.addActionListener(this);
-		showBtn = bp.getB3();
+		showBtn = bp.getB2();
 		showBtn.addActionListener(this);
-		exportBtn = bp.getB4();
+		exportBtn = bp.getB3();
 		exportBtn.addActionListener(this);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tp, jp);
 		sp.setOneTouchExpandable(true);
-		sp.setDividerLocation(0.5);
+		sp.setDividerLocation(new ScreenSetup().SPLIT_PANE_FACTOR);
 
 		bar = new MyProgressBar("Postęp eksportu:");
 
@@ -87,30 +92,54 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	}
 
 	private String getFilePath() {
-		if (tp.getSelectedIndex() == 0) {
-			type = "WORD";
-			return wordSettingPanel.getFilePath();
-		} else {
-			type = "SENTENCE";
-			return sentenceSettingPanel.getFilePath();
-		}
-	}
-
-	private String getSeparationSign() {
-		if (tp.getSelectedIndex() == 0)
-			return wordSettingPanel.getSeparationSign();
-		else
-			return sentenceSettingPanel.getSeparationSign();
+		return exportConfigPanel.getFilePath();
 	}
 
 	private void clearAll() {
 		bar.setNull();
 		txtArea.setText(null);
+		toExport.clear();
+		exportConfigPanel.clear();
+	}
 
-		if (tp.getSelectedIndex() == 0) {
-			wordSettingPanel.clearEditField();
+	private List<String> prepareDataToExport(HashMap<String, String> var) {
+		List<String> list = new LinkedList<>();
+		Optional<String> option = var.entrySet().stream().filter(e -> "word".equals(e.getValue()))
+				.map(Map.Entry::getKey).findFirst();
+
+		if (option.isPresent()) {
+			list = new GetWordsAsList().getAllWordListToExport();
 		} else {
-			sentenceSettingPanel.clearEditField();
+			list = new GetListOfSentences().getList(genos);
+		}
+
+		return list;
+	}
+
+	private void exportToCSVFile(String exportKind) {
+		if (getFilePath() == null || toExport.isEmpty()) {
+			new ShowMessage("NO_DATA", "uzupełnij brakujące dane");
+		} else if (getFilePath() != null && !toExport.isEmpty()) {
+			es.submit(new ExportDataToFile(toExport, getFilePath(), exportKind));
+			clearAll();
+		} else if (getFilePath() != null && toExport.isEmpty()) {
+			HashMap<String, String> var = exportConfigPanel.getParam();
+			toExport = prepareDataToExport(var);
+			es.submit(new ExportDataToFile(toExport, getFilePath(), exportKind));
+			clearAll();
+		}
+	}
+
+	// TODO change and improve this method and export into other class
+	private void exportToJSONFile(JSONObject var) {
+		try {
+			String val = var.toString();
+			FileWriter writer = new FileWriter(new File(getFilePath()), true);
+			writer.write(val);
+			writer.write("\n");
+			writer.close();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -123,40 +152,32 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 			repaint();
 		}
 
-		else if (src == prepareDataBtn) {
-			prepareDataToExport();
+		else if (src == showBtn) {
+			HashMap<String, String> var = exportConfigPanel.getParam();
+			toExport = prepareDataToExport(var);
+			toExport.forEach((s) -> txtArea.append(s));
 		}
 
 		else if (src == exportBtn) {
-			String filePath = getFilePath();
-			if (filePath != null && getSeparationSign() != null) {
-				int selectedIndex = tp.getSelectedIndex();
-				GetListOfWords glw = new GetListOfWords();
-				GetListOfSentences gls = new GetListOfSentences();
+			String exportKind = exportConfigPanel.getExportKind();
+			if (exportKind.equals("CSV")) {
+				exportToCSVFile(exportKind);
+			} else {
+				// TODO you need to find some resolve
+				int lines = txtArea.getLineCount();
+				StringReader sr = new StringReader(txtArea.getText());
+				BufferedReader br = new BufferedReader(sr);
+				String nextLine = "";
+				try {
+					while ((nextLine = br.readLine()) != null) {
+						JSONObject var = new SentenceJSONParser(nextLine).getJSONItem();
+						exportToJSONFile(var);
+					}
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 
-//				if (selectedIndex == 0)
-//					glw.getList(wordSettingPanel.getGenus());
-//				else
-//					gls.getList(sentenceSettingPanel.getGenus());
 			}
 		}
-
-		else if (src == showBtn) {
-
-		}
-
 	}
-
-	private void prepareDataToExport() {
-		if (tp.getSelectedIndex() == 0) {
-			GetListOfWords glw = new GetListOfWords();
-			wordList = glw.getList(wordSettingPanel.getFilePath(), wordSettingPanel.getSeparationSign(),
-					wordSettingPanel.getGenus());
-		} else {
-			GetListOfSentences gls = new GetListOfSentences();
-			sentenceList = gls.getList(sentenceSettingPanel.getFilePath(), sentenceSettingPanel.getSeparationSign(),
-					sentenceSettingPanel.getGenus());
-		}
-	}
-
 }

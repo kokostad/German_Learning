@@ -14,6 +14,7 @@ import java.util.Map;
 import edu.german.dao.DbConnect;
 import edu.german.tools.PrepareArrayFromString;
 import edu.german.words.model.Noun;
+import edu.german.words.model.Verb;
 import edu.german.words.model.Word;
 
 /**
@@ -184,6 +185,37 @@ public class QueryContractor {
 				list.add(str);
 			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return list;
+	}
+
+	public List<String> getWordsAsStringList(String sql) {
+		List<String> list = new LinkedList<>();
+
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numOfCol = rsmd.getColumnCount();
+
+			while (rs.next()) {
+				StringBuilder sb = new StringBuilder();
+				for (int i = 1; i <= numOfCol; i++) {
+					Object var = rs.getObject(i);
+					if (i < numOfCol)
+						sb.append(var.toString() + ";");
+					if (i == numOfCol)
+						sb.append(var.toString() + "\n");
+				}
+				list.add(sb.toString());
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -420,6 +452,106 @@ public class QueryContractor {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return list;
+	}
+
+	public List<String> getSentencesAsList(String sql) {
+		List<String> list = new LinkedList<>();
+
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numOfCol = rsmd.getColumnCount();
+
+			while (rs.next()) {
+				StringBuilder sb = new StringBuilder();
+				for (int i = 1; i <= numOfCol; i++) {
+					Object var = rs.getObject(i);
+					if (i == 1)
+						sb.append(var.toString() + ";");
+					if (i == 2)
+						sb.append(var.toString() + "\n");
+				}
+				list.add(sb.toString());
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return list;
+	}
+
+	public List<String> getSentencesList(String sql, String separationSign) {
+		List<String> list = new LinkedList<>();
+
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numOfCol = rsmd.getColumnCount();
+
+			while (rs.next()) {
+				StringBuilder sb = new StringBuilder();
+				for (int i = 1; i <= numOfCol; i++) {
+					Object var = rs.getObject(i);
+					if (var != null)
+						sb.append(var.toString());
+					else
+						sb.append("null");
+				}
+				list.add(sb.toString());
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return list;
+	}
+
+	public List<String> getSentencesList(String sql, String separationSign, String category) {
+		List<String> list = new LinkedList<>();
+
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, category);
+
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numOfCol = rsmd.getColumnCount();
+
+			while (rs.next()) {
+				StringBuilder sb = new StringBuilder();
+				for (int i = 1; i <= numOfCol; i++) {
+					Object var = rs.getObject(i);
+					if (var != null) {
+						sb.append(var.toString());
+						sb.append(separationSign);
+					}
+				}
+				list.add(sb.toString());
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
 		}
 
 		return list;
@@ -606,6 +738,56 @@ public class QueryContractor {
 					noun.setExample(rs.getString("sentence"));
 
 				list.add(noun);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return list;
+	}
+
+	public int getVerb(String sql, String word, String value) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			ps.setString(1, word);
+
+			while (rs.next()) {
+				return rs.getInt(value);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return -1;
+	}
+
+	public List<Verb> getVerbList(String sql) {
+		List<Verb> list = new LinkedList<>();
+
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Verb verb = new Verb();
+				verb.setOid(rs.getInt("oid"));
+				verb.setWoid(rs.getInt("woid"));
+				verb.setMainWord(rs.getString("word"));
+				verb.setMeaning(rs.getString("meaning"));
+				verb.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
+				verb.setGenus(rs.getString("genus"));
+				list.add(verb);
 			}
 
 		} catch (SQLException e) {
