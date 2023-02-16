@@ -27,9 +27,9 @@ public class ExportConfigPanel extends JPanel {
 	private JLabel pathLab;
 	private String filePath;
 	private MyCheckBox orderBox;
-	private MyCheckBox kindBox;
-	private MyComboBox wordKindBox;
-	private MyComboBox exportBox;
+	private MyCheckBox sentencesOrWordsChooseBox;
+	private MyComboBox wordGenusBox;
+	private MyComboBox exportTypeBox;
 
 	public ExportConfigPanel() {
 		filePath = null;
@@ -41,18 +41,18 @@ public class ExportConfigPanel extends JPanel {
 		orderBox = new MyCheckBox("Zmień porządek eksportu: ", "polski/niemiecki",
 				"Porządek eksportu (niemiecki/polski)");
 
-		kindBox = new MyCheckBox("Ustaw eksport wyrazów: ", "Wyrazy", "Eksport (domyślnie: zdania)");
+		sentencesOrWordsChooseBox = new MyCheckBox("Ustaw eksport wyrazów: ", "Wyrazy", "Eksport (domyślnie: zdania)");
 
 		String[] selectionList = new MyProperties(WORD_FILE_CFG).getValuesArray("GENUS_LIST");
-		wordKindBox = new MyComboBox(Titles.setTitel("WORDS_GENUS"), selectionList);
+		wordGenusBox = new MyComboBox(Titles.setTitel("WORDS_GENUS"), selectionList);
 
 		FileKind[] fileKind = FileKind.values();
-		exportBox = new MyComboBox("Typ eksportu", fileKind);
+		exportTypeBox = new MyComboBox("Typ eksportu", fileKind);
 
-		upPanel.add(kindBox);
+		upPanel.add(sentencesOrWordsChooseBox);
 		upPanel.add(orderBox);
-		upPanel.add(wordKindBox);
-		upPanel.add(exportBox);
+		upPanel.add(wordGenusBox);
+		upPanel.add(exportTypeBox);
 		upPanel.repaint();
 
 		JPanel downPanel = new JPanel();
@@ -88,40 +88,53 @@ public class ExportConfigPanel extends JPanel {
 		pathLab.setText(labelInfo);
 	}
 
-	private boolean getOrder() {
+	public boolean order() {
 		return orderBox.result();
 	}
 
-	private boolean getKind() {
-		return kindBox.result();
+	public String orderAsString() {
+		if (order())
+			return "pl";
+		else
+			return "ge";
+
 	}
 
-	public String getExportKind() {
-		return exportBox.getValue();
+	public boolean sentencesOrWords() {
+		return sentencesOrWordsChooseBox.result();
 	}
 
-	public HashMap<String, String> getParam() {
+	public String exportType() {
+		return exportTypeBox.getValue();
+	}
+
+	public String wordGenus() {
+		return wordGenusBox.getValue();
+	}
+
+	public HashMap<String, String> exportConfigParam() {
 		String kind = "sentence";
-		if (getKind())
+		if (sentencesOrWords())
 			kind = "word";
 		String order = "ge";
-		if (getOrder())
+		if (order())
 			order = "pl";
 
-		HashMap<String, String> map = new HashMap<>();
-		map.put("KIND", kind);
-		map.put("ORDER", order);
+		HashMap<String, String> exportConfigMap = new HashMap<>();
+		exportConfigMap.put("EXPORT_TYPE", exportType());
+		exportConfigMap.put("GENUS", kind);
+		exportConfigMap.put("ORDER", order);
 		if (kind.equals("word"))
-			map.put("WORD_KIND", wordKindBox.getValue());
+			exportConfigMap.put("WORD_GENUS", wordGenus());
 
-		return map;
+		return exportConfigMap;
 	}
 
 	public void clear() {
 		filePath = null;
 		orderBox.clear();
-		kindBox.clear();
-		wordKindBox.setValue(null);
+		sentencesOrWordsChooseBox.clear();
+		wordGenusBox.setValue(null);
 		clearFilePath();
 	}
 

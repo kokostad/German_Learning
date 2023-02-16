@@ -211,8 +211,8 @@ public class QueryContractor {
 					Object var = rs.getObject(i);
 					if (i < numOfCol)
 						sb.append(var.toString() + ";");
-					if (i == numOfCol)
-						sb.append(var.toString() + "\n");
+					if (i == numOfCol && var != null)
+						sb.append(var.toString());
 				}
 				list.add(sb.toString());
 			}

@@ -4,11 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,41 +19,47 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import org.json.JSONObject;
-
+import edu.german.services.ExportSentencesToCSVFile;
+import edu.german.services.ExportSentencesToJSONFile;
 import edu.german.services.GetWordsAsList;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.ScreenSetup;
-import edu.german.tools.SentenceJSONParser;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.buttons.ButtonsPanel;
 
+/**
+ * ExportToFile.java
+ * 
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com 
+ * 
+ * The class exports data to CSV and JSON files
+ */
 public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private ButtonsPanel bp;
 	private JButton clearEditFieldBtn;
 	private JButton showBtn;
 	private JButton exportBtn;
-	private JTextArea txtArea;
+	private JTextArea textArea;
 	private ExecutorService es;
 	private JTabbedPane tp;
 	private MyProgressBar bar;
-	private List<String> toExport;
-	private String genos;
+	private List<String> toExport = null;
+	private boolean textImportState = false;
 	private ExportConfigPanel exportConfigPanel;
 
 	public ExportToFile(int height, int width, String titel) {
 		super(height, width, titel);
-		es = Executors.newSingleThreadExecutor();
+		es = Executors.newFixedThreadPool(4);
 
-		txtArea = new JTextArea(15, 70);
-		txtArea.setEditable(false);
-		txtArea.setLineWrap(true);
-		txtArea.setWrapStyleWord(true);
+		textArea = new JTextArea(15, 70);
+		textArea.setEditable(true);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
 
 		JScrollPane jp = new JScrollPane();
-		jp.getViewport().setView(txtArea);
+		jp.getViewport().setView(textArea);
 		jp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -91,58 +92,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		this.add(rightPan, BorderLayout.EAST);
 	}
 
-	private String getFilePath() {
-		return exportConfigPanel.getFilePath();
-	}
-
-	private void clearAll() {
-		bar.setNull();
-		txtArea.setText(null);
-		toExport.clear();
-		exportConfigPanel.clear();
-	}
-
-	private List<String> prepareDataToExport(HashMap<String, String> var) {
-		List<String> list = new LinkedList<>();
-		Optional<String> option = var.entrySet().stream().filter(e -> "word".equals(e.getValue()))
-				.map(Map.Entry::getKey).findFirst();
-
-		if (option.isPresent()) {
-			list = new GetWordsAsList().getAllWordListToExport();
-		} else {
-			list = new GetListOfSentences().getList(genos);
-		}
-
-		return list;
-	}
-
-	private void exportToCSVFile(String exportKind) {
-		if (getFilePath() == null || toExport.isEmpty()) {
-			new ShowMessage("NO_DATA", "uzupełnij brakujące dane");
-		} else if (getFilePath() != null && !toExport.isEmpty()) {
-			es.submit(new ExportDataToFile(toExport, getFilePath(), exportKind));
-			clearAll();
-		} else if (getFilePath() != null && toExport.isEmpty()) {
-			HashMap<String, String> var = exportConfigPanel.getParam();
-			toExport = prepareDataToExport(var);
-			es.submit(new ExportDataToFile(toExport, getFilePath(), exportKind));
-			clearAll();
-		}
-	}
-
-	// TODO change and improve this method and export into other class
-	private void exportToJSONFile(JSONObject var) {
-		try {
-			String val = var.toString();
-			FileWriter writer = new FileWriter(new File(getFilePath()), true);
-			writer.write(val);
-			writer.write("\n");
-			writer.close();
-		} catch (Exception e2) {
-			e2.printStackTrace();
-		}
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
@@ -153,31 +102,104 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == showBtn) {
-			HashMap<String, String> var = exportConfigPanel.getParam();
-			toExport = prepareDataToExport(var);
-			toExport.forEach((s) -> txtArea.append(s));
+			textArea.setText(null);
+			toExport = prepareDataToExport(exportConfigPanel.exportConfigParam());
+			setTextImportState(true);
+			putIntoTextArea(toExport);
 		}
 
 		else if (src == exportBtn) {
-			String exportKind = exportConfigPanel.getExportKind();
-			if (exportKind.equals("CSV")) {
-				exportToCSVFile(exportKind);
-			} else {
-				// TODO you need to find some resolve
-				int lines = txtArea.getLineCount();
-				StringReader sr = new StringReader(txtArea.getText());
-				BufferedReader br = new BufferedReader(sr);
-				String nextLine = "";
-				try {
-					while ((nextLine = br.readLine()) != null) {
-						JSONObject var = new SentenceJSONParser(nextLine).getJSONItem();
-						exportToJSONFile(var);
-					}
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+			if (exportConfigPanel.getFilePath() == null) {
+				new ShowMessage("NO_DATA", "uzupełnij brakujące dane");
+				return;
+			}
 
+			if (!isTextImportState()) {
+				toExport = prepareDataToExport(exportConfigPanel.exportConfigParam());
+			}
+
+			/*
+			 * Default is SENTENCE if word put words into file if CSV put into CSV file else
+			 * put into JSON file into JSON file
+			 */
+			boolean val = exportConfigPanel.sentencesOrWords(); // true is WORD, false is SENTENCE
+			if (val) {
+				if ((exportConfigPanel.exportType()).equals("CSV")) {
+					es.submit(new ExportWordsToCSVFile(toExport, getFilePath()));
+				} else {
+					es.submit(new ExportWordsToJSONFile(toExport, getFilePath()));
+				}
+				setTextImportState(false);
+			}
+
+			/*
+			 * If parameter equals "sentence" then chose only sentences and than put into
+			 * file, if CSV put into CSV file otherwise into JSON file
+			 */
+			else {
+				if ((exportConfigPanel.exportType()).equals("CSV")) {
+					es.submit(new ExportSentencesToCSVFile(toExport, getFilePath()));
+				} else {
+					es.submit(new ExportSentencesToJSONFile(toExport, getFilePath()));
+				}
+				setTextImportState(false);
 			}
 		}
 	}
+
+	private String getFilePath() {
+		return exportConfigPanel.getFilePath();
+	}
+
+	private void clearAll() {
+		bar.setNull();
+		textArea.setText(null);
+		toExport.clear();
+		exportConfigPanel.clear();
+		setTextImportState(false);
+	}
+
+	/**
+	 * The method completes and return the data in the form of a list of strings
+	 * 
+	 * @param map - Map of Words or Sentences
+	 * @return list of strings
+	 */
+	private List<String> prepareDataToExport(HashMap<String, String> map) {
+		List<String> list = new LinkedList<>();
+		Optional<String> option = map.entrySet().stream().filter(e -> "word".equals(e.getValue()))
+				.map(Map.Entry::getKey).findFirst();
+
+		String wordGenus = null;
+		if (map.containsKey("WORD_GENUS"))
+			wordGenus = map.get("WORD_GENUS");
+
+		if (option.isPresent()) {
+			if (wordGenus != null && !wordGenus.isBlank())
+				list = new GetWordsAsList().getGenusWordListToExport(wordGenus, getOrder());
+			else
+				list = new GetWordsAsList().getAllWordListToExport(getOrder());
+		} else {
+			list = new GetListOfSentences().getList(getOrder());
+		}
+
+		return list;
+	}
+
+	private void putIntoTextArea(List<String> toExport) {
+		toExport.forEach((s) -> textArea.append(s + "\n"));
+	}
+
+	public boolean isTextImportState() {
+		return textImportState;
+	}
+
+	public void setTextImportState(boolean textImportState) {
+		this.textImportState = textImportState;
+	}
+
+	private String getOrder() {
+		return exportConfigPanel.orderAsString();
+	}
+
 }

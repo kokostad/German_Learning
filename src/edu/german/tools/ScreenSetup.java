@@ -41,8 +41,8 @@ public class ScreenSetup {
 	public String GAME_FONT_ART = "MV Boli";
 
 	public Font DEFAULT_FONT = new Font(STANDART_FONT_ART, Font.ITALIC, DEFAULT_FONT_SIZE);
-	public Font NORMAL_FONT = new Font(STANDART_FONT_ART, Font.PLAIN, DEFAULT_FONT_SIZE);
 	public Font GAME_FONT = new Font(GAME_FONT_ART, Font.BOLD | Font.ITALIC, GAME_FONT_SIZE);
+	public Font NORMAL_FONT = new MyFont().myFont(DEFAULT_FONT_SIZE);
 
 //	Color parameters
 	public Color LABEL_COLOR = new Color(139, 69, 19);

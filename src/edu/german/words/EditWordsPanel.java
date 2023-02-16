@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import edu.german.tools.MyComboBox;
+import edu.german.tools.MyFont;
 import edu.german.tools.OneEditField;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.TextCleaner;
@@ -30,7 +31,7 @@ public class EditWordsPanel extends JPanel {
 		word = new OneEditField.Builder()
 				.withTitle(Titles.setTitel("KEY_WORD"))
 				.withHint(Titles.setTitel("KEY_WORD"))
-//				.withFontSize(ss.DEFAULT_FONT_SIZE)
+				.withFont(new ScreenSetup().DEFAULT_FONT)
 				.withWidth(ss.WORD_FIELD_WIDTH)
 				.withHeight(ss.EDIT_FIELD_HEIGHT)
 				.build();
@@ -40,7 +41,7 @@ public class EditWordsPanel extends JPanel {
 			meaning = new OneEditField.Builder()
 					.withTitle(Titles.setTitel("MEANING"))
 					.withHint(Titles.setTitel("WRITE_MEANING"))
-					.withFont(new ScreenSetup().GAME_FONT)
+					.withFont(new ScreenSetup().DEFAULT_FONT)
 					.withWidth(ss.WORD_FIELD_WIDTH)
 					.withHeight(ss.EDIT_FIELD_HEIGHT)
 					.build();
@@ -122,6 +123,7 @@ public class EditWordsPanel extends JPanel {
 		return map;
 	}
 
+	// TODO need to improve text cleaner, check if exist some value or null 
 	public Map<Object, Object> getMeaning() {
 		Map<Object, Object> map = new HashMap<>();
 		if (labelInfo1 != null) {

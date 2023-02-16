@@ -1,19 +1,17 @@
-package edu.german.io;
+package edu.german.services;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class ExportDataToFile implements Runnable {
+public class ExportSentencesToCSVFile implements Runnable {
 	private List<String> toExport;
-	private String path;
-	private String exportKind;
+	private String filePath;
 
-	public ExportDataToFile(List<String> toExport, String path, String exportKind) {
+	public ExportSentencesToCSVFile(List<String> toExport, String filePath) {
 		this.toExport = toExport;
-		this.path = path;
-		this.exportKind = exportKind;
+		this.filePath = filePath;
 	}
 
 	@Override
@@ -21,10 +19,9 @@ public class ExportDataToFile implements Runnable {
 		writeToFile();
 	}
 
-	// TODO make new way to export data in JSON format - parameter: exportKind
 	private void writeToFile() {
 		try {
-			FileWriter writer = new FileWriter(new File(path));
+			FileWriter writer = new FileWriter(new File(filePath));
 			toExport.forEach((s) -> {
 				try {
 					writer.write(s);

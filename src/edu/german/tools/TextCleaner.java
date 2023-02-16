@@ -1,8 +1,6 @@
 package edu.german.tools;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,6 +14,7 @@ public class TextCleaner {
 	public TextCleaner() {
 	}
 
+	// TODO need to improve this method, check if exist some value or null
 	public TextCleaner(String word) {
 		StringBuilder sb = new StringBuilder();
 		String[] wordParts = word.split(" ");

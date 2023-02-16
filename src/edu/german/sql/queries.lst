@@ -100,12 +100,25 @@ EOSQL
 INSERT INTO ge.rules(title, contents, tips) VALUES(?, ?, ?);
 EOSQL
 
+## Get from database
+[get_all_sentences_to_export]
+SELECT sentence, meaning, type FROM ge.sentences ;
+EOSQL
+
+[get_all_sentences_to_export_pl]
+SELECT meaning, sentence, type FROM ge.sentences ;
+EOSQL
+
 [get_all_words]
 SELECT * from ge.all_words_objects;
 EOSQL
 
 [get_all_words_to_export]
 SELECT word, meaning, genus from ge.all_words_objects;
+EOSQL
+
+[get_all_words_to_export_pl]
+SELECT meaning, word, genus FROM ge.all_words_objects;
 EOSQL
 
 [add_adjective_graduation]

@@ -6,6 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * SqlQuery.java
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ * The Class get SQL query from file
+ * return query as string  
+ */
 public class SqlQuery {
 	private String FILE_CFG = "src/edu/german/sql/queries.lst";
 	private static String rgxStart = "[";
