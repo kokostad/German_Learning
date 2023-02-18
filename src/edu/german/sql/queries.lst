@@ -50,6 +50,7 @@ EOSQL
 INSERT INTO ge.sentences (sentence, meaning, type) VALUES(?, ?, ?);
 EOSQL
 
+## Checking
 [check_sentence]
 SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.category = ? ;
 EOSQL
@@ -60,9 +61,24 @@ EOSQL
 
 // Sentence,Meaning,Genus,Mode,Tens,Word,Word_Meaning,Word_genus
 ## INSERT INTO ge.sentences (sentence,meaning,genus,mode,tens,word,word_meaning,word_genus) VALUES(?, ?, ?, ?, ?, ?);
+[add_sentence]
+INSERT INTO ge.sentences (sentence, meaning) VALUES(?, ?);
+EOSQL
+
 [add_sentence_with_mode]
 INSERT INTO ge.sentences (sentence,meaning,type,category,tens,word) VALUES(?, ?, ?, ?, ?, ?);
 EOSQL
+
+[add_sentence_with_woid]
+INSERT INTO ge.sentences (sentence, meaning, type, category, tens, word, woid) VALUES(?, ?, ?, ?, ?, ?, ?);
+EOSQL
+
+
+## Getting
+[get_sentence_oid]
+SELECT s.oid FROM ge.sentences s WHERE s.sentence = ?;
+EOSQL
+
 
 [get_all_words_by_genus]
 SELECT * FROM ge.all_words_objects awo WHERE awo.genus = ? LIMIT ? ;
@@ -101,6 +117,14 @@ INSERT INTO ge.rules(title, contents, tips) VALUES(?, ?, ?);
 EOSQL
 
 ## Get from database
+[get_word_woid]
+SELECT woid FROM ge.all_words_objects WHERE word = ? AND genus = ? ;
+EOSQL
+
+[get_woid_from_sentence]
+SELECT woid FROM ge.sentences WHERE oid = ?  ;
+EOSQL
+
 [get_all_sentences_to_export]
 SELECT sentence, meaning, type FROM ge.sentences ;
 EOSQL

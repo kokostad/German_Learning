@@ -36,7 +36,7 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 	private JButton editRowBtn;
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
-	private EditWordsPanel editPanel;
+	private WordEditPanel editPanel;
 	private TableHanlder st;
 	private ExecutorService es;
 
@@ -70,7 +70,7 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		editPanel = new EditWordsPanel(Titles.setTitel("WRITE_WORD"), Titles.setTitel("WRITE_MEANING"),
+		editPanel = new WordEditPanel(Titles.setTitel("WRITE_WORD"), Titles.setTitel("WRITE_MEANING"),
 				prop.getValuesArray("GENUS_LIST"));
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editPanel, scp);
@@ -83,8 +83,8 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 	}
 
 	private void clearEditFields() {
-		editPanel.setEditFields(null);
-		editPanel.setEditFields(null);
+		editPanel.setWordEditField(null);
+		editPanel.setWordEditField(null);
 	}
 
 	@Override

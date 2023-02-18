@@ -1,7 +1,7 @@
 package edu.german.tools;
 
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.Box;
 import javax.swing.JComboBox;
@@ -10,40 +10,30 @@ import javax.swing.JPanel;
 
 public class MyComboBox extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private int fontSize = 15;
+	private JComboBox<Object> box;
 
-	@SuppressWarnings("rawtypes")
-	private JComboBox box;
-
-	/**
-	 * Class to create a JCombobox
-	 * 
-	 * @param labelInfo - label title
-	 * @param array     - value list for box
-	 * @param b
-	 * @param translate - parameter showing whether to translate the values
-	 */
 	public MyComboBox(String labelInfo, Object[] array) {
 		JPanel boxPanel = new JPanel();
 		JLabel label = new JLabel(labelInfo);
+		ScreenSetup ss = new ScreenSetup();
 
 		label.setAlignmentX(LEFT_ALIGNMENT);
-		label.setFont(new MyFont().myFont(fontSize));
+		label.setFont(ss.DEFAULT_FONT);
 		boxPanel.add(label);
 		boxPanel.add(Box.createRigidArea(new Dimension(5, 5)));
 		if (array != null) {
 			box = new JComboBox<Object>(array);
-			box.setFont(new MyFont().myFont(fontSize));
+			box.setFont(ss.DEFAULT_FONT);
 			box.setAlignmentX(CENTER_ALIGNMENT);
 			boxPanel.add(box);
 		}
 
-		setLayout(new GridLayout(1, 1, 5, 5));
-		add(boxPanel);
+		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		this.add(boxPanel);
 	}
 
-	public void setValue(String str) {
-		box.setSelectedItem(str);
+	public void setValue(String value) {
+		box.setSelectedItem(value);
 	}
 
 	public String getValue() {

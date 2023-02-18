@@ -1,12 +1,9 @@
 package edu.german.sentences;
 
-import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.LayoutManager;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import edu.german.tools.MyComboBox;
@@ -16,32 +13,35 @@ import edu.german.tools.Titles;
 public class SentenceParamPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private String CFG_FILE = "sentence.properties";
-	private MyComboBox typeBox;
+	private MyComboBox kindBox;
+	private MyComboBox tribeBox;
 	private MyComboBox tensBox;
-	private MyComboBox modeBox;
 
 	public SentenceParamPanel() {
-		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("MODE_LIST");
-		typeBox = new MyComboBox(Titles.setTitel("GENUS"), selectionList);
+		// NOTICE kind of sentence
+		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_KIND_LIST");
+		kindBox = new MyComboBox(Titles.setTitel("KIND"), selectionList);
 
-		String[] mode = new MyProperties(CFG_FILE).getValuesArray("GENUS_LIST");
-		modeBox = new MyComboBox(Titles.setTitel("MODE"), mode);
+		// NOTICE mode = tribe
+		String[] mode = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_TRIBE_LIST");
+		tribeBox = new MyComboBox(Titles.setTitel("TRIBE"), mode);
 
-		String[] tenses = new MyProperties(CFG_FILE).getValuesArray("TENS_LIST");
+		// NOTICE tens = time
+		String[] tenses = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_TENS_LIST");
 		tensBox = new MyComboBox(Titles.setTitel("TENS"), tenses);
 
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		this.add(typeBox);
-		this.add(modeBox);
+		this.add(kindBox);
+		this.add(tribeBox);
 		this.add(tensBox);
 	}
 
-	public String getType() {
-		return typeBox.getValue();
+	public String getKind() {
+		return kindBox.getValue();
 	}
 
-	public void setType(String type) {
-		typeBox.setValue(type);
+	public void setKind(String kind) {
+		kindBox.setValue(kind);
 	}
 
 	public String getTens() {
@@ -52,40 +52,39 @@ public class SentenceParamPanel extends JPanel {
 		tensBox.setValue(tens);
 	}
 
-	public String getMode() {
-		return modeBox.getValue();
+	public void setTribe(String tribe) {
+		tribeBox.setValue(tribe);
 	}
 
-	public void setMode(String category) {
-		modeBox.setValue(category);
+	public String getTribe() {
+		return tribeBox.getValue();
 	}
 
-	public Map<Object, Object> getModeMap() {
+	public Map<Object, Object> getKindAsMap() {
 		Map<Object, Object> map = new HashMap<>();
-		map.put("MODE", getMode());
+		map.put("SENTENCE_KIND", getKind());
 		return map;
 	}
 
-	public Map<Object, Object> getGenusMap() {
+	public Map<Object, Object> getTribeAsMap() {
 		Map<Object, Object> map = new HashMap<>();
-		map.put("GENUS", getType());
+		map.put("SENTENCE_TRIBE", getTribe());
 		return map;
 	}
 
-	public Map<Object, Object> getTensMap() {
+	public Map<Object, Object> getTensAsMap() {
 		Map<Object, Object> map = new HashMap<>();
 		map.put("TENS", getTens());
 		return map;
 	}
 
 	public void showData(Map<String, String> selectedRowAsMap) {
-			if (selectedRowAsMap.containsKey("MODE"))
-				setMode(selectedRowAsMap.get("MODE"));
-			if (selectedRowAsMap.containsKey("TENS"))
-				setTens(selectedRowAsMap.get("TENS"));
-			if (selectedRowAsMap.containsKey("GENUS"))
-				setType(selectedRowAsMap.get("GENUS"));
+		if (selectedRowAsMap.containsKey("SENTENCE_KIND"))
+			setKind(selectedRowAsMap.get("SENTENCE_KIND"));
+		if (selectedRowAsMap.containsKey("SENTENCE_TRIBE"))
+			setTribe(selectedRowAsMap.get("SENTENCE_TRIBE"));
+		if (selectedRowAsMap.containsKey("TENS"))
+			setTens(selectedRowAsMap.get("TENS"));
 	}
-
 
 }

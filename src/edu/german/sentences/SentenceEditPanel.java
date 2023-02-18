@@ -23,20 +23,20 @@ public class SentenceEditPanel extends JPanel {
 		sentence = new OneEditField.Builder()
 				.withTitle(Translate.setText("write_german_sentence"))
 				.withHint(Translate.setText("write_in_german"))
-//				.withFontSize(ss.DEFAULT_FONT_SIZE)
-				.withWidth(ss.EDIT_FIELD_WIDTH - 50)
+				.withFont(ss.DEFAULT_FONT)
+				.withWidth(ss.EDIT_FIELD_WIDTH)
 				.withHeight(ss.EDIT_FIELD_FACTOR)
 				.build();
 
 		meaning = new OneEditField.Builder()
 				.withTitle(Translate.setText("write_polish_meaning"))
 				.withHint(Translate.setText("write_in_polish"))
-//				.withFontSize(ss.DEFAULT_FONT_SIZE)
-				.withWidth(ss.EDIT_FIELD_WIDTH - 50)
+				.withFont(ss.DEFAULT_FONT)
+				.withWidth(ss.EDIT_FIELD_WIDTH)
 				.withHeight(ss.EDIT_FIELD_FACTOR)
 				.build();
 
-		GridLayout gl = new GridLayout(2, 1);
+		GridLayout gl = new GridLayout(2, 1, 10, 10);
 		JPanel editFieldsPan = new JPanel();
 		editFieldsPan.setLayout(gl);
 		editFieldsPan.add(sentence);
@@ -47,7 +47,7 @@ public class SentenceEditPanel extends JPanel {
 
 	public Map<Object, Object> getSentence() {
 		Map<Object, Object> map = new HashMap<>();
-		if (!sentence.getValue().isBlank())
+		if (sentence != null || !sentence.getValue().isBlank())
 			map.put("SENTENCE", sentence.getValue());
 
 		return map;
@@ -56,7 +56,7 @@ public class SentenceEditPanel extends JPanel {
 	public Map<Object, Object> getMeaning() {
 		Map<Object, Object> map = new HashMap<>();
 		if (!meaning.getValue().isBlank())
-			map.put("MEANING", meaning.getValue());
+			map.put("SENTENCE_MEANING", meaning.getValue());
 
 		return map;
 	}
@@ -69,7 +69,7 @@ public class SentenceEditPanel extends JPanel {
 			new ShowMessage("Empty field!");
 
 		if (!meaning.getValue().isEmpty())
-			map.put("MEANING", meaning.getValue());
+			map.put("SENTENCE_MEANING", meaning.getValue());
 		else
 			new ShowMessage("Empty field!");
 
@@ -94,18 +94,11 @@ public class SentenceEditPanel extends JPanel {
 		meaning.clearField();
 	}
 
-	public void showData(String newSentence, String newMeaning, String type, String category, String tens, String var) {
-		if (!newSentence.isBlank())
-			sentence.setValue(newSentence);
-		if (!newMeaning.isBlank())
-			meaning.setValue(newMeaning);
-	}
-
 	public void showData(Map<String, String> map) {
 		map.entrySet().forEach(entry -> {
 			if ((entry.getKey().toUpperCase()).equals("SENTENCE"))
 				sentence.setValue(entry.getValue());
-			if ((entry.getKey().toUpperCase()).equals("MEANING"))
+			if ((entry.getKey().toUpperCase()).equals("SENTENCE_MEANING"))
 				meaning.setValue(entry.getValue());
 		});
 	}

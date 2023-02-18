@@ -24,11 +24,12 @@ import edu.german.tools.ShowMessage;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.Titles;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.words.EditWordsPanel;
+import edu.german.words.WordEditPanel;
 
 public class AddSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private String CFG_FILE = "sentence.properties";
+	private String SENTENCE_CFG = "sentence.properties";
+	private String WORD_CFG = "word.properties";
 	private ButtonsPanel bp;
 	private JButton clearEditFieldsBtn;
 	private JButton clearListBtn;
@@ -36,13 +37,13 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private JButton editRowBtn;
 	private JButton addToRepoBtn;
 	private JButton removeBtn;
-	private TableHanlder st;
+	private TableHanlder table;
 	private String[] header;
 	private List<HashMap<String, String>> mapList;
 	private ExecutorService es;
 	private SentenceEditPanel editSentence;
 	private SentenceParamPanel sentenceParam;
-	private EditWordsPanel editWordsPanel;
+	private WordEditPanel editWord;
 
 	public AddSentences(int height, int width, String titel) {
 		super(height, width, titel);
@@ -63,21 +64,22 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		addToRepoBtn = bp.getB6();
 		addToRepoBtn.addActionListener(this);
 
-		header = new MyProperties(CFG_FILE).getValuesArray("TABLE_HEADER");
-		st = new TableHanlder(header, true);
+		header = new MyProperties(SENTENCE_CFG).getValuesArray("SENTENCE_TABLE_HEADER");
+
+		table = new TableHanlder(header, true);
 
 		JPanel edit = new JPanel();
 		edit.setLayout(new GridLayout(3, 1, 2, 2));
 		editSentence = new SentenceEditPanel();
 		sentenceParam = new SentenceParamPanel();
-		editWordsPanel = new EditWordsPanel(Titles.setTitel("WRITE_WORD"), Titles.setTitel("MEANING"),
-				new MyProperties("word.properties").getValuesArray("MODE_LIST"));
+		editWord = new WordEditPanel(Titles.setTitel("WRITE_WORD"), Titles.setTitel("MEANING"),
+				new MyProperties(WORD_CFG).getValuesArray("WORD_MODE_LIST"));
 		edit.add(editSentence);
 		edit.add(sentenceParam);
-		edit.add(editWordsPanel);
+		edit.add(editWord);
 
 		JScrollPane scp = new JScrollPane();
-		scp.setViewportView(st);
+		scp.setViewportView(table);
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -88,8 +90,8 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 
 		this.add(bp, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
-		setVisible(true);
-		repaint();
+		this.setVisible(true);
+		this.repaint();
 	}
 
 	@Override
@@ -104,42 +106,42 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 			List<Map<Object, Object>> list = new LinkedList<>();
 			list.add(editSentence.getSentence());
 			list.add(editSentence.getMeaning());
-			list.add(sentenceParam.getModeMap());
-			list.add(sentenceParam.getGenusMap());
-			list.add(sentenceParam.getTensMap());
-			list.add(editWordsPanel.getWord());
-			list.add(editWordsPanel.getMeaning());
-			list.add(editWordsPanel.getBoxValue());
+			list.add(sentenceParam.getKindAsMap());
+			list.add(sentenceParam.getTribeAsMap());
+			list.add(sentenceParam.getTensAsMap());
+			list.add(editWord.getWord());
+			list.add(editWord.getMeaning());
+			list.add(editWord.getBoxValue());
 
 			if (!list.isEmpty()) {
-				st.showList(list);
+				table.showList(list);
 				clearEditFiles();
 			} else
 				new ShowMessage("EMPTY_FIELDS");
 		}
 
 		else if (src == editRowBtn) {
-			Map<String, String> var = st.getSelectedRowAsMap();
+			Map<String, String> var = table.getSelectedRowAsMap();
 			editSentence.showData(var);
 			sentenceParam.showData(var);
-			editWordsPanel.showData(var);
-			if (st.getIdx() > -1)
-				st.removeRow();
+			editWord.showData(var);
+			if (table.getIdx() > -1)
+				table.removeRow();
 		}
 
 		else if (src == addToRepoBtn) {
-			mapList = st.getDataAsMapList();
+			mapList = table.getDataAsMapList();
 			if (!mapList.isEmpty()) {
 				es.submit(new ExecutorPutSentenceIntoDatabase(mapList));
-				st.clearWordsList();
-				st.clearTable();
+				table.clearWordsList();
+				table.clearTable();
 			}
 		}
 	}
 
 	private void clearEditFiles() {
 		editSentence.clearEditFields();
-		editWordsPanel.clearEditFields();
+		editWord.clearEditFields();
 	}
 
 }

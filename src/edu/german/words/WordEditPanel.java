@@ -15,7 +15,7 @@ import edu.german.tools.ScreenSetup;
 import edu.german.tools.TextCleaner;
 import edu.german.tools.Titles;
 
-public class EditWordsPanel extends JPanel {
+public class WordEditPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private OneEditField word;
 	private OneEditField meaning;
@@ -23,7 +23,7 @@ public class EditWordsPanel extends JPanel {
 	private String labelInfo1;
 	private String labelInfo2;
 
-	public EditWordsPanel(String labelInfo1, String labelInfo2, String[] selectionList) {
+	public WordEditPanel(String labelInfo1, String labelInfo2, String[] paramList) {
 		this.labelInfo1 = labelInfo1;
 		this.labelInfo2 = labelInfo2;
 		ScreenSetup ss = new ScreenSetup();
@@ -31,7 +31,7 @@ public class EditWordsPanel extends JPanel {
 		word = new OneEditField.Builder()
 				.withTitle(Titles.setTitel("KEY_WORD"))
 				.withHint(Titles.setTitel("KEY_WORD"))
-				.withFont(new ScreenSetup().DEFAULT_FONT)
+				.withFont(ss.DEFAULT_FONT)
 				.withWidth(ss.WORD_FIELD_WIDTH)
 				.withHeight(ss.EDIT_FIELD_HEIGHT)
 				.build();
@@ -41,22 +41,29 @@ public class EditWordsPanel extends JPanel {
 			meaning = new OneEditField.Builder()
 					.withTitle(Titles.setTitel("MEANING"))
 					.withHint(Titles.setTitel("WRITE_MEANING"))
-					.withFont(new ScreenSetup().DEFAULT_FONT)
+					.withFont(ss.DEFAULT_FONT)
 					.withWidth(ss.WORD_FIELD_WIDTH)
 					.withHeight(ss.EDIT_FIELD_HEIGHT)
 					.build();
 			this.add(meaning);
 		}
 
-		box = new MyComboBox(Titles.setTitel("GENUS"), selectionList);
+		box = new MyComboBox(Titles.setTitel("GENUS"), paramList);
 
-		this.add(box);
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		this.add(box);
 	}
 
-	public void setEditFields(String str) {
-		word.setValue(str);
-		meaning.setValue(str);
+	public void setWordEditField(String wordVal) {
+		word.setValue(wordVal);
+	}
+
+	public void setMeaningEditField(String meaningVal) {
+		meaning.setValue(meaningVal);
+	}
+
+	private void setBox(String str) {
+		box.setValue(str);
 	}
 
 	public String[] getValuAsArray() {
@@ -83,19 +90,19 @@ public class EditWordsPanel extends JPanel {
 		return list;
 	}
 
-	public Map<String, String> getValueAsHashMap(String[] tableHeaders) {
+	public Map<String, String> getValueAsHashMap(String[] header) {
 		Map<String, String> map = new HashMap<String, String>();
 		String wordTmp = new TextCleaner(word.getValue()).getWord();
 		if (wordTmp != null)
-			map.put(tableHeaders[0], wordTmp);
+			map.put(header[0], wordTmp);
 
 		wordTmp = new TextCleaner(meaning.getValue()).getWord();
 		if (labelInfo2 != null)
-			map.put(tableHeaders[1], wordTmp);
+			map.put(header[1], wordTmp);
 
 		wordTmp = box.getValue();
 
-		map.put(tableHeaders[2], wordTmp);
+		map.put(header[2], wordTmp);
 
 		return map;
 	}
@@ -123,7 +130,7 @@ public class EditWordsPanel extends JPanel {
 		return map;
 	}
 
-	// TODO need to improve text cleaner, check if exist some value or null 
+	// TODO need to improve text cleaner, check if exist some value or null
 	public Map<Object, Object> getMeaning() {
 		Map<Object, Object> map = new HashMap<>();
 		if (labelInfo1 != null) {
@@ -136,34 +143,17 @@ public class EditWordsPanel extends JPanel {
 
 	public Map<Object, Object> getBoxValue() {
 		Map<Object, Object> map = new HashMap<>();
-		map.put("WORD_GENUS", box.getValue());
+		map.put("WORD_KIND", box.getValue());
 		return map;
 	}
 
 	public void showData(Map<String, String> selectedRowAsMap) {
 		if (selectedRowAsMap.containsKey("WORD"))
-			setWord(selectedRowAsMap.get("WORD"));
+			setWordEditField(selectedRowAsMap.get("WORD"));
 		if (selectedRowAsMap.containsKey("WORD_MEANING"))
-			setMeaning(selectedRowAsMap.get("WORD_MEANING"));
-		if (selectedRowAsMap.containsKey("MEANING"))
-			setMeaning(selectedRowAsMap.get("MEANING"));
-		if (selectedRowAsMap.containsKey("WORD_GENUS"))
-			setBox(selectedRowAsMap.get("WORD_GENUS"));
-		if (selectedRowAsMap.containsKey("GENUS"))
-			setBox(selectedRowAsMap.get("GENUS"));
-	}
-
-	private void setWord(String str) {
-		word.setValue(str);
-
-	}
-
-	private void setMeaning(String str) {
-		meaning.setValue(str);
-	}
-
-	private void setBox(String str) {
-		box.setValue(str);
+			setMeaningEditField(selectedRowAsMap.get("WORD_MEANING"));
+		if (selectedRowAsMap.containsKey("WORD_KIND"))
+			setBox(selectedRowAsMap.get("WORD_KIND"));
 	}
 
 	public void clearEditFields() {

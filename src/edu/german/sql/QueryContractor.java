@@ -18,8 +18,10 @@ import edu.german.words.model.Verb;
 import edu.german.words.model.Word;
 
 /**
+ * QueryContractor.java
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
  *
+ * The class performs SQL queries
  */
 public class QueryContractor {
 	private DbConnect dbc;
@@ -68,17 +70,13 @@ public class QueryContractor {
 		return false;
 	}
 
-	public void closeConnection() {
-		dbc.closeConnection(con);
-	}
-
-	public int getId(String sql, String word) {
+	public int getId(String sql, String variable) {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, word);
+			ps.setString(1, variable);
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -662,6 +660,8 @@ public class QueryContractor {
 			ps.setString(2, meaning);
 			ps.setString(3, genus);
 
+			System.out.println(ps.toString());
+
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -799,4 +799,58 @@ public class QueryContractor {
 		return list;
 	}
 
+	public void simpleQueryExecution(String sql) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+	}
+
+	public void addSentenceToDatabase(String sql, String sentence, String meaning, String genus, String mode,
+			String tens, String word, int woid) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, sentence);
+			ps.setString(2, meaning);
+			ps.setString(3, genus);
+			ps.setString(4, mode);
+			ps.setString(5, tens);
+			ps.setString(6, word);
+			ps.setInt(7, woid);
+
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+	}
+
+	public int getWoidFromSentence(String sql, int oid) {
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, oid);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return -1;
+	}
 }

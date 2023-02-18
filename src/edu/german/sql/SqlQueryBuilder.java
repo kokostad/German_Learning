@@ -75,4 +75,29 @@ public class SqlQueryBuilder {
 		return sb.toString();
 	}
 
+	public String addNewSentenceToRepository(String sentence, String meaning, String genus, String mode, String tens,
+			String word, String wordMeaning, String wordGenus) {
+
+		//sentence, meaning, type, category, tens, word, woid
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT INTO ge.sentences(sentence, meaning, type, category, tens, word, woid) VALUES(");
+		sb.append("'" + sentence + "', '" + meaning + "', '" + genus + "', '" + mode + "', '" + tens + "', '" + word
+				+ "' ");
+		sb.append("(SELECT meaning, woid FROM ge.all_words_objects WHERE ");
+
+		return null;
+	}
+
+	// sentence, meaning, type, category, tens, word, woid
+	public String addNewSentenceWithWoid(String sentence, String meaning, String type, String category, String tens,
+			String word, int woid) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT INTO ge.sentences(sentence, meaning, type, category, tens, word, woid) VALUES(");
+		sb.append("'" + sentence + "', '" + meaning + "', '" + type + "', ");
+		sb.append("'" + category + "', '" + tens + "', '" + word + "', '" + "" + woid + "') ;");
+
+		return sb.toString();
+	}
+
 }

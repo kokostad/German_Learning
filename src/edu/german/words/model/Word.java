@@ -1,6 +1,7 @@
 package edu.german.words.model;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +10,26 @@ import edu.german.sql.SqlQuery;
 
 public class Word implements WordModel {
 	private Map<Object, Object> wordMap;
+	private int woid;
+	private int oid;
+	private String word;
+	private String menaing;
+	private String genus;
+	private List<Map<Object, Object>> propertiesList;
 
 	public Word() {
 		wordMap = new HashMap<>();
+		propertiesList = new LinkedList<>();
+	}
+
+	public Word(String word, String meaning, String genus) {
+		wordMap = new HashMap<>();
+		propertiesList = new LinkedList<>();
+		setWord(word);
+		setMeaning(meaning);
+		setGenus(genus);
+		setWoid(new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus));
+		addToPropertiesList();
 	}
 
 	@Override
@@ -94,6 +112,14 @@ public class Word implements WordModel {
 		return -1;
 	}
 
+	// TODO to improve
+	public int getWoid(String word, String genus) {
+		if (getWoid() < 0)
+			return new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus);
+
+		return -1;
+	}
+
 	@Override
 	public void setWoid(int woid) {
 		wordMap.put("WOID", woid);
@@ -123,8 +149,10 @@ public class Word implements WordModel {
 
 	@Override
 	public void putIntoRepository(String word, String meaning, String genus) {
-		String query = new SqlQuery().getSql("add_new_word");
-		new QueryContractor().addNewWord(query, word, meaning, genus);
+		if (!isExist(word, genus)) {
+			String query = new SqlQuery().getSql("add_new_word");
+			new QueryContractor().addNewWord(query, word, meaning, genus);
+		}
 	}
 
 	@Override
@@ -134,4 +162,7 @@ public class Word implements WordModel {
 		return list;
 	}
 
+	public void addToPropertiesList() {
+		propertiesList.add(wordMap);
+	}
 }
