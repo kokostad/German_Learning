@@ -13,7 +13,7 @@ import edu.german.tools.MyFont;
 import edu.german.tools.OneEditField;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.TextCleaner;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 
 public class WordEditPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -29,8 +29,8 @@ public class WordEditPanel extends JPanel {
 		ScreenSetup ss = new ScreenSetup();
 
 		word = new OneEditField.Builder()
-				.withTitle(Titles.setTitel("KEY_WORD"))
-				.withHint(Titles.setTitel("KEY_WORD"))
+				.withTitle(Titel.setTitel("KEY_WORD"))
+				.withHint(Titel.setTitel("KEY_WORD"))
 				.withFont(ss.DEFAULT_FONT)
 				.withWidth(ss.WORD_FIELD_WIDTH)
 				.withHeight(ss.EDIT_FIELD_HEIGHT)
@@ -39,8 +39,8 @@ public class WordEditPanel extends JPanel {
 
 		if (labelInfo2 != null) {
 			meaning = new OneEditField.Builder()
-					.withTitle(Titles.setTitel("MEANING"))
-					.withHint(Titles.setTitel("WRITE_MEANING"))
+					.withTitle(Titel.setTitel("MEANING"))
+					.withHint(Titel.setTitel("WRITE_MEANING"))
 					.withFont(ss.DEFAULT_FONT)
 					.withWidth(ss.WORD_FIELD_WIDTH)
 					.withHeight(ss.EDIT_FIELD_HEIGHT)
@@ -48,7 +48,7 @@ public class WordEditPanel extends JPanel {
 			this.add(meaning);
 		}
 
-		box = new MyComboBox(Titles.setTitel("GENUS"), paramList);
+		box = new MyComboBox(Titel.setTitel("GENUS"), paramList);
 
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		this.add(box);

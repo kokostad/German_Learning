@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import edu.german.tools.MyComboBox;
 import edu.german.tools.MyProperties;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 
 public class SentenceParamPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -20,15 +20,15 @@ public class SentenceParamPanel extends JPanel {
 	public SentenceParamPanel() {
 		// NOTICE kind of sentence
 		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_KIND_LIST");
-		kindBox = new MyComboBox(Titles.setTitel("KIND"), selectionList);
+		kindBox = new MyComboBox(Titel.setTitel("KIND"), selectionList);
 
 		// NOTICE mode = tribe
 		String[] mode = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_TRIBE_LIST");
-		tribeBox = new MyComboBox(Titles.setTitel("TRIBE"), mode);
+		tribeBox = new MyComboBox(Titel.setTitel("TRIBE"), mode);
 
 		// NOTICE tens = time
 		String[] tenses = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_TENS_LIST");
-		tensBox = new MyComboBox(Titles.setTitel("TENS"), tenses);
+		tensBox = new MyComboBox(Titel.setTitel("TENS"), tenses);
 
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		this.add(kindBox);

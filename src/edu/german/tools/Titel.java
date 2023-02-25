@@ -1,6 +1,6 @@
 package edu.german.tools;
 
-public class Titles {
+public class Titel {
 	private static String CONFIG_FILE = "titles.properties";
 
 	/**
@@ -10,5 +10,5 @@ public class Titles {
 	public static String setTitel(String pattern) {
 		return new MyProperties(CONFIG_FILE).getText(pattern);
 	}
-	
+
 }

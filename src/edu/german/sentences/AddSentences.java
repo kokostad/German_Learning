@@ -22,7 +22,7 @@ import edu.german.tools.MyProperties;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.TableHanlder;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.WordEditPanel;
 
@@ -72,7 +72,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		edit.setLayout(new GridLayout(3, 1, 2, 2));
 		editSentence = new SentenceEditPanel();
 		sentenceParam = new SentenceParamPanel();
-		editWord = new WordEditPanel(Titles.setTitel("WRITE_WORD"), Titles.setTitel("MEANING"),
+		editWord = new WordEditPanel(Titel.setTitel("WRITE_WORD"), Titel.setTitel("MEANING"),
 				new MyProperties(WORD_CFG).getValuesArray("WORD_MODE_LIST"));
 		edit.add(editSentence);
 		edit.add(sentenceParam);

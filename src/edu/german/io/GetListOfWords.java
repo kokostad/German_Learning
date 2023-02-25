@@ -2,14 +2,14 @@ package edu.german.io;
 
 import java.util.List;
 
-import edu.german.sql.SqlQueryBuilder;
+import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 
 public class GetListOfWords {
 
 	private List<String[]> getList(String genus) {
 		System.out.println("I wat to get the list of words");
-		String sql = new SqlQueryBuilder().getAllWordFromSpecyficTable(genus);
+		String sql = new QueryBuilder().getAllWordFromSpecyficTable(genus);
 		System.out.println(sql);
 
 		QueryContractor qc = new QueryContractor();

@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 import edu.german.tools.MyComboBox;
 import edu.german.tools.MyProperties;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 
 public class WordSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -16,11 +16,11 @@ public class WordSelectionPanel extends JPanel {
 
 	public WordSelectionPanel(boolean setWordKinds) {
 		String[] numbers = { "10", "15", "20", "30", "50" };
-		boxNumber = new MyComboBox(Titles.setTitel("WORDS_NUMBER"), numbers);
+		boxNumber = new MyComboBox(Titel.setTitel("WORDS_NUMBER"), numbers);
 
 		if (setWordKinds) {
 			selectionList = new MyProperties(FILE_NAME).getValuesArray("GENUS_LIST_FOR_GAMES");
-			kindBox = new MyComboBox(Titles.setTitel("CHOOSE_GENUS"), selectionList);
+			kindBox = new MyComboBox(Titel.setTitel("CHOOSE_GENUS"), selectionList);
 			this.add(kindBox);
 		}
 

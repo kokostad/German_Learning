@@ -14,6 +14,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
+import edu.german.cfg.MyIcon;
 import edu.german.games.GuessArticle;
 import edu.german.games.GuessTheMeaning;
 import edu.german.io.ExportToFile;
@@ -23,7 +24,7 @@ import edu.german.tools.AddRule;
 import edu.german.tools.ImgUtils;
 import edu.german.tools.MyToolbar;
 import edu.german.tools.ScreenSetup;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ModelButton;
 import edu.german.words.AddAdjective;
 import edu.german.words.SimpleWordAddition;
@@ -51,54 +52,53 @@ public class Learning extends JFrame implements ActionListener {
 
 	public Learning() {
 		ScreenSetup scr = new ScreenSetup();
-		String path = "src/edu/german/img/btn/";
-		ImageIcon img = new ImageIcon("src/edu/german/img/tak2.gif");
+		ImgUtils myImg = new ImgUtils();
+		int iconWidth = scr.ICON_WIDTH;
+		int iconHeight = scr.ICON_HEIGHT;
+
+		ImageIcon img = new ImageIcon(myImg.scaleImage(iconWidth, iconHeight, MyIcon.mainIcon));
 		this.setIconImage(img.getImage());
-		this.setTitle(Titles.setTitel("MAIN_TITLE_GERMAN"));
+		this.setTitle(Titel.setTitel("MAIN_TITLE_GERMAN"));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(scr.SCR_DEFAULT_WIDTH, scr.SCR_DEFAULT_HEIGHT);
 		this.setResizable(true);
 
-		int iconWidth = scr.ICON_WIDTH;
-		int iconHeight = scr.ICON_HEIGHT;
+		ImageIcon importIcon = new ImageIcon(myImg.scaleImage(iconWidth, iconHeight, MyIcon.importItem));
+		ImageIcon exportIcon = new ImageIcon(myImg.scaleImage(iconWidth, iconHeight, MyIcon.exportItem));
+		ImageIcon exitIcon = new ImageIcon(myImg.scaleImage(iconWidth, iconHeight, MyIcon.exit));
 
-		ImgUtils myImg = new ImgUtils();
-		ImageIcon importIcon = new ImageIcon(myImg.scaleImage(iconWidth, iconHeight, path + "import.png"));
-		ImageIcon exportIcon = new ImageIcon(myImg.scaleImage(iconWidth, iconHeight, path + "export.png"));
-		ImageIcon exitIcon = new ImageIcon(myImg.scaleImage(iconWidth, iconHeight, path + "exit.png"));
-
-		miImport = new JMenuItem(" " + Titles.setTitel("IMPORT"), importIcon);
+		miImport = new JMenuItem(Titel.setTitel("IMPORT"), importIcon);
 		miImport.addActionListener(this);
-		miExport = new JMenuItem(" " + Titles.setTitel("EXPORT"), exportIcon);
+		miExport = new JMenuItem(Titel.setTitel("EXPORT"), exportIcon);
 		miExport.addActionListener(this);
 
-		exit = new JMenuItem(" " + Titles.setTitel("EXIT"), exitIcon);
+		exit = new JMenuItem(Titel.setTitel("EXIT"), exitIcon);
 		exit.addActionListener(this);
 
-		JMenu mOption = new JMenu(Titles.setTitel("OPTION"));
+		JMenu mOption = new JMenu(Titel.setTitel("OPTION"));
 		mOption.add(miImport);
 		mOption.add(miExport);
 		mOption.addSeparator();
 		mOption.add(exit);
 		
-		miSimpleWordsAddition = new JMenuItem(Titles.setTitel("SIMPLE_WORDS_ADDITION"));
+		miSimpleWordsAddition = new JMenuItem(Titel.setTitel("SIMPLE_WORDS_ADDITION"));
 		miSimpleWordsAddition.addActionListener(this);
 
-		miSentencesAddition = new JMenuItem(Titles.setTitel("SENTENCES_ADDITION"));
+		miSentencesAddition = new JMenuItem(Titel.setTitel("SENTENCES_ADDITION"));
 		miSentencesAddition.addActionListener(this);
 
-		JMenu mAddWords = new JMenu(Titles.setTitel("WORDS_ADDITION"));
-		miAddVerbs = new JMenuItem(Titles.setTitel("ADD_VERBS"));
+		JMenu mAddWords = new JMenu(Titel.setTitel("WORDS_ADDITION"));
+		miAddVerbs = new JMenuItem(Titel.setTitel("ADD_VERBS"));
 		miAddVerbs.addActionListener(this);
-		miAddAdjective = new JMenuItem(Titles.setTitel("ADD_ADJECTIVE"));
+		miAddAdjective = new JMenuItem(Titel.setTitel("ADD_ADJECTIVE"));
 		miAddAdjective.addActionListener(this);
 		mAddWords.add(miAddAdjective);
 		mAddWords.add(miAddVerbs);
 
-		miAddRules = new JMenuItem(Titles.setTitel("ADD_RULES"));
+		miAddRules = new JMenuItem(Titel.setTitel("ADD_RULES"));
 		miAddRules.addActionListener(this);
 
-		JMenu mAddition = new JMenu(Titles.setTitel("MENU_ADDITION"));
+		JMenu mAddition = new JMenu(Titel.setTitel("MENU_ADDITION"));
 		mAddition.add(miSimpleWordsAddition);
 		mAddition.add(mAddWords);
 		mAddition.add(new JSeparator());
@@ -106,50 +106,50 @@ public class Learning extends JFrame implements ActionListener {
 		mAddition.add(new JSeparator());
 		mAddition.add(miAddRules);
 
-		guessTheMeaning = new JMenuItem(Titles.setTitel("GUESS_THE_MEANING"));
+		guessTheMeaning = new JMenuItem(Titel.setTitel("GUESS_THE_MEANING"));
 		guessTheMeaning.addActionListener(this);
-		miWhatKind = new JMenuItem(Titles.setTitel("WHAT_ARTICLE"));
+		miWhatKind = new JMenuItem(Titel.setTitel("WHAT_ARTICLE"));
 		miWhatKind.addActionListener(this);
 
-		JMenu mGuessing = new JMenu(Titles.setTitel("QUESSING"));
+		JMenu mGuessing = new JMenu(Titel.setTitel("QUESSING"));
 		mGuessing.add(miWhatKind);
 		mGuessing.add(guessTheMeaning);
 
-		JMenu mGames = new JMenu(Titles.setTitel("LEARNING_GAMES"));
+		JMenu mGames = new JMenu(Titel.setTitel("LEARNING_GAMES"));
 		mGames.add(mGuessing);
 
 		exitBtn = new ModelButton.Builder()
 				.setTitle("Exit")
-				.setIconName("exit.png")
-				.setHint(Titles.setTitel("EXIT"))
+				.setIconName(MyIcon.exit)
+				.setHint(Titel.setTitel("EXIT"))
 				.build();
 		exitBtn.addActionListener(this);
 
 		importBtn = new ModelButton.Builder()
 				.setTitle("Import")
-				.setIconName("import.png")
-				.setHint(Titles.setTitel("IMPORT"))
+				.setIconName(MyIcon.importItem)
+				.setHint(Titel.setTitel("IMPORT"))
 				.build();
 		importBtn.addActionListener(this);
 
 		exportBtn = new ModelButton.Builder()
 				.setTitle("Export")
-				.setIconName("export.png")
-				.setHint(Titles.setTitel("EXPORT"))
+				.setIconName(MyIcon.exportItem)
+				.setHint(Titel.setTitel("EXPORT"))
 				.build();
 		exportBtn.addActionListener(this);
 
 		addRulesBtn = new ModelButton.Builder()
 				.setTitle("Rules")
-				.setIconName("rules.png")
-				.setHint(Titles.setTitel("ADD_RULES"))
+				.setIconName(MyIcon.rules)
+				.setHint(Titel.setTitel("ADD_RULES"))
 				.build();
 		addRulesBtn.addActionListener(this);
 
 		addSentenceBtn = new ModelButton.Builder()
 				.setTitle("Add Sentence")
-				.setIconName("add_sentence.png")
-				.setHint(Titles.setTitel("ADD_SENTENCE"))
+				.setIconName(MyIcon.add_sentence)
+				.setHint(Titel.setTitel("ADD_SENTENCE"))
 				.build();
 		addSentenceBtn.addActionListener(this);
 		
@@ -191,7 +191,7 @@ public class Learning extends JFrame implements ActionListener {
 		}
 
 		else if (src == miSentencesAddition || src == addSentenceBtn) {
-			AddSentences as = new AddSentences(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("SENTENCES_ADDITION"));
+			AddSentences as = new AddSentences(dsk.getHeight(), dsk.getWidth(), Titel.setTitel("SENTENCES_ADDITION"));
 			dsk.add(as);
 			dsk.moveToFront(as);
 			dsk.repaint();
@@ -199,35 +199,35 @@ public class Learning extends JFrame implements ActionListener {
 
 		else if (src == miSimpleWordsAddition) {
 			SimpleWordAddition swa = new SimpleWordAddition(dsk.getHeight(), dsk.getWidth(),
-					Titles.setTitel("SIMPLE_WORDS_ADDITION"));
+					Titel.setTitel("SIMPLE_WORDS_ADDITION"));
 			dsk.add(swa);
 			dsk.moveToFront(swa);
 			dsk.repaint();
 		}
 
 		else if (src == miAddAdjective) {
-			AddAdjective aa = new AddAdjective(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("ADD_ADDJECTIVES"));
+			AddAdjective aa = new AddAdjective(dsk.getHeight(), dsk.getWidth(), Titel.setTitel("ADD_ADDJECTIVES"));
 			dsk.add(aa);
 			dsk.moveToFront(aa);
 			dsk.repaint();
 		}
 
 		else if (src == miAddVerbs) {
-			AddVerbs av = new AddVerbs(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("ADD_VERBS"));
+			AddVerbs av = new AddVerbs(dsk.getHeight(), dsk.getWidth(), Titel.setTitel("ADD_VERBS"));
 			dsk.add(av);
 			dsk.moveToFront(av);
 			dsk.repaint();
 		}
 
 		else if (src == miImport || src == importBtn) {
-			ImportFromFile iff = new ImportFromFile(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("IMPORT"));
+			ImportFromFile iff = new ImportFromFile(dsk.getHeight(), dsk.getWidth(), Titel.setTitel("IMPORT"));
 			dsk.add(iff);
 			dsk.moveToFront(iff);
 			dsk.repaint();
 		}
 
 		else if (src == miExport || src == exportBtn) {
-			ExportToFile etf = new ExportToFile(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("EXPORT"));
+			ExportToFile etf = new ExportToFile(dsk.getHeight(), dsk.getWidth(), Titel.setTitel("EXPORT"));
 			dsk.add(etf);
 			dsk.moveToFront(etf);
 			dsk.repaint();
@@ -235,7 +235,7 @@ public class Learning extends JFrame implements ActionListener {
 
 		else if (src == miWhatKind) {
 			GuessArticle guessArticle = new GuessArticle(dsk.getHeight(), dsk.getWidth(),
-					Titles.setTitel("WHAT_ARTICLE"));
+					Titel.setTitel("WHAT_ARTICLE"));
 			dsk.add(guessArticle);
 			dsk.moveToFront(guessArticle);
 			dsk.repaint();
@@ -243,14 +243,14 @@ public class Learning extends JFrame implements ActionListener {
 
 		else if (src == guessTheMeaning) {
 			GuessTheMeaning guessMeaning = new GuessTheMeaning(dsk.getHeight(), dsk.getWidth(),
-					Titles.setTitel("GUESS_THE_MEANING"));
+					Titel.setTitel("GUESS_THE_MEANING"));
 			dsk.add(guessMeaning);
 			dsk.moveToFront(guessMeaning);
 			dsk.repaint();
 		}
 
 		else if (src == miAddRules || src == addRulesBtn) {
-			AddRule addRule = new AddRule(dsk.getHeight(), dsk.getWidth(), Titles.setTitel("ADD_RULES"));
+			AddRule addRule = new AddRule(dsk.getHeight(), dsk.getWidth(), Titel.setTitel("ADD_RULES"));
 			dsk.add(addRule);
 			dsk.moveToFront(addRule);
 			dsk.repaint();

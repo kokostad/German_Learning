@@ -37,9 +37,7 @@ public class MyProgressBar extends JPanel {
 	}
 
 	public void setNull() {
-//		bar.setUI(new BasicProgressBarUI());
 		bar.setValue(0);
-//		bar.setString("0%");
 		this.repaint();
 	}
 

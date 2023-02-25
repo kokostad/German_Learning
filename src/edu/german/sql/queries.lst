@@ -79,6 +79,9 @@ EOSQL
 SELECT s.oid FROM ge.sentences s WHERE s.sentence = ?;
 EOSQL
 
+[get_full_sentence]
+SELECT * FROM ge.sentences WHERE sentence = ? AND meaning = ? ; 
+EOSQL
 
 [get_all_words_by_genus]
 SELECT * FROM ge.all_words_objects awo WHERE awo.genus = ? LIMIT ? ;

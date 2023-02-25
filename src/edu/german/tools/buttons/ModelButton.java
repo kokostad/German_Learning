@@ -8,7 +8,6 @@ import edu.german.tools.ScreenSetup;
 
 public class ModelButton extends JButton {
 	private static final long serialVersionUID = 1L;
-	private String iconPath = "src/edu/german/img/btn/";
 	private String title;
 	private String hint;
 	private String iconName;
@@ -24,11 +23,7 @@ public class ModelButton extends JButton {
 		this.title = title;
 		this.iconName = iconName;
 		this.setToolTipText(hint);
-		this.setIcon(new ImageIcon(myImg.scaleImage(sp.ICON_WIDTH, sp.ICON_HEIGHT, iconPath + iconName)));
-	}
-
-	public void setIconPath(String iconPath) {
-		this.iconPath = iconPath;
+		this.setIcon(new ImageIcon(myImg.scaleImage(sp.ICON_WIDTH, sp.ICON_HEIGHT, iconName)));
 	}
 
 	public void setTitle(String title) {

@@ -28,7 +28,7 @@ public class MyInternalFrame extends JInternalFrame {
 		ModelButton bExit = new ModelButton.Builder()
 				.setTitle("Exit")
 				.setIconName("exit.png")
-				.setHint(Titles.setTitel("EXIT"))
+				.setHint(Titel.setTitel("EXIT"))
 				.build();
 		bExit.addActionListener(new ActionListener() {
 			@Override

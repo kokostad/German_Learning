@@ -8,10 +8,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -19,19 +21,22 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
 import edu.german.sentences.SentencesSetting;
-import edu.german.services.ExecutorSentenceTask;
+import edu.german.services.ExecutorTaskAddSentenceToRepository;
 import edu.german.services.ExecutorWordTask;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
-import edu.german.tools.SentencesListPreparation;
-import edu.german.tools.Titles;
+import edu.german.tools.SentencesListPreparationFromCSVFile;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.WordsSetting;
 
+/**
+ * ImportFromFile.java
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ * The class for importing data from JSON and CSV files
+ */
 public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	private WordsSetting wordSettingPanel;
-	private SentencesSetting sentenceSettingPanel;
 	private ButtonsPanel bp;
 	private JButton clearEditFieldBtn;
 	private JButton showBtn;
@@ -39,13 +44,16 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	private JTextArea txtArea;
 	private ExecutorService es;
 	private JTabbedPane tp;
-	private String type;
+	private String what;
+	private String fileType;
 	private MyProgressBar bar;
+	private ImportConfigPanel importConfigPanel;
+	private String separationSign = ";";
 
 	public ImportFromFile(int height, int width, String titel) {
 		super(height, width, titel);
 		es = Executors.newSingleThreadExecutor();
-		type = null;
+		what = null;
 
 		txtArea = new JTextArea(15, 70);
 		txtArea.setEditable(false);
@@ -57,14 +65,17 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		jp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		wordSettingPanel = new WordsSetting();
-		sentenceSettingPanel = new SentencesSetting();
+		importConfigPanel = new ImportConfigPanel.Builder()
+				.withFirstParamTitle("Zmień porządek importu: ")
+				.withFirstHint("Porządek importu (niemiecki/polski)")
+				.withSecondParamTitle("Ustaw import wyrazów: ")
+				.withSecondHint("Import (domyślnie: zdania)")
+				.build();
 
 		tp = new JTabbedPane();
-		tp.add("Konfiguracja parametrów słów", wordSettingPanel);
-		tp.add("Konfiguracja parametrów zdań", sentenceSettingPanel);
+		tp.add(Titel.setTitel("IMPORT_CONFIGURATION"), importConfigPanel);
 
-		bp = new ButtonsPanel("CLEAR_EDIT_FIELD", "SHOW_FILE", "IMPORT");
+		bp = new ButtonsPanel("CLEAR", "SHOW_DATA", "IMPORT");
 		bp.setFontSize(20);
 		clearEditFieldBtn = bp.getB1();
 		clearEditFieldBtn.addActionListener(this);
@@ -75,7 +86,6 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tp, jp);
 		sp.setOneTouchExpandable(true);
-		sp.setResizeWeight(0.3);
 
 		bar = new MyProgressBar("Postęp importu:");
 
@@ -88,41 +98,6 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		this.add(rightPan, BorderLayout.EAST);
 	}
 
-	private String getFilePath() {
-		if (tp.getSelectedIndex() == 0) {
-			type = "WORD";
-			return wordSettingPanel.getFilePath();
-		} else {
-			type = "SENTENCE";
-			return sentenceSettingPanel.getFilePath();
-		}
-	}
-
-	private String getSeparationSign() {
-		if (tp.getSelectedIndex() == 0)
-			return wordSettingPanel.getSeparationSign();
-		else
-			return sentenceSettingPanel.getSeparationSign();
-	}
-
-	private String getGenus() {
-		if (tp.getSelectedIndex() == 0)
-			return wordSettingPanel.getGenus();
-		else
-			return sentenceSettingPanel.getGenus();
-	}
-
-	private void clearAll() {
-		bar.setNull();
-		txtArea.setText(null);
-
-		if (tp.getSelectedIndex() == 0) {
-			wordSettingPanel.clearEditField();
-		} else {
-			sentenceSettingPanel.clearEditField();
-		}
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
@@ -130,29 +105,41 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		if (src == clearEditFieldBtn) {
 			clearAll();
 			repaint();
-		} else if (src == importBtn) {
+		}
+
+		else if (src == importBtn) {
 			String filePath = getFilePath();
-			if (filePath != null && getSeparationSign() != null) {
+			if (filePath != null) {
 				try {
 					BufferedReader br = new BufferedReader(new FileReader(filePath));
 					if (br != null) {
-						if (type.equals("SENTENCE")) {
-							SentencesListPreparation sPrep = new SentencesListPreparation(br, getSeparationSign());
-							es.submit(new ExecutorSentenceTask(sPrep.getList(), type, bar,
-									sentenceSettingPanel.getOrder()));
-						} else {
-							es.submit(new ExecutorWordTask(br, getSeparationSign(), getGenus(), bar,
-									wordSettingPanel.getOrder()));
+						what = importConfigPanel.sentencesOrWordsAsString();
+						fileType = importConfigPanel.fileType();
+						if (fileType.equals("CSV")) {
+							if (what.equals("SENTENCE")) {
+								SentencesListPreparationFromCSVFile sPrep = new SentencesListPreparationFromCSVFile(br,
+										separationSign);
+								List<String[]> list = sPrep.getList();
+								if (list != null)
+									es.submit(new ExecutorTaskAddSentenceToRepository(list, bar, getOrder()));
+							} else {
+								es.submit(new ExecutorWordTask(br, separationSign, getGenus(), bar, getOrder()));
+							}
+						}
+
+						else {
+							// NOTICE file type equals JSON
 						}
 					}
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
-				clearAll();
 				txtArea.setText(null);
 				repaint();
 			}
-		} else if (src == showBtn) {
+		}
+
+		else if (src == showBtn) {
 			bar.setNull();
 			txtArea.setText(null);
 			String filePath = getFilePath();
@@ -161,14 +148,42 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 					String line;
 					try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 						while ((line = br.readLine()) != null) {
-							txtArea.append(line + "\n");
+							if (line.length() > 1)
+								txtArea.append(line + "\n");
 						}
 					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
+			txtArea.setCaretPosition(0);
+			txtArea.setEditable(true);
 		}
+	}
+
+	private String getFilePath() {
+		return importConfigPanel.getFilePath();
+	}
+
+	private String getGenus() {
+		return importConfigPanel.wordGenus();
+	}
+
+	private boolean getOrder() {
+		return importConfigPanel.order();
+	}
+
+	private void clearAll() {
+		bar.setNull();
+		txtArea.setText(null);
+		importConfigPanel.clear();
+	}
+
+	/*
+	 * NOTICE need to check source file meets the criteria if not show message
+	 */
+	private void checkSource() {
+
 	}
 
 }

@@ -2,6 +2,7 @@ package edu.german.tools;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 import javax.swing.Box;
 import javax.swing.JComboBox;
@@ -20,7 +21,7 @@ public class MyComboBox extends JPanel {
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		label.setFont(ss.DEFAULT_FONT);
 		boxPanel.add(label);
-		boxPanel.add(Box.createRigidArea(new Dimension(5, 5)));
+		boxPanel.add(Box.createRigidArea(new Dimension(5, 2)));
 		if (array != null) {
 			box = new JComboBox<Object>(array);
 			box.setFont(ss.DEFAULT_FONT);
@@ -28,7 +29,26 @@ public class MyComboBox extends JPanel {
 			boxPanel.add(box);
 		}
 
-		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+		this.add(boxPanel);
+	}
+
+	public MyComboBox(String labelInfo, Object[] array, Font font) {
+		JPanel boxPanel = new JPanel();
+		JLabel label = new JLabel(labelInfo);
+
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		label.setFont(font);
+		boxPanel.add(label);
+		boxPanel.add(Box.createRigidArea(new Dimension(5, 2)));
+		if (array != null) {
+			box = new JComboBox<Object>(array);
+			box.setFont(font);
+			box.setAlignmentX(CENTER_ALIGNMENT);
+			boxPanel.add(box);
+		}
+
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
 		this.add(boxPanel);
 	}
 
@@ -46,4 +66,5 @@ public class MyComboBox extends JPanel {
 	public void clearField() {
 		box.setSelectedItem(null);
 	}
+
 }

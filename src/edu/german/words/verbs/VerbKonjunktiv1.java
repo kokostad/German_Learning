@@ -10,7 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 
 public class VerbKonjunktiv1 extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -21,19 +21,19 @@ public class VerbKonjunktiv1 extends JPanel {
 	private static final String modus = "KONJUNKTIV I";
 
 	public VerbKonjunktiv1() {
-		TitledBorder titlePresent = BorderFactory.createTitledBorder(Titles.setTitel("PRESENT"));
+		TitledBorder titlePresent = BorderFactory.createTitledBorder(Titel.setTitel("PRESENT"));
 		vPresent = new AddVerbTens("PRESENT");
 		vPresent.setBorder(titlePresent);
 
-		TitledBorder titlePerfekt = BorderFactory.createTitledBorder(Titles.setTitel("PERFEKT"));
+		TitledBorder titlePerfekt = BorderFactory.createTitledBorder(Titel.setTitel("PERFEKT"));
 		vPerfekt = new AddVerbTens("PERFEKT");
 		vPerfekt.setBorder(titlePerfekt);
 
-		TitledBorder titleFutur1 = BorderFactory.createTitledBorder(Titles.setTitel("FUTUR_I"));
+		TitledBorder titleFutur1 = BorderFactory.createTitledBorder(Titel.setTitel("FUTUR_I"));
 		vFutur1 = new AddVerbTens("FUTUR_I");
 		vFutur1.setBorder(titleFutur1);
 
-		TitledBorder titlevFutur2 = BorderFactory.createTitledBorder(Titles.setTitel("FUTUR_II"));
+		TitledBorder titlevFutur2 = BorderFactory.createTitledBorder(Titel.setTitel("FUTUR_II"));
 		vFutur2 = new AddVerbTens("FUTUR_II");
 		vFutur2.setBorder(titlevFutur2);
 

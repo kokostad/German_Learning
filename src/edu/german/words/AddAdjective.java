@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 
 import edu.german.tools.MyInternalFrame;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 
 public class AddAdjective extends MyInternalFrame implements ActionListener {
@@ -47,8 +47,8 @@ public class AddAdjective extends MyInternalFrame implements ActionListener {
 		ag = new AdjectiveGradation();
 
 		tb = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		new Titles();
-		tb.add(Titles.setTitel("ADJECTIVE_GRADATION"), ag);
+		new Titel();
+		tb.add(Titel.setTitel("ADJECTIVE_GRADATION"), ag);
 
 		add(tb, BorderLayout.CENTER);
 		add(bp, BorderLayout.EAST);

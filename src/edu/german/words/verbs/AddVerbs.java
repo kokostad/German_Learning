@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JTabbedPane;
 
 import edu.german.tools.MyInternalFrame;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 
 public class AddVerbs extends MyInternalFrame implements ActionListener {
@@ -55,7 +55,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		imperativAndPartizip = new VerbImperativAndImpersonal("IMPERATIV UND UNPERSÖNLICHE FORMEN");
 
 		tb = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		new Titles();
+		new Titel();
 		tb.add("INDIKATIV", indikativ);
 		tb.add("KONJUNKTIV", konjunktiv);
 		tb.add("IMPERATIV UND UNPERSÖNLICHE FORMEN", imperativAndPartizip);

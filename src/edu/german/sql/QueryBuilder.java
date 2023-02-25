@@ -2,9 +2,9 @@ package edu.german.sql;
 
 import edu.german.tools.MyProperties;
 
-public class SqlQueryBuilder {
+public class QueryBuilder {
 
-	public SqlQueryBuilder() {
+	public QueryBuilder() {
 	}
 
 	public String prepareInsertQueryWithTableNames(String tableName) {
@@ -78,7 +78,7 @@ public class SqlQueryBuilder {
 	public String addNewSentenceToRepository(String sentence, String meaning, String genus, String mode, String tens,
 			String word, String wordMeaning, String wordGenus) {
 
-		//sentence, meaning, type, category, tens, word, woid
+		// sentence, meaning, type, category, tens, word, woid
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO ge.sentences(sentence, meaning, type, category, tens, word, woid) VALUES(");
 		sb.append("'" + sentence + "', '" + meaning + "', '" + genus + "', '" + mode + "', '" + tens + "', '" + word
@@ -96,6 +96,34 @@ public class SqlQueryBuilder {
 		sb.append("INSERT INTO ge.sentences(sentence, meaning, type, category, tens, word, woid) VALUES(");
 		sb.append("'" + sentence + "', '" + meaning + "', '" + type + "', ");
 		sb.append("'" + category + "', '" + tens + "', '" + word + "', '" + "" + woid + "') ;");
+
+		return sb.toString();
+	}
+
+	public String addNewSentenceToRepository(String[] sentence) {
+		String[] header = new MyProperties("table_headers.properties").getValuesArray("SENTENCES");
+		StringBuilder sb = new StringBuilder();
+		int length = sentence.length - 1;
+
+		sb.append("INSERT INTO ge.sentences(");
+
+		for (int i = 0; i <= length; i++) {
+			if (i < length)
+				sb.append(header[i] + ", ");
+			else
+				sb.append(header[i]);
+		}
+
+		sb.append(") VALUES (");
+
+		for (int i = 0; i <= length; i++) {
+			if (i < length)
+				sb.append("'" + sentence[i] + "', ");
+			else
+				sb.append("'" + sentence[i] + "'");
+		}
+
+		sb.append(");");
 
 		return sb.toString();
 	}

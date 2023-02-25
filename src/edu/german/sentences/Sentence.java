@@ -5,7 +5,7 @@ import java.util.Map;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
-import edu.german.sql.SqlQueryBuilder;
+import edu.german.sql.QueryBuilder;
 
 public class Sentence {
 	private int oid;
@@ -24,7 +24,6 @@ public class Sentence {
 		sentenceMap = new HashMap<String, Object>();
 	}
 
-	// sentence, meaning, type(genus), category(mode), tens, word, woid)
 	public Sentence(String sentence, String meaning, String type, String category, String tens, String word) {
 		oid = -1;
 		woid = -1;
@@ -174,8 +173,9 @@ public class Sentence {
 	}
 
 	/*
-	 * NOTICE have to check are this methods below needed?
-	 * If they are needed, are they like this?
+	 * NOTICE
+	 * have to check are this methods below needed? If they are needed, are
+	 * they like this?
 	 */
 	public boolean isExist(String sentence, String category) {
 		if (!sentence.isBlank() && category != null) {
@@ -189,16 +189,31 @@ public class Sentence {
 		return false;
 	}
 
-	// sentence, meaning, type(genus), category(mode), tens, word, woid)
-	// sentence, meaning, type, category, tens
+	public Sentence getSentenceFromRepository(String sentenceStr, String meaningStr) {
+		String sql = new SqlQuery().getSql("get_full_sentence");
+		QueryContractor qc = new QueryContractor();
+		Sentence sentence = qc.getSentence(sql, sentenceStr, meaningStr);
+		return sentence;
+	}
+
+	/*
+	 * NOTICE
+	 * to describe the methods below, what they do exactly? maybe need to change the
+	 * name
+	 */
 	public void addToRepository(int woid) {
-		String sql = new SqlQueryBuilder().addNewSentenceWithWoid(sentence, meaning, type, category, tens, word, woid);
+		String sql = new QueryBuilder().addNewSentenceWithWoid(sentence, meaning, type, category, tens, word, woid);
 		new QueryContractor().simpleQueryExecution(sql);
 	}
 
 	public void addToRepository(String sql, String sentence, String meaning, String genus) {
 		if (sentence != null && (!sentence.isBlank() && !meaning.isBlank() && !genus.isBlank()))
 			new QueryContractor().executeQuery(sql, sentence, meaning, genus);
+	}
+
+	public void addToRepository(String sql, String sentence, String meaning) {
+		if (sentence != null && (!sentence.isBlank() && !meaning.isBlank()))
+			new QueryContractor().executeQuery(sql, sentence, meaning);
 	}
 
 }

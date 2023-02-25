@@ -11,7 +11,7 @@ import java.util.List;
 
 import edu.german.tools.MyProperties;
 import edu.german.tools.TableHanlder;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 import edu.german.tools.TwoEditableFieldsPanel;
 
 public class AdjectiveGradation extends JPanel {
@@ -33,9 +33,9 @@ public class AdjectiveGradation extends JPanel {
 
 		JPanel editPanel = new JPanel();
 		editPanel.setLayout(new GridLayout(1, 3, 5, 5));
-		equel = new TwoEditableFieldsPanel(Titles.setTitel("EQUEL_DEGREE"), "przymiotnik", " znaczenie");
-		comparative = new TwoEditableFieldsPanel(Titles.setTitel("COMPARATIVE_DEGREE"), "przymiotnik", " znaczenie");
-		supreme = new TwoEditableFieldsPanel(Titles.setTitel("SUPREME_DEGREE"), "przymiotnik", " znaczenie");
+		equel = new TwoEditableFieldsPanel(Titel.setTitel("EQUEL_DEGREE"), "przymiotnik", " znaczenie");
+		comparative = new TwoEditableFieldsPanel(Titel.setTitel("COMPARATIVE_DEGREE"), "przymiotnik", " znaczenie");
+		supreme = new TwoEditableFieldsPanel(Titel.setTitel("SUPREME_DEGREE"), "przymiotnik", " znaczenie");
 		editPanel.add(equel);
 		editPanel.add(comparative);
 		editPanel.add(supreme);

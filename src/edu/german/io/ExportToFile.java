@@ -26,13 +26,12 @@ import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 
 /**
  * ExportToFile.java
- * 
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com 
- * 
  * The class exports data to CSV and JSON files
  */
 public class ExportToFile extends MyInternalFrame implements ActionListener {
@@ -66,7 +65,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		exportConfigPanel = new ExportConfigPanel();
 
 		tp = new JTabbedPane();
-		tp.add("Konfiguracja parametrów eksportu", exportConfigPanel);
+		tp.add(Titel.setTitel("EXPORT_CONFIGURATION"), exportConfigPanel);
 
 		bp = new ButtonsPanel("CLEAR", "SHOW_DATA", "EXPORT");
 		bp.setFontSize(20);
@@ -114,36 +113,30 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 				return;
 			}
 
-			if (!isTextImportState()) {
+			if (!isTextImportState())
 				toExport = prepareDataToExport(exportConfigPanel.exportConfigParam());
-			}
 
 			/*
 			 * Default is SENTENCE if word put words into file if CSV put into CSV file else
 			 * put into JSON file into JSON file
 			 */
 			boolean val = exportConfigPanel.sentencesOrWords(); // true is WORD, false is SENTENCE
-			if (val) {
-				if ((exportConfigPanel.exportType()).equals("CSV")) {
+			if (val)
+				if ((exportConfigPanel.exportType()).equals("CSV"))
 					es.submit(new ExportWordsToCSVFile(toExport, getFilePath()));
-				} else {
+				else
 					es.submit(new ExportWordsToJSONFile(toExport, getFilePath()));
-				}
-				setTextImportState(false);
-			}
 
 			/*
 			 * If parameter equals "sentence" then chose only sentences and than put into
 			 * file, if CSV put into CSV file otherwise into JSON file
 			 */
-			else {
-				if ((exportConfigPanel.exportType()).equals("CSV")) {
-					es.submit(new ExportSentencesToCSVFile(toExport, getFilePath()));
-				} else {
-					es.submit(new ExportSentencesToJSONFile(toExport, getFilePath()));
-				}
-				setTextImportState(false);
-			}
+			else if ((exportConfigPanel.exportType()).equals("CSV"))
+				es.submit(new ExportSentencesToCSVFile(toExport, getFilePath()));
+			else
+				es.submit(new ExportSentencesToJSONFile(toExport, getFilePath()));
+
+			setTextImportState(false);
 		}
 	}
 
@@ -174,6 +167,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		if (map.containsKey("WORD_GENUS"))
 			wordGenus = map.get("WORD_GENUS");
 
+		// TODO need to use DoCall - Callable<>
 		if (option.isPresent()) {
 			if (wordGenus != null && !wordGenus.isBlank())
 				list = new GetWordsAsList().getGenusWordListToExport(wordGenus, getOrder());

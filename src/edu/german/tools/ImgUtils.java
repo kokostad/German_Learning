@@ -6,11 +6,13 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 
+import edu.german.cfg.MyIcon;
+
 public class ImgUtils {
 	public BufferedImage scaleImage(int WIDTH, int HEIGHT, String filename) {
 		BufferedImage bi = null;
 		try {
-			ImageIcon ii = new ImageIcon(filename);
+			ImageIcon ii = new ImageIcon(MyIcon.iconPath + filename);
 			bi = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2d = (Graphics2D) bi.createGraphics();
 			g2d.addRenderingHints(

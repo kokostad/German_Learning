@@ -10,7 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 
 public class VerbImperativAndImpersonal extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -18,11 +18,11 @@ public class VerbImperativAndImpersonal extends JPanel {
 	private ImpersonalForm impersonal;
 
 	public VerbImperativAndImpersonal(String string) {
-		TitledBorder titleImperative = BorderFactory.createTitledBorder(Titles.setTitel("IMPERATIVE"));
+		TitledBorder titleImperative = BorderFactory.createTitledBorder(Titel.setTitel("IMPERATIVE"));
 		imperative = new VerbImperative();
 		imperative.setBorder(titleImperative);
 
-		TitledBorder titleImpersonal = BorderFactory.createTitledBorder(Titles.setTitel("IMPERSONAL_FORMS"));
+		TitledBorder titleImpersonal = BorderFactory.createTitledBorder(Titel.setTitel("IMPERSONAL_FORMS"));
 		impersonal = new ImpersonalForm();
 		impersonal.setBorder(titleImpersonal);
 

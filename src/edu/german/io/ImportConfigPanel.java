@@ -19,40 +19,47 @@ import edu.german.tools.MyFileChooser;
 import edu.german.tools.MyProperties;
 import edu.german.tools.Titel;
 
-public class ExportConfigPanel extends JPanel {
+public class ImportConfigPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final String WORD_FILE_CFG = "words_genus.properties";
 	private String labelInfo = "Ścieżka do pliku: ";
 	private JButton chooseBtn;
 	private JLabel pathLab;
 	private String filePath;
+	private String firstParamTitle;
+	private String secondParamTitle;
+	private String firstHint;
+	private String secondHint;
 	private MyCheckBox orderBox;
-	private MyCheckBox sentencesOrWordsChooseBox;
+	private MyCheckBox sentencesOrWordsBox;
 	private MyComboBox wordGenusBox;
-	private MyComboBox exportTypeBox;
+	private MyComboBox fileTypeBox;
 
-	public ExportConfigPanel() {
+	public ImportConfigPanel(String firstParamTitle, String secondParamTitle, String firstHint, String secondHint) {
+		this.firstParamTitle = firstParamTitle;
+		this.secondParamTitle = secondParamTitle;
+		this.firstHint = firstHint;
+		this.secondHint = secondHint;
 		filePath = null;
+		
 		pathLab = new JLabel(labelInfo);
 
 		JPanel upPanel = new JPanel();
 		upPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-		orderBox = new MyCheckBox("Zmień porządek eksportu: ", "polski/niemiecki",
-				"Porządek eksportu (niemiecki/polski)");
-
-		sentencesOrWordsChooseBox = new MyCheckBox("Ustaw eksport wyrazów: ", "Wyrazy", "Eksport (domyślnie: zdania)");
+		orderBox = new MyCheckBox(firstParamTitle, "polski/niemiecki", firstHint);
+		sentencesOrWordsBox = new MyCheckBox(secondParamTitle, "Wyrazy", secondHint);
 
 		String[] selectionList = new MyProperties(WORD_FILE_CFG).getValuesArray("GENUS_LIST");
 		wordGenusBox = new MyComboBox(Titel.setTitel("WORDS_GENUS"), selectionList);
 
 		FileKind[] fileKind = FileKind.values();
-		exportTypeBox = new MyComboBox("Typ eksportu", fileKind);
+		fileTypeBox = new MyComboBox("Typ eksportu", fileKind);
 
-		upPanel.add(sentencesOrWordsChooseBox);
+		upPanel.add(sentencesOrWordsBox);
 		upPanel.add(orderBox);
 		upPanel.add(wordGenusBox);
-		upPanel.add(exportTypeBox);
+		upPanel.add(fileTypeBox);
 		upPanel.repaint();
 
 		JPanel downPanel = new JPanel();
@@ -80,6 +87,40 @@ public class ExportConfigPanel extends JPanel {
 		this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 	}
 
+	public static class Builder {
+		private String firstParamTitle;
+		private String secondParamTitle;
+		private String firstHint;
+		private String secondHint;
+
+		public Builder() {
+		}
+
+		public Builder withFirstParamTitle(String firstParamTitle) {
+			this.firstParamTitle = firstParamTitle;
+			return this;
+		}
+
+		public Builder withSecondParamTitle(String secondParamTitle) {
+			this.secondParamTitle = secondParamTitle;
+			return this;
+		}
+
+		public Builder withFirstHint(String firstHint) {
+			this.firstHint = firstHint;
+			return this;
+		}
+
+		public Builder withSecondHint(String secondHint) {
+			this.secondHint = secondHint;
+			return this;
+		}
+
+		public ImportConfigPanel build() {
+			return new ImportConfigPanel(firstParamTitle, secondParamTitle, firstHint, secondHint);
+		}
+
+	}
 	public String getFilePath() {
 		return filePath;
 	}
@@ -101,11 +142,18 @@ public class ExportConfigPanel extends JPanel {
 	}
 
 	public boolean sentencesOrWords() {
-		return sentencesOrWordsChooseBox.result();
+		return sentencesOrWordsBox.result();
 	}
 
-	public String exportType() {
-		return exportTypeBox.getValue();
+	public String sentencesOrWordsAsString() {
+		if (sentencesOrWordsBox.result())
+			return "WORDS";
+
+		return "SENTENCE";
+	}
+	
+	public String fileType() {
+		return fileTypeBox.getValue();
 	}
 
 	public String wordGenus() {
@@ -121,7 +169,7 @@ public class ExportConfigPanel extends JPanel {
 			order = "pl";
 
 		HashMap<String, String> exportConfigMap = new HashMap<>();
-		exportConfigMap.put("EXPORT_TYPE", exportType());
+		exportConfigMap.put("EXPORT_TYPE", fileType());
 		exportConfigMap.put("GENUS", kind);
 		exportConfigMap.put("ORDER", order);
 		if (kind.equals("word"))
@@ -133,9 +181,10 @@ public class ExportConfigPanel extends JPanel {
 	public void clear() {
 		filePath = null;
 		orderBox.clear();
-		sentencesOrWordsChooseBox.clear();
+		sentencesOrWordsBox.clear();
 		wordGenusBox.setValue(null);
 		clearFilePath();
 	}
 
 }
+

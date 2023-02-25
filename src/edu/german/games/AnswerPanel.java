@@ -13,16 +13,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import edu.german.tools.ScreenSetup;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 
 public class AnswerPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel answerLab;
 	private JLabel infoLab;
 	private JLabel exampleLab;
-	private String information = Titles.setTitel("YOUR_ANSWER");
-	private String meaningInformation = Titles.setTitel("MEANING");
-	private String exampleInformation = Titles.setTitel("EXAMPLE");
+	private String information = Titel.setTitel("YOUR_ANSWER");
+	private String meaningInformation = Titel.setTitel("MEANING");
+	private String exampleInformation = Titel.setTitel("EXAMPLE");
 	private final Color labClr = new Color(139, 69, 19);
 	private final Color labAnsw = new Color(51, 51, 255);
 

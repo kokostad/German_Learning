@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import edu.german.tools.MyInternalFrame;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 
 public class WordAddition extends SimpleWordAddition implements ActionListener {
 

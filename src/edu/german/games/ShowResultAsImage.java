@@ -17,9 +17,9 @@ import edu.german.tools.ImgUtils;
  */
 public class ShowResultAsImage extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static String sImageNothing = "src/edu/german/img/nothing.png";
-	private static String sImageGood = "src/edu/german/img/good.png";
-	private static String sImageAngry = "src/edu/german/img/angry.png";
+	private static String sImageNothing = "nothing.png";
+	private static String sImageGood = "good.png";
+	private static String sImageAngry = "angry.png";
 	private Integer width = 130;
 	private Integer hight = 130;
 	private ImageIcon imgIcon;

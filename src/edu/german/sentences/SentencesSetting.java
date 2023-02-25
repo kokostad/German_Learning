@@ -14,7 +14,7 @@ import edu.german.tools.MyComboBox;
 import edu.german.tools.MyFileChooser;
 import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditableField;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 
 public class SentencesSetting extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -28,10 +28,10 @@ public class SentencesSetting extends JPanel {
 	private MyCheckBox cBox;
 
 	public SentencesSetting() {
-		chooseFile = new OneEditableField(Titles.setTitel("CHOOSE_FILE"), "Wybierz odpowiedni plik", fontSize, 16);
-		separationSign = new OneEditableField(Titles.setTitel("CHOOSE_SEPARATION_SIGN"),
+		chooseFile = new OneEditableField(Titel.setTitel("CHOOSE_FILE"), "Wybierz odpowiedni plik", fontSize, 16);
+		separationSign = new OneEditableField(Titel.setTitel("CHOOSE_SEPARATION_SIGN"),
 				"Wpisz odpowieni znak rozdzielajacy", fontSize, 2);
-		chooseBtn = new JButton(Titles.setTitel("CHOOSE_FILE"));
+		chooseBtn = new JButton(Titel.setTitel("CHOOSE_FILE"));
 		chooseBtn.setPreferredSize(new Dimension(200, 32));
 		chooseBtn.addActionListener(new ActionListener() {
 
@@ -46,7 +46,7 @@ public class SentencesSetting extends JPanel {
 		filePath = null;
 
 		String[] selectionList = new MyProperties(FILE_NAME).getValuesArray("CHOOSE_SENTENCE_GENUS_LIST");
-		box = new MyComboBox(Titles.setTitel("CHOOSE_GENUS"), selectionList);
+		box = new MyComboBox(Titel.setTitel("CHOOSE_GENUS"), selectionList);
 		cBox = new MyCheckBox(" Zmień kolejność w pliku: ", "polskie/niemieckie",
 				"Kolejność zdań (domyślnie: niemiecki/polski)");
 

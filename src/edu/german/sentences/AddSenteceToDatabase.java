@@ -67,4 +67,11 @@ public class AddSenteceToDatabase {
 
 		}
 	}
+
+//	public void addNewSentence(String sql, String german, String polish, String type) {
+//		// TODO Auto-generated method stub
+//		Sentence sentence = new Sentence();
+//		sentence 
+//		
+//	}
 }

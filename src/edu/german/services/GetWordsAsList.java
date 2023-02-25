@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
-import edu.german.sql.SqlQueryBuilder;
+import edu.german.sql.QueryBuilder;
 
 /**
  * @author Tadeusz Kokotowski email: t.kokotowski@gail.com 
@@ -36,7 +36,7 @@ public class GetWordsAsList {
 	 * @return only words by specific kind (genus) from main word table without OID
 	 */
 	public List<String> getGenusWordListToExport(String wordGenus, String order) {
-		String query = new SqlQueryBuilder().getWordListByGenus(wordGenus, order);
+		String query = new QueryBuilder().getWordListByGenus(wordGenus, order);
 		return new QueryContractor().getWordsAsStringList(query);
 	}
 

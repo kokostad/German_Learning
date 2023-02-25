@@ -26,7 +26,7 @@ import edu.german.tools.MyInternalFrame;
 import edu.german.tools.ResultsPanel;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.WordSelectionPanel;
 import edu.german.words.model.Noun;
@@ -101,7 +101,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		dasBtn.addActionListener(this);
 
 		gameWordLbl = new JLabel();
-		gameWordLbl.setText(Titles.setTitel("WORD_TO_CHECK"));
+		gameWordLbl.setText(Titel.setTitel("WORD_TO_CHECK"));
 		gameWordLbl.setFont(new Font(fontArt, Font.ITALIC, bigFontSize));
 		gameWordLbl.setForeground(new Color(34, 139, 34));
 		gameWordLbl.setHorizontalAlignment(JTextField.LEFT);
@@ -120,7 +120,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		answerLab.setHorizontalAlignment(JTextField.LEFT);
 
 		answerPanel = new AnswerPanel();
-		resultPan = new ResultsPanel(Titles.setTitel("YOUR_RESULTS"));
+		resultPan = new ResultsPanel(Titel.setTitel("YOUR_RESULTS"));
 
 		JPanel workPanel = new JPanel();
 		workPanel.setLayout(new GridLayout(1, 3, 10, 5));
@@ -160,7 +160,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		if (number < severalNouns.size())
 			setGameWord(number, severalNouns);
 		else if (number == severalNouns.size())
-			gameWordLbl.setText(Titles.setTitel("END_OF_ROUND"));
+			gameWordLbl.setText(Titel.setTitel("END_OF_ROUND"));
 		else if (number > severalNouns.size())
 			new ShowMessage("NO_MORE_WORDS");
 		else

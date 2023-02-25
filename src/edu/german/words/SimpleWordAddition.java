@@ -18,7 +18,7 @@ import edu.german.tools.MyProperties;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.TableHanlder;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 
 /**
@@ -70,7 +70,7 @@ public class SimpleWordAddition extends MyInternalFrame implements ActionListene
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		editPanel = new WordEditPanel(Titles.setTitel("WRITE_WORD"), Titles.setTitel("WRITE_MEANING"),
+		editPanel = new WordEditPanel(Titel.setTitel("WRITE_WORD"), Titel.setTitel("WRITE_MEANING"),
 				prop.getValuesArray("GENUS_LIST"));
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, editPanel, scp);

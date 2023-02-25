@@ -29,7 +29,7 @@ import edu.german.tools.OneEditableField;
 import edu.german.tools.ResultsPanel;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
-import edu.german.tools.Titles;
+import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.WordSelectionPanel;
 import edu.german.words.model.Word;
@@ -51,7 +51,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	private JLabel choosenWordLabel;
 	private JLabel communique;
 	private OneEditField answer;
-	private String information = Titles.setTitel("WORD_TO_GUESS") + ": ";
+	private String information = Titel.setTitel("WORD_TO_GUESS") + ": ";
 	private ResultsPanel resultPan;
 	private String choosenWord;
 	private String controlWord;
@@ -115,7 +115,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		playPanel.add(showImage);
 		playPanel.add(gamePanel);
 
-		resultPan = new ResultsPanel(Titles.setTitel("YOUR_RESULTS"));
+		resultPan = new ResultsPanel(Titel.setTitel("YOUR_RESULTS"));
 
 		JPanel centralPan = new JPanel();
 		centralPan.setLayout(new GridLayout(3, 1, 10, 5));

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.german.dao.DbConnect;
+import edu.german.sentences.Sentence;
 import edu.german.tools.PrepareArrayFromString;
 import edu.german.words.model.Noun;
 import edu.german.words.model.Verb;
@@ -19,9 +20,10 @@ import edu.german.words.model.Word;
 
 /**
  * QueryContractor.java
+ * 
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
  *
- * The class performs SQL queries
+ *         The class performs SQL queries
  */
 public class QueryContractor {
 	private DbConnect dbc;
@@ -60,7 +62,29 @@ public class QueryContractor {
 			ps.setString(2, str2);
 			ps.setString(3, str3);
 
-			return ps.execute();
+			System.out.println(ps.toString());
+
+//			return ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return false;
+	}
+
+	public boolean executeQuery(String sql, String str1, String str2) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, str1);
+			ps.setString(2, str2);
+
+			System.out.println(ps.toString());
+
+//			return ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -852,5 +876,37 @@ public class QueryContractor {
 		}
 
 		return -1;
+	}
+
+	public Sentence getSentence(String sql, String sentenceStr, String meaningStr) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		Sentence sentence = new Sentence();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, sentenceStr);
+			ps.setString(2, meaningStr);
+
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				sentence.setOid(rs.getInt("oid"));
+				sentence.setSentence(rs.getString("sentence"));
+				sentence.setMeaning(rs.getString("meaning"));
+				sentence.setType(rs.getString("type"));
+				sentence.setCategory(rs.getString("category"));
+				sentence.setTens(rs.getString("tens"));
+				sentence.setWord(rs.getString("word"));
+				sentence.setWoid(rs.getInt("woid"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+		return sentence;
 	}
 }
