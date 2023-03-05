@@ -87,4 +87,7 @@ public class TextCleaner {
 		this.word = word;
 	}
 
+	public String removeTab(String string) {
+		return string.replace("\t", "");
+	}
 }

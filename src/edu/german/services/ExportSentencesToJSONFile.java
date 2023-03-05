@@ -6,18 +6,28 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import edu.german.tools.SentenceJSONParser;
 
 public class ExportSentencesToJSONFile implements Runnable {
-	private List<String> toExport;
-	private String filePath;
+	private String path;
+	private StringBuilder sb;
+	private int count;
+	private String[] newExport;
 
-	public ExportSentencesToJSONFile(List<String> toExport, String filePath) {
-		this.toExport = toExport;
-		this.filePath = filePath;
+	public ExportSentencesToJSONFile(List<String> toExport, String path) {
+		this.path = path;
+		sb = new StringBuilder();
 		deleteIfFileExist();
+		count = toExport.size();
+		int i = 0;
+		for (String s : toExport) {
+			prepareJSONObject(i, s);
+			i += 1;
+		}
+
+		newExport = (sb.toString()).split(System.lineSeparator());
 	}
 
 	@Override
@@ -26,15 +36,14 @@ public class ExportSentencesToJSONFile implements Runnable {
 	}
 
 	private void putIntoJSONFile() {
-		toExport.forEach((line) -> putLineIntoFile(line));
+		for (String l : newExport)
+			putLineIntoFile(l);
 	}
 
 	private void putLineIntoFile(String line) {
-		JSONObject var = new SentenceJSONParser(line).getJSONItem();
 		try {
-			FileWriter writer = new FileWriter(filePath, true);
-			String val = var.toString();
-			writer.write(val);
+			FileWriter writer = new FileWriter(path, true);
+			writer.write(line);
 			writer.write("\n");
 			writer.close();
 		} catch (IOException e) {
@@ -44,11 +53,33 @@ public class ExportSentencesToJSONFile implements Runnable {
 
 	private boolean deleteIfFileExist() {
 		try {
-			return Files.deleteIfExists(Paths.get(filePath));
+			return Files.deleteIfExists(Paths.get(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		return false;
 	}
+
+	private void prepareJSONObject(int i, String line) {
+		JSONObject var = new SentenceJSONParser(line).getJSONItem();
+		if (i == 0) {
+			sb.append("{\"SENTENCES\":");
+			sb.append("[");
+			sb.append("\n");
+			sb.append(var.toJSONString());
+			sb.append(",");
+			sb.append("\n");
+		} else if (i < count - 1) {
+			sb.append(var.toJSONString());
+			sb.append(",");
+			sb.append("\n");
+		} else {
+			sb.append(var.toJSONString());
+			sb.append("\n");
+			sb.append("]");
+			sb.append("}");
+		}
+	}
+
 }

@@ -3,25 +3,27 @@ package edu.german.tools;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 public class WordJSONParser {
 	private JSONObject json;
 
+	@SuppressWarnings("unchecked")
 	public WordJSONParser(String line) {
 		String[] array = line.split(";");
 		json = new JSONObject();
-		Map<String, String> map = new LinkedHashMap<>();
 
 		for (int i = 0; i < array.length; i++) {
+			Map<String, Object> map = new LinkedHashMap<>();
 			if (i == 0)
-				map.put("WORD", array[i]);
+				map.put("WORD", array[i].toString());
 			if (i == 1)
-				map.put("MEANING", array[i]);
+				map.put("MEANING", array[i].toString());
 			if (i == 2)
-				map.put("GENUS", array[i]);
+				map.put("GENUS", array[i].toString());
+
+			json.putAll(map);
 		}
-		map.forEach((k, v) -> json.append(k, v));
 	}
 
 	public JSONObject getJSONItem() {

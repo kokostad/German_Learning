@@ -129,11 +129,11 @@ SELECT woid FROM ge.sentences WHERE oid = ?  ;
 EOSQL
 
 [get_all_sentences_to_export]
-SELECT sentence, meaning, type FROM ge.sentences ;
+SELECT sentence, meaning, type FROM ge.sentences;
 EOSQL
 
 [get_all_sentences_to_export_pl]
-SELECT meaning, sentence, type FROM ge.sentences ;
+SELECT meaning, sentence, type FROM ge.sentences;
 EOSQL
 
 [get_all_words]

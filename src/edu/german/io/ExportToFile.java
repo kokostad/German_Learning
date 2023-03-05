@@ -26,6 +26,7 @@ import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
+import edu.german.tools.TextCleaner;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 
@@ -80,7 +81,8 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		sp.setOneTouchExpandable(true);
 		sp.setDividerLocation(new ScreenSetup().SPLIT_PANE_FACTOR);
 
-		bar = new MyProgressBar("Postęp eksportu:");
+		bar = new MyProgressBar("EXPORT_PROGRESS");
+		bar.setInfo("PROGRESS");
 
 		JPanel rightPan = new JPanel();
 		rightPan.setLayout(new GridLayout(2, 1, 10, 10));
@@ -117,7 +119,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 				toExport = prepareDataToExport(exportConfigPanel.exportConfigParam());
 
 			/*
-			 * Default is SENTENCE if word put words into file if CSV put into CSV file else
+			 * NOTICE Default is SENTENCE if word put words into file if CSV put into CSV file else
 			 * put into JSON file into JSON file
 			 */
 			boolean val = exportConfigPanel.sentencesOrWords(); // true is WORD, false is SENTENCE
@@ -128,7 +130,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 					es.submit(new ExportWordsToJSONFile(toExport, getFilePath()));
 
 			/*
-			 * If parameter equals "sentence" then chose only sentences and than put into
+			 * NOTICE If parameter equals "sentence" then chose only sentences and than put into
 			 * file, if CSV put into CSV file otherwise into JSON file
 			 */
 			else if ((exportConfigPanel.exportType()).equals("CSV"))
@@ -154,7 +156,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 
 	/**
 	 * The method completes and return the data in the form of a list of strings
-	 * 
 	 * @param map - Map of Words or Sentences
 	 * @return list of strings
 	 */
@@ -170,11 +171,11 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		// TODO need to use DoCall - Callable<>
 		if (option.isPresent()) {
 			if (wordGenus != null && !wordGenus.isBlank())
-				list = new GetWordsAsList().getGenusWordListToExport(wordGenus, getOrder());
+				list = new GetWordsAsList().getGenusList(wordGenus, getOrder());
 			else
-				list = new GetWordsAsList().getAllWordListToExport(getOrder());
+				list = new GetWordsAsList().getList(getOrder());
 		} else {
-			list = new GetListOfSentences().getList(getOrder());
+			list = new GetSentenceList().getList(getOrder());
 		}
 
 		return list;

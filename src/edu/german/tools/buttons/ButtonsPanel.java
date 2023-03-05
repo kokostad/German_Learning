@@ -13,7 +13,7 @@ import edu.german.tools.MyProperties;
 
 public class ButtonsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final String CFG_FILE = "../cfg/buttons.properties";
+	private static final String CFG_FILE = "buttons.properties";
 	private MyFont myFont;
 	private JButton b1;
 	private JButton b2;

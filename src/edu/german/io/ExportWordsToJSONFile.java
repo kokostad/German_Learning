@@ -6,25 +6,35 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import edu.german.tools.WordJSONParser;
 
 /**
  * ExportWordsToJSONFile.java
- * 
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
- *
- * The class saves data to JSON files
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com 
+ * The class prepare and saves data to JSON files
  */
 public class ExportWordsToJSONFile implements Runnable {
-	private List<String> toExport;
 	private String path;
+	private StringBuilder sb;
+	private String[] newExport;
+	private int count;
 
 	public ExportWordsToJSONFile(List<String> toExport, String path) {
-		this.toExport = toExport;
 		this.path = path;
+		sb = new StringBuilder();
 		deleteIfFileExist();
+		count = toExport.size();
+		int i = 0;
+		for (String s : toExport) {
+			prepareJSONObject(i, s);
+			i += 1;
+		}
+		sb.append("]");
+		sb.append("}");
+
+		newExport = (sb.toString()).split(System.lineSeparator());
 	}
 
 	@Override
@@ -33,15 +43,14 @@ public class ExportWordsToJSONFile implements Runnable {
 	}
 
 	private void putIntoJSONFile() {
-		toExport.forEach((line) -> putLineIntoFile(line));
+		for (String l : newExport)
+			putLineIntoFile(l);
 	}
 
 	private void putLineIntoFile(String line) {
-		JSONObject var = new WordJSONParser(line).getJSONItem();
 		try {
 			FileWriter writer = new FileWriter(path, true);
-			String val = var.toString();
-			writer.write(val);
+			writer.write(line);
 			writer.write("\n");
 			writer.close();
 		} catch (IOException e) {
@@ -58,4 +67,23 @@ public class ExportWordsToJSONFile implements Runnable {
 
 		return false;
 	}
+
+	private void prepareJSONObject(int i, String line) {
+		if (i == 0) {
+			sb.append("{\"WORDS\":");
+			sb.append("[");
+			sb.append("\n");
+		} else {
+			JSONObject var = new WordJSONParser(line).getJSONItem();
+			if (i < count - 1) {
+				sb.append(var.toJSONString());
+				sb.append(",");
+				sb.append("\n");
+			} else {
+				sb.append(var.toJSONString());
+				sb.append("\n");
+			}
+		}
+	}
+
 }

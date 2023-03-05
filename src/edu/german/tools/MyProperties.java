@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 public class MyProperties {
-	private String DEFAULT_PATH = "src/edu/german/cfg/";
+	private String DEFAULT_PATH = "config/";
 	private String FILE;
 
 	public MyProperties(String FILE) {

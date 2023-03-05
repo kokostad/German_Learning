@@ -5,9 +5,9 @@ import java.util.List;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 
-public class GetListOfSentences {
+public class GetSentenceList {
 
-	public GetListOfSentences() {
+	public GetSentenceList() {
 	}
 
 	public List<String> getList(String order) {

@@ -12,7 +12,7 @@ import edu.german.sql.QueryBuilder;
  */
 public class GetWordsAsList {
 
-	public List<String> getAllWordList() {
+	public List<String> getAllList() {
 		String query = new SqlQuery().getSql("get_all_words");
 		return new QueryContractor().getWordsAsStringList(query);
 	}
@@ -21,7 +21,7 @@ public class GetWordsAsList {
 	 * @param order - pl or ge
 	 * @return all words from main word table without OID
 	 */
-	public List<String> getAllWordListToExport(String order) {
+	public List<String> getList(String order) {
 		String query = new SqlQuery().getSql("get_all_words_to_export");
 
 		if (order.equals("pl"))
@@ -35,7 +35,7 @@ public class GetWordsAsList {
 	 * @param order - what is exported as first field (pl or ge)
 	 * @return only words by specific kind (genus) from main word table without OID
 	 */
-	public List<String> getGenusWordListToExport(String wordGenus, String order) {
+	public List<String> getGenusList(String wordGenus, String order) {
 		String query = new QueryBuilder().getWordListByGenus(wordGenus, order);
 		return new QueryContractor().getWordsAsStringList(query);
 	}

@@ -13,25 +13,24 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import edu.german.sentences.SentencesSetting;
 import edu.german.services.ExecutorTaskAddSentenceToRepository;
 import edu.german.services.ExecutorWordTask;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.SentencesListPreparationFromCSVFile;
+import edu.german.tools.SentenceListPreparationFromJSONFile;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.words.WordsSetting;
 
 /**
  * ImportFromFile.java
+ * 
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
  * The class for importing data from JSON and CSV files
  */
@@ -87,7 +86,8 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tp, jp);
 		sp.setOneTouchExpandable(true);
 
-		bar = new MyProgressBar("Postęp importu:");
+		bar = new MyProgressBar("IMPORT_PROGRESS");
+		bar.setInfo("PROGRESS");
 
 		JPanel rightPan = new JPanel();
 		rightPan.setLayout(new GridLayout(2, 1, 10, 10));
@@ -117,9 +117,9 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 						fileType = importConfigPanel.fileType();
 						if (fileType.equals("CSV")) {
 							if (what.equals("SENTENCE")) {
-								SentencesListPreparationFromCSVFile sPrep = new SentencesListPreparationFromCSVFile(br,
-										separationSign);
-								List<String[]> list = sPrep.getList();
+								SentencesListPreparationFromCSVFile prepCSV = new SentencesListPreparationFromCSVFile(
+										br, separationSign);
+								List<String[]> list = prepCSV.getList();
 								if (list != null)
 									es.submit(new ExecutorTaskAddSentenceToRepository(list, bar, getOrder()));
 							} else {
@@ -129,6 +129,17 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 						else {
 							// NOTICE file type equals JSON
+							if (what.equals("SENTENCE")) {
+								SentenceListPreparationFromJSONFile prepJSON = new SentenceListPreparationFromJSONFile(
+										br);
+								prepJSON.readFromBR();
+
+//								List<String[]> list = prepJSON.getList();
+//								if (list != null) {
+//									for (String[] array : list) {
+//										for (String str : array)
+//											System.out.println(str);
+							}
 						}
 					}
 				} catch (FileNotFoundException e1) {

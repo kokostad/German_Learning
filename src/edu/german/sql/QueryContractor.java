@@ -14,6 +14,7 @@ import java.util.Map;
 import edu.german.dao.DbConnect;
 import edu.german.sentences.Sentence;
 import edu.german.tools.PrepareArrayFromString;
+import edu.german.tools.TextCleaner;
 import edu.german.words.model.Noun;
 import edu.german.words.model.Verb;
 import edu.german.words.model.Word;
@@ -496,10 +497,10 @@ public class QueryContractor {
 				StringBuilder sb = new StringBuilder();
 				for (int i = 1; i <= numOfCol; i++) {
 					Object var = rs.getObject(i);
-					if (i == 1)
-						sb.append(var.toString() + ";");
-					if (i == 2)
-						sb.append(var.toString() + "\n");
+					if ((i < numOfCol) && (var != null))
+						sb.append(new TextCleaner().removeTab(var.toString()) + ";");
+					else if (var != null)
+						sb.append(new TextCleaner().removeTab(var.toString()));
 				}
 				list.add(sb.toString());
 			}
