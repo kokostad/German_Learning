@@ -69,7 +69,7 @@ public class OneEditField extends JPanel {
 	}
 
 	public String getValue() {
-		if (!editField.getText().isBlank())
+		if (!editField.getText().isBlank() && !editField.getText().equals(""))
 			return editField.getText();
 
 		return null;
@@ -85,17 +85,17 @@ public class OneEditField extends JPanel {
 
 	public static class Builder {
 		private String title;
-		private String value;
+//		private String value;
 		private String hint;
 		private Font font;
 		private int width;
 		private int height;
 		private Color color;
 
-		public Builder withValue(String value) {
-			this.value = value;
-			return this;
-		}
+//		public Builder withValue(String value) {
+//			this.value = value;
+//			return this;
+//		}
 
 		public Builder withHeight(int height) {
 			this.height = height;

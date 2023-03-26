@@ -1,5 +1,6 @@
 package edu.german.words.verbs;
 
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,6 +9,8 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 
 import edu.german.tools.Titel;
@@ -22,14 +25,19 @@ public class VerbImperativAndImpersonal extends JPanel {
 		imperative = new VerbImperative();
 		imperative.setBorder(titleImperative);
 
+		Component up = new JScrollPane(imperative);
+
 		TitledBorder titleImpersonal = BorderFactory.createTitledBorder(Titel.setTitel("IMPERSONAL_FORMS"));
 		impersonal = new ImpersonalForm();
 		impersonal.setBorder(titleImpersonal);
 
-		GridLayout g = new GridLayout(5, 1);
-		this.setLayout(g);
-		this.add(imperative);
-		this.add(impersonal);
+		Component down = new JScrollPane(impersonal);
+
+		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, up, down);
+		split.setDividerLocation(300);
+
+		this.setLayout(new GridLayout(1, 1, 5, 5));
+		this.add(split);
 	}
 
 	public Map<String, List<Map<String, String>>> getMapImperativ() {

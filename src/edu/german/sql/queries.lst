@@ -19,8 +19,21 @@ SELECT a.oid FROM ge.adjective_graduation a WHERE a.equal_degree_ge = ? LIMIT 1;
 EOSQL
 
 [check_verb]
-SELECT * FROM ge.verbs v WHERE v.word = ? LIMIT 1;
+SELECT oid FROM ge.verbs WHERE word = ? LIMIT 1;
 EOSQL
+
+[get_verb_oid]
+SELECT oid FROM ge.verbs WHERE word = ? AND irregular = ? AND separable = ? LIMIT 1;
+EOSQL
+
+[get_verb_meaning]
+SELECT meaning FROM ge.verbs WHERE word = ? AND irregular = ? AND separable = ? LIMIT 1;
+EOSQL
+
+[check_verb_in_main_tab]
+SELECT * FROM ge.all_words_objects WHERE word = ? AND genus = ?;
+EOSQL
+
 
 [check_verbs_conjugation]
 SELECT v.oid FROM ge.verbs_conjugation v WHERE v.woid = ? AND v.tens = ? ;
@@ -115,8 +128,13 @@ EOSQL
 SELECT * from ge.nouns;
 EOSQL
 
-[add_rules]
-INSERT INTO ge.rules(title, contents, tips) VALUES(?, ?, ?);
+[get_woid_from_main_tab]
+SELECT woid FROM ge.all_words_objects WHERE word = ? AND genus = ?;
+EOSQL
+
+## OID exist not more in ge.all_words_objects table
+[get_oid_from_main_tab]
+SELECT oid FROM ge.all_words_objects WHERE word = ? AND genus = ?;
 EOSQL
 
 ## Get from database
@@ -148,6 +166,31 @@ EOSQL
 SELECT meaning, word, genus FROM ge.all_words_objects;
 EOSQL
 
+[get_verb_from_main_tab]
+SELECT * FROM ge.all_words_objects WHERE word = ? AND genus = ? ;
+EOSQL
+
+[get_verb_by_oid]
+SELECT * FROM ge.verbs WHERE oid = ? ;
+EOSQL
+
+[get_verb_by_word]
+SELECT * FROM ge.verbs WHERE word = ? ;
+EOSQL
+
+
+## to improve this SQL query
+[get_full_verb]
+select * from ge.verbs_conjugation vc ;
+EOSQL
+
+
+## Add
+[add_rules]
+INSERT INTO ge.rules(title, contents, tips) VALUES(?, ?, ?);
+EOSQL
+
+## insert
 [add_adjective_graduation]
 INSERT INTO ge.adjective_graduation(equal_degree_ge,equal_degree_pl,comparative_ge,comparative_pl,
 highest_degree_ge,highest_degree_pl,woid)

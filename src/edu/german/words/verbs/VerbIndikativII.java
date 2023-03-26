@@ -1,32 +1,29 @@
 package edu.german.words.verbs;
 
 import java.awt.GridLayout;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import edu.german.tools.MyProperties;
+import edu.german.tools.ScreenSetup;
 import edu.german.tools.Titel;
+import edu.german.words.verbs.AddVerbTens;
 
-public class VerbKonjunktiv2 extends JPanel {
+public class VerbIndikativII extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private AddVerbTens vPreterite;
 	private AddVerbTens vPlusquamperfekt;
 	private AddVerbTens vFutur1;
 	private AddVerbTens vFutur2;
-	private static final String modus = "KONJUNKTIV II";
 
-	public VerbKonjunktiv2() {
+	public VerbIndikativII() {
+//		new ScreenSetup().
 		int row = new MyProperties("screen.properties").getIntValue("VERB_ROW");
-		TitledBorder titlePreterite = BorderFactory.createTitledBorder(Titel.setTitel("PRETERITE"));
-		vPreterite = new AddVerbTens("PRETERITE");
-		vPreterite.setBorder(titlePreterite);
-
 		TitledBorder titlePlusquamperfekt = BorderFactory.createTitledBorder(Titel.setTitel("PLUSQUAMPERFEKT"));
 		vPlusquamperfekt = new AddVerbTens("PLUSQUAMPERFEKT");
 		vPlusquamperfekt.setBorder(titlePlusquamperfekt);
@@ -40,18 +37,21 @@ public class VerbKonjunktiv2 extends JPanel {
 		vFutur2.setBorder(titlevFutur2);
 
 		GridLayout gl = new GridLayout(row, 1);
-		setLayout(gl);
-		add(vPreterite);
-		add(vPlusquamperfekt);
-		add(vFutur1);
-		add(vFutur2);
+		this.setLayout(gl);
+
+		this.add(vPlusquamperfekt);
+		this.add(vFutur1);
+		this.add(vFutur2);
 	}
 
-	public Map<String, List<Map<String, String>>> getMap() {
-		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
+	public void clearEditFields() {
+		vPlusquamperfekt.clearEditFields();
+		vFutur1.clearEditFields();
+		vFutur2.clearEditFields();
+	}
 
-		if (vPreterite.getMap() != null)
-			list.add(vPreterite.getMap());
+	public List<Map<String, String>> getList() {
+		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
 
 		if (vPlusquamperfekt.getMap() != null)
 			list.add(vPlusquamperfekt.getMap());
@@ -62,21 +62,7 @@ public class VerbKonjunktiv2 extends JPanel {
 		if (vFutur2.getMap() != null)
 			list.add(vFutur2.getMap());
 
-		System.out.println("List size: " + list.size());
-
-		if (list.size() > 0) {
-			Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
-			modusMap.put(modus, list);
-			return modusMap;
-		}
-
-		return null;
+		return list;
 	}
 
-	public void clearEditFields() {
-		vPreterite.clearEditFields();
-		vPlusquamperfekt.clearEditFields();
-		vFutur1.clearEditFields();
-		vFutur2.clearEditFields();
-	}
 }

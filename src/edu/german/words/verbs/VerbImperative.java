@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import edu.german.tools.LabelSize;
 import edu.german.tools.TextCleaner;
 import edu.german.tools.TwoEditFields;
 
@@ -18,12 +19,28 @@ public class VerbImperative extends JPanel {
 	private static final String tens = "IMPERATIV";
 
 	public VerbImperative() {
-		youS = new TwoEditFields("du", "ty");
-		youP = new TwoEditFields("ihr", "wy");
-		we = new TwoEditFields("wir", "my");
-		they = new TwoEditFields("Sie, sie", "Pan(i)/oni");
+		int labelSize = new LabelSize("du").getSize();
+		if (labelSize < new LabelSize("ty").getSize())
+			labelSize = new LabelSize("ty").getSize();
+		if (labelSize < new LabelSize("Ihr").getSize())
+			labelSize = new LabelSize("Ihr").getSize();
+		if (labelSize < new LabelSize("wy").getSize())
+			labelSize = new LabelSize("wy").getSize();
+		if (labelSize < new LabelSize("wir").getSize())
+			labelSize = new LabelSize("wir").getSize();
+		if (labelSize < new LabelSize("my").getSize())
+			labelSize = new LabelSize("my").getSize();
+		if (labelSize < new LabelSize("Sie, sie").getSize())
+			labelSize = new LabelSize("Sie, sie").getSize();
+		if (labelSize < new LabelSize("Pan(i)/oni").getSize())
+			labelSize = new LabelSize("Pan(i)/oni").getSize();
+		
+		youS = new TwoEditFields("du", labelSize, "ty", labelSize);
+		youP = new TwoEditFields("ihr", labelSize, "wy", labelSize);
+		we = new TwoEditFields("wir", labelSize, "my", labelSize);
+		they = new TwoEditFields("Sie, sie", labelSize, "Pan(i)/oni", labelSize);
 
-		GridLayout g = new GridLayout(4, 2);
+		GridLayout g = new GridLayout(6, 2, 5, 5);
 		this.setLayout(g);
 		this.add(youS);
 		this.add(youP);

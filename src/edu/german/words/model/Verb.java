@@ -1,9 +1,13 @@
 package edu.german.words.model;
 
 import java.util.List;
+import java.util.Properties;
 
+import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
+import edu.german.tools.OneEditField;
+import edu.german.words.verbs.VerbRegular;
 
 public class Verb extends Word {
 	private final String genus = "das Verb";
@@ -13,8 +17,23 @@ public class Verb extends Word {
 	private String word;
 	private String meaning;
 	private boolean irregular;
+	private String separable;
+	private Properties prop = new Properties();
 
 	public Verb() {
+
+	}
+
+	public Verb(String verb) {
+		String query = new SqlQuery().getSql("check_verb_in_main_tab");
+		boolean exist = new QueryContractor().executeQuery(query);
+
+		if (exist) {
+			query = new SqlQuery().getSql("get_woid_from_main_tab");
+			setWoid(new QueryContractor().getId(query, verb, "das Verb"));
+			query = new SqlQuery().getSql("get_oid_from_main_tab");
+			setOid(new QueryContractor().getId(query, verb, "das Verb"));
+		}
 	}
 
 	public Verb(int woid, int oid, String word, String meaning, boolean irregular) {
@@ -23,6 +42,30 @@ public class Verb extends Word {
 		this.word = word;
 		this.meaning = meaning;
 		this.irregular = irregular;
+	}
+
+	/*
+	 * NOTICE need to build verb from database if exists
+	 */
+	public Verb(String word, String regular, String separable) {
+		this.word = word;
+		String query = new QueryBuilder().getSimpleVerb(word, regular, separable);
+		
+		System.out.println(query);
+		
+		Verb verb = new QueryContractor().getSimpleVerb(query);
+
+		query = new SqlQuery().getSql("get_woid_from_main_tab");
+		System.out.println(query);
+		setWoid(new QueryContractor().getWoidByWord(query, word, "das Verb"));
+		query = new SqlQuery().getSql("check_verb");
+		System.out.println(query);
+		setOid(verb.getOid());
+		setMeaning(verb.getMeaning());
+	}
+
+	public Properties getProp() {
+		return prop;
 	}
 
 	public String getGenus() {
@@ -41,10 +84,10 @@ public class Verb extends Word {
 	public int getWoid() {
 		if (woid > 0)
 			return woid;
-		else if (word != null) {
-			String sql = new SqlQuery().getSql("check_verb");
-			return new QueryContractor().getVerb(sql, word, "woid");
-		} else
+//		else if (word != null) {
+//			String sql = new SqlQuery().getSql("check_verb");
+//			return new QueryContractor().getVerb(sql, word, "woid");
+//		} else
 			return -1;
 	}
 
@@ -61,19 +104,22 @@ public class Verb extends Word {
 
 	@Override
 	public String getMainWord() {
-		// TODO Auto-generated method stub
+		if (!word.isBlank())
+			return word;
+
 		return null;
 	}
 
 	@Override
 	public String getWord() {
-		// TODO Auto-generated method stub
+		if (!word.isBlank())
+			return word;
+
 		return null;
 	}
 
 	@Override
 	public String getMeaning() {
-		// TODO Auto-generated method stub
 		return meaning;
 	}
 
@@ -85,26 +131,26 @@ public class Verb extends Word {
 
 	@Override
 	public void setWoid(int woid) {
-		// TODO Auto-generated method stub
-
+		this.woid = woid;
+		if(woid > 0)
+			prop.setProperty("WOID", String.valueOf(woid));
 	}
 
 	@Override
 	public void setOid(int oid) {
-		// TODO Auto-generated method stub
-
+		this.oid = oid;
+		prop.setProperty("OID", String.valueOf(oid));
 	}
 
 	@Override
 	public void setMainWord(String word) {
-		// TODO Auto-generated method stub
-
+		this.word = word;
 	}
 
 	@Override
 	public void setMeaning(String meaning) {
-		// TODO Auto-generated method stub
-
+		this.meaning = meaning;
+//		prop.setProperty("MEANING", meaning);
 	}
 
 	@Override
@@ -115,14 +161,20 @@ public class Verb extends Word {
 
 	@Override
 	public void setWord(String word) {
-		// TODO Auto-generated method stub
+		this.word = word;
+		prop.setProperty("WORD", word);
+	}
 
+	/*
+	 * NOTICE these two queries below should be different
+	 */
+	public boolean isExist(String word, String regular, String trennbar) {
+		return new QueryContractor().executeQuery(new SqlQuery().getSql("check_verb"));
 	}
 
 	@Override
-	public boolean isExist(String word, String genus) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isExist(String word, String trennbar) {
+		return new QueryContractor().executeQuery(new SqlQuery().getSql("check_verb"));
 	}
 
 	@Override
@@ -135,6 +187,26 @@ public class Verb extends Word {
 		String query = new SqlQuery().getSql("get_all_verbs");
 		List<Verb> list = new QueryContractor().getVerbList(query);
 		return list;
+	}
+
+	/*
+	 * NOTICE Prepare Verb from database
+	 */
+	public static class Builder {
+		private int woid;
+		private int oid;
+		private String word;
+		private String meaning;
+		private boolean irregular;
+		private String separable;
+
+		public Builder() {
+		}
+
+		public Verb build() {
+			return new Verb();
+		}
+
 	}
 
 }

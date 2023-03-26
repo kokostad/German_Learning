@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import edu.german.tools.LabelSize;
 import edu.german.tools.TextCleaner;
 import edu.german.tools.TwoEditFields;
 
@@ -18,12 +19,28 @@ public class ImpersonalForm extends JPanel {
 	private static final String tens = "UNPERSÖNLICHE FORMEN";
 
 	public ImpersonalForm() {
-		presentInfinitive = new TwoEditFields("Infinitiv Präsens", "Czas teraźniejszy");
-		InfinitivePerfect = new TwoEditFields("Infinitiv Perfekt", "Czas dokonany");
-		participleOne = new TwoEditFields("Partizip I", "Imiesłów I");
-		participleTwo = new TwoEditFields("Partizip II", "Imiesłów II");
+		int labelSize = new LabelSize("Infinitiv Präsens").getSize();
+		if (labelSize < new LabelSize("Czas teraźniejszy").getSize())
+			labelSize = new LabelSize("Czas teraźniejszy").getSize();
+		if (labelSize < new LabelSize("Infinitiv Perfekt").getSize())
+			labelSize = new LabelSize("Infinitiv Perfekt").getSize();
+		if (labelSize < new LabelSize("Czas dokonany").getSize())
+			labelSize = new LabelSize("Czas dokonany").getSize();
+		if (labelSize < new LabelSize("Partizip I").getSize())
+			labelSize = new LabelSize("Partizip I").getSize();
+		if (labelSize < new LabelSize("Imiesłów I").getSize())
+			labelSize = new LabelSize("Imiesłów I").getSize();
+		if (labelSize < new LabelSize("Partizip II").getSize())
+			labelSize = new LabelSize("Partizip II").getSize();
+		if (labelSize < new LabelSize("Imiesłów II").getSize())
+			labelSize = new LabelSize("Imiesłów II").getSize();
 
-		GridLayout g = new GridLayout(4, 2);
+		presentInfinitive = new TwoEditFields("Infinitiv Präsens", labelSize, "Czas teraźniejszy", labelSize);
+		InfinitivePerfect = new TwoEditFields("Infinitiv Perfekt", labelSize, "Czas dokonany", labelSize);
+		participleOne = new TwoEditFields("Partizip I", labelSize, "Imiesłów I", labelSize);
+		participleTwo = new TwoEditFields("Partizip II", labelSize, "Imiesłów II", labelSize);
+
+		GridLayout g = new GridLayout(6, 1, 5, 5);
 		this.setLayout(g);
 		this.add(presentInfinitive);
 		this.add(InfinitivePerfect);

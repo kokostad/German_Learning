@@ -82,4 +82,13 @@ public class AddVerbTens extends JPanel {
 		return new TextCleaner(we.getFirst()).getWord();
 	}
 
+	public void setValue(String s1, String s2) {
+		i.setValue(s1, s2);
+	}
+
+	public void setValues() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

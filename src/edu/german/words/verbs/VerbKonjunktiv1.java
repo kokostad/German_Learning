@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import edu.german.tools.MyProperties;
 import edu.german.tools.Titel;
 
 public class VerbKonjunktiv1 extends JPanel {
@@ -21,6 +22,7 @@ public class VerbKonjunktiv1 extends JPanel {
 	private static final String modus = "KONJUNKTIV I";
 
 	public VerbKonjunktiv1() {
+		int row = new MyProperties("screen.properties").getIntValue("VERB_ROW");
 		TitledBorder titlePresent = BorderFactory.createTitledBorder(Titel.setTitel("PRESENT"));
 		vPresent = new AddVerbTens("PRESENT");
 		vPresent.setBorder(titlePresent);
@@ -37,7 +39,7 @@ public class VerbKonjunktiv1 extends JPanel {
 		vFutur2 = new AddVerbTens("FUTUR_II");
 		vFutur2.setBorder(titlevFutur2);
 
-		GridLayout gl = new GridLayout(6, 1);
+		GridLayout gl = new GridLayout(row, 1);
 		setLayout(gl);
 		add(vPresent);
 		add(vPerfekt);

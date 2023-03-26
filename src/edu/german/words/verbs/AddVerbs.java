@@ -1,25 +1,30 @@
 package edu.german.words.verbs;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import edu.german.tools.MyInternalFrame;
-import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
+import edu.german.words.NewVerb;
+import edu.german.words.model.Verb;
 
 public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private ButtonsPanel bp;
+	private JButton checkBtn;
 	private JButton clearEditFieldsBtn;
 	private JButton clearListBtn;
 	private JButton addToListBtn;
@@ -32,22 +37,29 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private List<Map<String, List<Map<String, String>>>> verbList;
 	private ExecutorService es;
 	private String mainWord;
+	private MainVerbPanel verbPanel;
+	private String separable = null; // = (VerbSeparable.untrennbare).toString();
+	private String regular = null; // = (VerbRegular.regelmäßig).toString();
 
 	public AddVerbs(int height, int width, String setTitel) {
 		super(height, width, setTitel);
 		es = Executors.newSingleThreadExecutor();
 		verbList = new LinkedList<Map<String, List<Map<String, String>>>>();
+		verbPanel = new MainVerbPanel();
 
-		bp = new ButtonsPanel("CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "SHOW_LIST", "CLEAR_LIST", "ADD_LIST_TO_REPOSITORY");
-		clearEditFieldsBtn = bp.getB1();
+		bp = new ButtonsPanel("CHECK_IN_DATABASE", "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "SHOW_LIST", "CLEAR_LIST",
+				"ADD_LIST_TO_REPOSITORY");
+		checkBtn = bp.getB1();
+		checkBtn.addActionListener(this);
+		clearEditFieldsBtn = bp.getB2();
 		clearEditFieldsBtn.addActionListener(this);
-		addToListBtn = bp.getB2();
+		addToListBtn = bp.getB3();
 		addToListBtn.addActionListener(this);
-		showListBtn = bp.getB3();
+		showListBtn = bp.getB4();
 		showListBtn.addActionListener(this);
-		clearListBtn = bp.getB4();
+		clearListBtn = bp.getB5();
 		clearListBtn.addActionListener(this);
-		addListToRepoBtn = bp.getB5();
+		addListToRepoBtn = bp.getB6();
 		addListToRepoBtn.addActionListener(this);
 
 		indikativ = new VerbIndikativ("INDIKATIV");
@@ -55,36 +67,76 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		imperativAndPartizip = new VerbImperativAndImpersonal("IMPERATIV UND UNPERSÖNLICHE FORMEN");
 
 		tb = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		new Titel();
 		tb.add("INDIKATIV", indikativ);
 		tb.add("KONJUNKTIV", konjunktiv);
 		tb.add("IMPERATIV UND UNPERSÖNLICHE FORMEN", imperativAndPartizip);
 
-		setLayout(new BorderLayout());
-		add(tb, BorderLayout.CENTER);
-		add(bp, BorderLayout.EAST);
-		add(toolBar, BorderLayout.BEFORE_FIRST_LINE);
-		setVisible(true);
-		repaint();
+		JPanel workPanel = new JPanel();
+		workPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
+		workPanel.setLayout(new BorderLayout());
+		workPanel.add(verbPanel, BorderLayout.NORTH);
+		workPanel.add(tb, BorderLayout.CENTER);
+
+		this.setLayout(new BorderLayout());
+		this.add(toolBar, BorderLayout.BEFORE_FIRST_LINE);
+		this.add(workPanel, BorderLayout.CENTER);
+		this.add(bp, BorderLayout.EAST);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
 
-		if (src == clearEditFieldsBtn) {
+		if (src == checkBtn) {
+			String verb = verbPanel.getWord();
+
+			if (!verbPanel.getSeparatable().isBlank())
+				separable = verbPanel.getSeparatable();
+			else
+				separable = "untrennbare";
+
+			if (!verbPanel.getRegular().isBlank())
+				regular = verbPanel.getRegular();
+			else
+				regular = "regelmäßig";
+
+			System.out.println(verb + " " + regular + " " + separable);
+
+			NewVerb newVerb = new NewVerb().prepareVerbFromRepository(verb, regular, separable);
+
+			System.out.println("Verb: " + newVerb.getWord() + ", meaning: " + newVerb.getMeaning() + ", woid: "
+					+ newVerb.getWoid() + ", oid: " + newVerb.getOid());
+
+			Properties prop = newVerb.getProperties();
+			
+			String var = prop.get("MODUS").toString();
+			if(var.equals("INDIKATIV")) {
+				indikativ.fieldsFilling(prop);
+			}
+
+			if(var.contains("KONJUMKTIV")) {
+				konjunktiv.fieldsFilling(prop);
+			}
+
+		}
+
+		else if (src == clearEditFieldsBtn) {
 			clearAllEditFields();
 		}
 
 		else if (src == addToListBtn) {
-			setMainWord(indikativ.getMainWord());
+			String mainWord = verbPanel.getWord();
+			if (mainWord != null)
+				setMainWord(mainWord);
+			else
+				setMainWord(indikativ.getMainWord());
 
 			Map<String, List<Map<String, String>>> indikativMap = indikativ.getMap();
 			if (indikativMap != null && indikativMap.size() > 0)
 				verbList.add(indikativMap);
 
 			Map<String, List<Map<String, String>>> konjunktivMapI = konjunktiv.getMapOne();
-			if (konjunktivMapI != null  && konjunktivMapI.size() > 0)
+			if (konjunktivMapI != null && konjunktivMapI.size() > 0)
 				verbList.add(konjunktivMapI);
 
 			Map<String, List<Map<String, String>>> konjunktivMapII = konjunktiv.getMapTwo();
@@ -99,16 +151,12 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			if (impersonal != null)
 				verbList.add(impersonal);
 
-//			showList();
-//			clearAllEditFields();
 		}
 
 		else if (src == addListToRepoBtn) {
 			if (!getMainWord().isBlank() && !verbList.isEmpty())
 				es.submit(new PutVerbIntoRepository(getMainWord(), verbList));
 
-//			verbList.clear();
-//			clearAllEditFields();
 		}
 
 		else if (src == showListBtn) {

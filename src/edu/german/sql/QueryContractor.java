@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import edu.german.dao.DbConnect;
 import edu.german.sentences.Sentence;
@@ -54,18 +55,16 @@ public class QueryContractor {
 		return false;
 	}
 
-	public boolean executeQuery(String sql, String str1, String str2, String str3) {
+	public boolean executeQuery(String sql, String str1) {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, str1);
-			ps.setString(2, str2);
-			ps.setString(3, str3);
 
 			System.out.println(ps.toString());
 
-//			return ps.execute();
+			return ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -85,7 +84,28 @@ public class QueryContractor {
 
 			System.out.println(ps.toString());
 
-//			return ps.execute();
+			return ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return false;
+	}
+
+	public boolean executeQuery(String sql, String str1, String str2, String str3) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, str1);
+			ps.setString(2, str2);
+			ps.setString(3, str3);
+
+			System.out.println(ps.toString());
+
+			return ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -103,9 +123,35 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, variable);
 
+			System.out.println(ps.toString());
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 				return rs.getInt(1);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return -1;
+	}
+
+	public int getWoid(String sql, String word, String genus) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, word);
+			ps.setString(2, genus);
+
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+				return rs.getInt("woid");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -125,6 +171,8 @@ public class QueryContractor {
 			ps.setString(1, word);
 			ps.setString(2, genus);
 
+			System.out.println(ps.toString());
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 				return rs.getInt(1);
@@ -138,6 +186,54 @@ public class QueryContractor {
 		return -1;
 	}
 
+	public int getVerbId(String sql, String word, String irregular, String separable) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, word);
+			ps.setString(2, irregular);
+			ps.setString(3, separable);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+				return rs.getInt("oid");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return -1;
+	}
+
+	public String getVerbMeaning(String sql, String word, String irregular, String separable) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, word);
+			ps.setString(2, irregular);
+			ps.setString(3, separable);
+
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+				return rs.getString("meaning");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return null;
+	}
+
 	public int getId(String sql, String word, String genus, int woid) {
 		loadDriver();
 		dbc = new DbConnect();
@@ -147,6 +243,8 @@ public class QueryContractor {
 			ps.setString(1, word);
 			ps.setString(2, genus);
 			ps.setInt(3, woid);
+
+			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -779,10 +877,14 @@ public class QueryContractor {
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 
+		System.out.println(sql);
+
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ResultSet rs = ps.executeQuery();
 			ps.setString(1, word);
 
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				return rs.getInt(value);
 			}
@@ -793,6 +895,85 @@ public class QueryContractor {
 		}
 
 		return -1;
+	}
+
+	public Verb getSimpleVerb(String sql) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		Verb verb = new Verb();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				verb.setOid(rs.getInt("oid"));
+				verb.setWord(rs.getString("word"));
+				verb.setMeaning(rs.getString("meaning"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+		return verb;
+	}
+
+	public Properties getVerbProperties(String sql, int oid) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		Properties properties = new Properties();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int count = rsmd.getColumnCount();
+
+			String[] headers = new String[count];
+			for (int i = 1, k = 0; i <= headers.length; i++, k++)
+				headers[k] = rsmd.getColumnName(i);
+
+			while (rs.next()) {
+				for (int k = 0; k < headers.length; k++)
+					if (rs.getObject(headers[k]) != null)
+						properties.put(headers[k].toUpperCase(), rs.getObject(headers[k]));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+		return properties;
+	}
+
+	public Verb getVerb(String sql, Integer woid, String type) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		Verb verb = new Verb();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, woid);
+			ps.setString(2, type);
+
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				verb.setOid(rs.getInt("oid"));
+				verb.setWoid(rs.getInt("woid"));
+				verb.setWord(rs.getString("word"));
+				verb.setMeaning(rs.getString("meaning"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+		return verb;
 	}
 
 	public List<Verb> getVerbList(String sql) {
@@ -889,7 +1070,7 @@ public class QueryContractor {
 			ps.setString(1, sentenceStr);
 			ps.setString(2, meaningStr);
 
-			System.out.println(ps.toString());
+//			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -909,5 +1090,30 @@ public class QueryContractor {
 			dbc.closeConnection(con);
 		}
 		return sentence;
+	}
+
+	public int getWoidByWord(String query, String word, String genus) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, word);
+			ps.setString(2, genus);
+
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return rs.getInt("woid");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return -1;
 	}
 }

@@ -3,6 +3,7 @@ package edu.german.words.verbs;
 import java.awt.BorderLayout;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -39,6 +40,10 @@ public class VerbKonjunktiv extends JPanel {
 	public void clearEditFields() {
 		konjunktiv1.clearEditFields();
 		konjunktiv2.clearEditFields();
+	}
+
+	public void fieldsFilling(Properties properties) {
+		System.out.println(properties.toString());
 	}
 
 }

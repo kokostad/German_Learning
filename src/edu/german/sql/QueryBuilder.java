@@ -128,4 +128,21 @@ public class QueryBuilder {
 		return sb.toString();
 	}
 
+	public String getSimpleVerb(String word, String regular, String separable) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT * FROM ge.verbs WHERE word = '" + word + "' ");
+
+		if (regular != null || separable != null) {
+			if (regular != null)
+				sb.append(" AND irregular = '" + regular + "' ");
+
+			if (separable != null)
+				sb.append(" AND separable = '" + separable + "' ");
+		}
+
+		sb.append(";");
+
+		return sb.toString();
+	}
+
 }
