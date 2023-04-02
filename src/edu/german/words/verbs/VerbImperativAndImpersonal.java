@@ -2,10 +2,12 @@ package edu.german.words.verbs;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -69,6 +71,13 @@ public class VerbImperativAndImpersonal extends JPanel {
 	public void clearEditFields() {
 		imperative.clearEditFields();
 		impersonal.clearEditFields();
+	}
+
+	public Collection<? extends Properties> getPropertiesList() {
+		List<Properties> list = new LinkedList<>();
+		list.add(imperative.getProperties());
+		list.add(impersonal.getProperties());
+		return list;
 	}
 
 }

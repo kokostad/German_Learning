@@ -34,7 +34,8 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private VerbIndikativ indikativ;
 	private VerbKonjunktiv konjunktiv;
 	private VerbImperativAndImpersonal imperativAndPartizip;
-	private List<Map<String, List<Map<String, String>>>> verbList;
+//	private List<Map<String, List<Map<String, String>>>> verbList;
+	private List<NewVerb> verbList;
 	private ExecutorService es;
 	private String mainWord;
 	private MainVerbPanel verbPanel;
@@ -44,7 +45,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	public AddVerbs(int height, int width, String setTitel) {
 		super(height, width, setTitel);
 		es = Executors.newSingleThreadExecutor();
-		verbList = new LinkedList<Map<String, List<Map<String, String>>>>();
+		verbList = new LinkedList<NewVerb>();
 		verbPanel = new MainVerbPanel();
 
 		bp = new ButtonsPanel("CHECK_IN_DATABASE", "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "SHOW_LIST", "CLEAR_LIST",
@@ -88,33 +89,23 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		Object src = e.getSource();
 
 		if (src == checkBtn) {
-			String verb = verbPanel.getWord();
+			// NOTICE to improve
+			String word = verbPanel.getWord();
+			separable = verbPanel.getSeparatable();
+			regular = verbPanel.getRegular();
 
-			if (!verbPanel.getSeparatable().isBlank())
-				separable = verbPanel.getSeparatable();
-			else
-				separable = "untrennbare";
-
-			if (!verbPanel.getRegular().isBlank())
-				regular = verbPanel.getRegular();
-			else
-				regular = "regelmäßig";
-
-			System.out.println(verb + " " + regular + " " + separable);
-
-			NewVerb newVerb = new NewVerb().prepareVerbFromRepository(verb, regular, separable);
-
-			System.out.println("Verb: " + newVerb.getWord() + ", meaning: " + newVerb.getMeaning() + ", woid: "
-					+ newVerb.getWoid() + ", oid: " + newVerb.getOid());
-
+			NewVerb newVerb = new NewVerb().prepareVerbFromRepository(word, regular, separable);
 			Properties prop = newVerb.getProperties();
-			
-			String var = prop.get("MODUS").toString();
-			if(var.equals("INDIKATIV")) {
+
+			String var = null;
+			if(prop.containsKey("MODUS"))
+				var = prop.get("MODUS").toString();
+
+			if (var != null && var.equals("INDIKATIV")) {
 				indikativ.fieldsFilling(prop);
 			}
 
-			if(var.contains("KONJUMKTIV")) {
+			if (var != null && var.contains("KONJUMKTIV")) {
 				konjunktiv.fieldsFilling(prop);
 			}
 
@@ -125,38 +116,50 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addToListBtn) {
-			String mainWord = verbPanel.getWord();
-			if (mainWord != null)
-				setMainWord(mainWord);
-			else
-				setMainWord(indikativ.getMainWord());
+			List<Properties> propertiesList = new LinkedList<>();
+			separable = verbPanel.getSeparatable();
+			regular = verbPanel.getRegular();
 
-			Map<String, List<Map<String, String>>> indikativMap = indikativ.getMap();
-			if (indikativMap != null && indikativMap.size() > 0)
-				verbList.add(indikativMap);
+			propertiesList.addAll(indikativ.getPropertiesList());
+			propertiesList.addAll(konjunktiv.getPropertiesList());
+			propertiesList.addAll(imperativAndPartizip.getPropertiesList());
 
-			Map<String, List<Map<String, String>>> konjunktivMapI = konjunktiv.getMapOne();
-			if (konjunktivMapI != null && konjunktivMapI.size() > 0)
-				verbList.add(konjunktivMapI);
+			propertiesList.forEach(prop -> System.out.println(prop));
 
-			Map<String, List<Map<String, String>>> konjunktivMapII = konjunktiv.getMapTwo();
-			if (konjunktivMapII != null)
-				verbList.add(konjunktivMapII);
-
-			Map<String, List<Map<String, String>>> imperative = imperativAndPartizip.getMapImperativ();
-			if (imperative != null)
-				verbList.add(imperative);
-
-			Map<String, List<Map<String, String>>> impersonal = imperativAndPartizip.getMapImpersonal();
-			if (impersonal != null)
-				verbList.add(impersonal);
-
+//			String mainWord = verbPanel.getWord();
+//			if (mainWord != null)
+//				setMainWord(mainWord);
+//			else
+//				setMainWord(indikativ.getMainWord());
+//
+//			Map<String, List<Map<String, String>>> indikativMap = indikativ.getMap();
+//			if (indikativMap != null && indikativMap.size() > 0)
+//				verbList.add(indikativMap);
+//
+//			Map<String, List<Map<String, String>>> konjunktivMapI = konjunktiv.getMapOne();
+//			if (konjunktivMapI != null && konjunktivMapI.size() > 0)
+//				verbList.add(konjunktivMapI);
+//
+//			Map<String, List<Map<String, String>>> konjunktivMapII = konjunktiv.getMapTwo();
+//			if (konjunktivMapII != null)
+//				verbList.add(konjunktivMapII);
+//
+//			Map<String, List<Map<String, String>>> imperative = imperativAndPartizip.getMapImperativ();
+//			if (imperative != null)
+//				verbList.add(imperative);
+//
+//			Map<String, List<Map<String, String>>> impersonal = imperativAndPartizip.getMapImpersonal();
+//			if (impersonal != null)
+//				verbList.add(impersonal);
+//
 		}
 
 		else if (src == addListToRepoBtn) {
-			if (!getMainWord().isBlank() && !verbList.isEmpty())
-				es.submit(new PutVerbIntoRepository(getMainWord(), verbList));
-
+			if (!verbList.isEmpty()) {
+				es.submit(new PutVerbIntoRepository(verbList));
+			}
+				
+//				es.submit(new PutVerbIntoRepository(getMainWord(), verbList));
 		}
 
 		else if (src == showListBtn) {
@@ -178,22 +181,22 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	}
 
 	private void showList() {
-		verbList.forEach(map -> {
-			map.forEach((key, map2) -> {
-				map2.forEach(value -> showMap(key, value));
-			});
-		});
+//		verbList.forEach(map -> {
+//			map.forEach((key, map2) -> {
+//				map2.forEach(value -> showMap(key, value));
+//			});
+//		});
 	}
 
-	private void showMap(String modus, Map<String, String> value) {
-		String tens = "";
-		if (value.containsKey("TENS")) {
-			tens = value.get("TENS");
-			System.out.println("MODUS: " + modus + ", TENS: " + tens);
-			value.remove("TENS");
-		}
-		value.forEach((k, v) -> System.out.println("PERSON: " + k + ", VERB: " + v));
-	}
+//	private void showMap(String modus, Map<String, String> value) {
+//		String tens = "";
+//		if (value.containsKey("TENS")) {
+//			tens = value.get("TENS");
+//			System.out.println("MODUS: " + modus + ", TENS: " + tens);
+//			value.remove("TENS");
+//		}
+//		value.forEach((k, v) -> System.out.println("PERSON: " + k + ", VERB: " + v));
+//	}
 
 	private void clearAllEditFields() {
 		indikativ.clearEditFields();

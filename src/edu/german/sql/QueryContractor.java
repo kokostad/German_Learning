@@ -926,7 +926,9 @@ public class QueryContractor {
 		Properties properties = new Properties();
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, oid);
 			ResultSet rs = ps.executeQuery();
+			
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int count = rsmd.getColumnCount();
 
@@ -1108,6 +1110,30 @@ public class QueryContractor {
 				return rs.getInt("woid");
 			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return -1;
+	}
+
+	public int getVoid(String sql, String word, String irregular, String separable) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, word);
+			ps.setString(2, irregular);
+			ps.setString(3, separable);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return rs.getInt("void");
+			}
+
+			System.out.println(ps.toString());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

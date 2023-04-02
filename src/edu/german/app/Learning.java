@@ -87,8 +87,8 @@ public class Learning extends JFrame implements ActionListener {
 		miSentencesAddition = new JMenuItem(Titel.setTitel("SENTENCES_ADDITION"));
 		miSentencesAddition.addActionListener(this);
 
-		JMenu mAddWords = new JMenu(Titel.setTitel("WORDS_ADDITION"));
-		miAddVerbs = new JMenuItem(Titel.setTitel("ADD_VERBS"));
+		JMenu mAddWords = new JMenu(Titel.setTitel("WORDS_ADDITION_AND_EDITION"));
+		miAddVerbs = new JMenuItem(Titel.setTitel("EDIT_AND_ADD_VERBS"));
 		miAddVerbs.addActionListener(this);
 		miAddAdjective = new JMenuItem(Titel.setTitel("ADD_ADJECTIVE"));
 		miAddAdjective.addActionListener(this);

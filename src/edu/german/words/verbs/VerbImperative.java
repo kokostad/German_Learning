@@ -1,8 +1,12 @@
 package edu.german.words.verbs;
 
 import java.awt.GridLayout;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.JPanel;
 
@@ -34,7 +38,7 @@ public class VerbImperative extends JPanel {
 			labelSize = new LabelSize("Sie, sie").getSize();
 		if (labelSize < new LabelSize("Pan(i)/oni").getSize())
 			labelSize = new LabelSize("Pan(i)/oni").getSize();
-		
+
 		youS = new TwoEditFields("du", labelSize, "ty", labelSize);
 		youP = new TwoEditFields("ihr", labelSize, "wy", labelSize);
 		we = new TwoEditFields("wir", labelSize, "my", labelSize);
@@ -74,5 +78,21 @@ public class VerbImperative extends JPanel {
 		youP.clear();
 		we.clear();
 		they.clear();
+	}
+
+	public Properties getProperties() {
+		Properties properties = new Properties();
+		properties.put("DU", new TextCleaner(youS.getFirst()).getWord());
+		properties.put("TY", new TextCleaner(youS.getSecond()).getWord());
+		properties.put("WIR", new TextCleaner(we.getFirst()).getWord());
+		properties.put("MY", new TextCleaner(we.getSecond()).getWord());
+		properties.put("IHR", new TextCleaner(youP.getFirst()).getWord());
+		properties.put("WY", new TextCleaner(youP.getSecond()).getWord());
+		properties.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
+		properties.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
+		properties.put("TENS", getTens());
+		properties.put("MODUS", "IMPERATIV");
+
+		return properties;
 	}
 }

@@ -3,6 +3,7 @@ package edu.german.words.verbs;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.JPanel;
 
@@ -75,4 +76,21 @@ public class ImpersonalForm extends JPanel {
 		participleOne.clear();
 		participleTwo.clear();
 	}
+
+	public Properties getProperties() {
+		Properties properties = new Properties();
+		properties.put("PRESENT_INFINITIVE", new TextCleaner(presentInfinitive.getFirst()).getWord());
+		properties.put("CZAS_TERAZNIEJSZ", new TextCleaner(presentInfinitive.getSecond()).getWord());
+		properties.put("INFINITIVE_PERFECT", new TextCleaner(InfinitivePerfect.getFirst()).getWord());
+		properties.put("CZAS_DOKONANY", new TextCleaner(InfinitivePerfect.getSecond()).getWord());
+		properties.put("PARTICIPLE_I", new TextCleaner(participleOne.getFirst()).getWord());
+		properties.put("IMIESLOW_I", new TextCleaner(participleOne.getSecond()).getWord());
+		properties.put("PARTICIPLE_II", new TextCleaner(participleTwo.getFirst()).getWord());
+		properties.put("IMIESLOW_II", new TextCleaner(participleTwo.getSecond()).getWord());
+		properties.put("TENS", getTens());
+		properties.put("MODUS", "IMPERSONAL");
+
+		return properties;
+	}
+
 }

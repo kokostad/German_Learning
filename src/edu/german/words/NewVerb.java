@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
-import edu.german.words.model.Verb;
 
 public class NewVerb {
 	private static final String genus = "das Verb";
@@ -86,9 +85,9 @@ public class NewVerb {
 		this.properties = properties;
 	}
 
-	public void prepareProperties() {
-		String sql = "select * from ge.verbs_conjugation where wir = 'lernen' ;";
-		setProperties(new QueryContractor().getVerbProperties(sql, getOid()));
+	public void prepareProperties(int woid, int oid, String word, String meaning, String irregular, String separable) {
+		String sql = new SqlQuery().getSql("get_full_verb");
+		setProperties(new QueryContractor().getVerbProperties(sql, oid));
 	}
 
 	public NewVerb prepareVerbFromRepository(String word, String irregular, String separable) {
@@ -105,7 +104,7 @@ public class NewVerb {
 			setMeaning(new QueryContractor().getVerbMeaning(query, word, irregular, separable));
 		}
 
-		prepareProperties();
+		prepareProperties(woid, getOid(), word, meaning, irregular, separable);
 
 		return new NewVerb(woid, oid, word, meaning, irregular, separable, getProperties());
 	}
@@ -163,4 +162,8 @@ public class NewVerb {
 
 	}
 
+	public void showVerb() {
+		System.out.println(word + " " + meaning + " " + oid + " "  + oid);
+		System.out.println(properties.toString());
+	}
 }

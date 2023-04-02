@@ -5,29 +5,29 @@ import java.util.Map;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
+import edu.german.words.NewVerb;
 
 public class PutVerbIntoRepository implements Runnable {
 	private static final String genus = "das Verb";
-	private List<Map<String, List<Map<String, String>>>> verbList;
-	private String mainWord;
+	private List<NewVerb> verbList;
 	private int oid = -1;
 	private int woid = -1;
 
 	// TODO add fields into database and new query for "imperative" and "impersonal
 	// forms"
-	public PutVerbIntoRepository(String mainWord, List<Map<String, List<Map<String, String>>>> verbList) {
-		this.mainWord = mainWord;
+	public PutVerbIntoRepository(List<NewVerb> verbList) {
 		this.verbList = verbList;
 	}
 
 	@Override
 	public void run() {
-		verbList.forEach(m -> {
-			m.forEach((modus, list) -> {
-				list.forEach(m2 -> {
-					prepareVerb(modus, m2);
-				});
-			});
+		verbList.forEach(verb -> {
+			verb.showVerb();
+//			m.forEach((modus, list) -> {
+//				list.forEach(m2 -> {
+//					prepareVerb(modus, m2);
+//				});
+//			});
 		});
 	}
 
@@ -54,8 +54,10 @@ public class PutVerbIntoRepository implements Runnable {
 			System.out.println("check_if_word_exists");
 			setWoid(checkWoid());
 
-			if (getWoid() == -1 && mainWord != null)
-				new QueryContractor().addNewWord(new SqlQuery().getSql("add_new_word"), mainWord, my, genus);
+			if (getWoid() == -1) // && mainWord != null)
+				new QueryContractor().addNewWord(new SqlQuery().getSql("add_new_word"), wir, my, genus);
+
+//			new QueryContractor().addNewWord(new SqlQuery().getSql("add_new_word"), mainWord, my, genus);
 
 			setOid(new QueryContractor()
 					.getVerbId(new SqlQuery().getSql("check_verbs_conjugation"), getWoid(), tens));
@@ -85,7 +87,7 @@ public class PutVerbIntoRepository implements Runnable {
 				System.out.println("check_verbs_impersonal");
 				String sql = new SqlQuery().getSql("check_verbs_impersonal");
 				int vid = new QueryContractor()
-						.getId(sql, mainWord, getWoid(), "UNPERSÖNLICHE FORMEN", "UNPERSÖNLICHE FORMEN");
+						.getId(sql, null, getWoid(), "UNPERSÖNLICHE FORMEN", "UNPERSÖNLICHE FORMEN");
 
 				System.out.println(vid);
 
@@ -117,6 +119,6 @@ public class PutVerbIntoRepository implements Runnable {
 	}
 
 	private int checkWoid() {
-		return new QueryContractor().getId(new SqlQuery().getSql("check_word"), mainWord, "das Verb");
+		return new QueryContractor().getId(new SqlQuery().getSql("check_word"), null, "das Verb");
 	}
 }

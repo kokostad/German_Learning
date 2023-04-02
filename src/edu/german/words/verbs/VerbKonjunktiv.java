@@ -1,6 +1,7 @@
 package edu.german.words.verbs;
 
 import java.awt.BorderLayout;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -10,12 +11,13 @@ import javax.swing.JTabbedPane;
 
 public class VerbKonjunktiv extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private String modus;
 	private JTabbedPane tb;
 	private VerbKonjunktiv1 konjunktiv1;
 	private VerbKonjunktiv2 konjunktiv2;
 
-	public VerbKonjunktiv(String string) {
-
+	public VerbKonjunktiv(String modus) {
+		this.modus = modus;
 		konjunktiv1 = new VerbKonjunktiv1();
 		konjunktiv2 = new VerbKonjunktiv2();
 
@@ -44,6 +46,21 @@ public class VerbKonjunktiv extends JPanel {
 
 	public void fieldsFilling(Properties properties) {
 		System.out.println(properties.toString());
+		getFromProperties(properties, "KONJUNKTIV I");
+		getFromProperties(properties, "KONJUNKTIV II");
+	}
+
+	private void getFromProperties(Properties properties, String requirement) {
+		Object var = properties.get(requirement);
+		System.out.println(requirement + ": " + var.toString());
+	}
+
+	public List<Properties> getPropertiesList() {
+		List<Properties> list = new LinkedList<>();
+		list.addAll(konjunktiv1.getProperiesList());
+		list.addAll(konjunktiv2.getProperiesList());
+
+		return list;
 	}
 
 }

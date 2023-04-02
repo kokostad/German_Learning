@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import java.util.Properties;
 
 import edu.german.tools.MyProperties;
 import edu.german.tools.Titel;
@@ -24,19 +25,19 @@ public class VerbKonjunktiv2 extends JPanel {
 	public VerbKonjunktiv2() {
 		int row = new MyProperties("screen.properties").getIntValue("VERB_ROW");
 		TitledBorder titlePreterite = BorderFactory.createTitledBorder(Titel.setTitel("PRETERITE"));
-		vPreterite = new AddVerbTens("PRETERITE");
+		vPreterite = new AddVerbTens("PRETERITE", modus);
 		vPreterite.setBorder(titlePreterite);
 
 		TitledBorder titlePlusquamperfekt = BorderFactory.createTitledBorder(Titel.setTitel("PLUSQUAMPERFEKT"));
-		vPlusquamperfekt = new AddVerbTens("PLUSQUAMPERFEKT");
+		vPlusquamperfekt = new AddVerbTens("PLUSQUAMPERFEKT", modus);
 		vPlusquamperfekt.setBorder(titlePlusquamperfekt);
 
 		TitledBorder titleFutur1 = BorderFactory.createTitledBorder(Titel.setTitel("FUTUR_I"));
-		vFutur1 = new AddVerbTens("FUTUR_I");
+		vFutur1 = new AddVerbTens("FUTUR_I", modus);
 		vFutur1.setBorder(titleFutur1);
 
 		TitledBorder titlevFutur2 = BorderFactory.createTitledBorder(Titel.setTitel("FUTUR_II"));
-		vFutur2 = new AddVerbTens("FUTUR_II");
+		vFutur2 = new AddVerbTens("FUTUR_II", modus);
 		vFutur2.setBorder(titlevFutur2);
 
 		GridLayout gl = new GridLayout(row, 1);
@@ -78,5 +79,15 @@ public class VerbKonjunktiv2 extends JPanel {
 		vPlusquamperfekt.clearEditFields();
 		vFutur1.clearEditFields();
 		vFutur2.clearEditFields();
+	}
+
+	public List<Properties> getProperiesList() {
+		List<Properties> list = new LinkedList<>();
+		list.add(vPreterite.getProperties());
+		list.add(vPlusquamperfekt.getProperties());
+		list.add(vFutur1.getProperties());
+		list.add(vFutur2.getProperties());
+
+		return list;
 	}
 }

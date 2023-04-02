@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -24,19 +25,19 @@ public class VerbKonjunktiv1 extends JPanel {
 	public VerbKonjunktiv1() {
 		int row = new MyProperties("screen.properties").getIntValue("VERB_ROW");
 		TitledBorder titlePresent = BorderFactory.createTitledBorder(Titel.setTitel("PRESENT"));
-		vPresent = new AddVerbTens("PRESENT");
+		vPresent = new AddVerbTens("PRESENT", modus);
 		vPresent.setBorder(titlePresent);
 
 		TitledBorder titlePerfekt = BorderFactory.createTitledBorder(Titel.setTitel("PERFEKT"));
-		vPerfekt = new AddVerbTens("PERFEKT");
+		vPerfekt = new AddVerbTens("PERFEKT", modus);
 		vPerfekt.setBorder(titlePerfekt);
 
 		TitledBorder titleFutur1 = BorderFactory.createTitledBorder(Titel.setTitel("FUTUR_I"));
-		vFutur1 = new AddVerbTens("FUTUR_I");
+		vFutur1 = new AddVerbTens("FUTUR_I", modus);
 		vFutur1.setBorder(titleFutur1);
 
 		TitledBorder titlevFutur2 = BorderFactory.createTitledBorder(Titel.setTitel("FUTUR_II"));
-		vFutur2 = new AddVerbTens("FUTUR_II");
+		vFutur2 = new AddVerbTens("FUTUR_II", modus);
 		vFutur2.setBorder(titlevFutur2);
 
 		GridLayout gl = new GridLayout(row, 1);
@@ -78,6 +79,16 @@ public class VerbKonjunktiv1 extends JPanel {
 		vPerfekt.clearEditFields();
 		vFutur1.clearEditFields();
 		vFutur2.clearEditFields();
+	}
+
+	public List<Properties> getProperiesList() {
+		List<Properties> list = new LinkedList<>();
+		list.add(vPresent.getProperties());
+		list.add(vPerfekt.getProperties());
+		list.add(vFutur1.getProperties());
+		list.add(vFutur2.getProperties());
+
+		return list;
 	}
 
 }

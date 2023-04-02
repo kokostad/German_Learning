@@ -30,6 +30,10 @@ EOSQL
 SELECT meaning FROM ge.verbs WHERE word = ? AND irregular = ? AND separable = ? LIMIT 1;
 EOSQL
 
+[get_full_verb]
+select * from ge.verbs_conjugation where void = ? ;
+EOSQL
+
 [check_verb_in_main_tab]
 SELECT * FROM ge.all_words_objects WHERE word = ? AND genus = ?;
 EOSQL
@@ -180,7 +184,7 @@ EOSQL
 
 
 ## to improve this SQL query
-[get_full_verb]
+[get_all_full_verb]
 select * from ge.verbs_conjugation vc ;
 EOSQL
 

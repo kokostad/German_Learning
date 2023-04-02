@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -12,25 +13,24 @@ import javax.swing.border.TitledBorder;
 import edu.german.tools.MyProperties;
 import edu.german.tools.Titel;
 
-
 public class VerbIndikativI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private AddVerbTens vPresent;
 	private AddVerbTens vPreterite;
 	private AddVerbTens vPerfekt;
 
-	public VerbIndikativI() {
+	public VerbIndikativI(String modus) {
 		int row = new MyProperties("screen.properties").getIntValue("VERB_ROW");
 		TitledBorder titlePresent = BorderFactory.createTitledBorder(Titel.setTitel("PRESENT"));
-		vPresent = new AddVerbTens("PRESENT");
+		vPresent = new AddVerbTens("PRESENT", modus);
 		vPresent.setBorder(titlePresent);
 
 		TitledBorder titlePreterite = BorderFactory.createTitledBorder(Titel.setTitel("PRETERITE"));
-		vPreterite = new AddVerbTens("PRETERITE");
+		vPreterite = new AddVerbTens("PRETERITE", modus);
 		vPreterite.setBorder(titlePreterite);
 
 		TitledBorder titlePerfekt = BorderFactory.createTitledBorder(Titel.setTitel("PERFEKT"));
-		vPerfekt = new AddVerbTens("PERFEKT");
+		vPerfekt = new AddVerbTens("PERFEKT", modus);
 		vPerfekt.setBorder(titlePerfekt);
 
 		GridLayout gl = new GridLayout(row, 1);
@@ -39,6 +39,15 @@ public class VerbIndikativI extends JPanel {
 		this.add(vPresent);
 		this.add(vPreterite);
 		this.add(vPerfekt);
+	}
+
+	public List<Properties> getProperitesList() {
+		List<Properties> list = new LinkedList<>();
+		list.add(vPresent.getProperties());
+		list.add(vPreterite.getProperties());
+		list.add(vPerfekt.getProperties());
+
+		return list;
 	}
 
 	public void clearEditFields() {
@@ -62,9 +71,11 @@ public class VerbIndikativI extends JPanel {
 		return list;
 	}
 
-	public void setPresent() {
-		vPresent.setValues();
-		
+	public void setPresent(Properties properties) {
+		System.out.println("VerbIndikativI -> " + properties.toString());
+		vPresent.setValues(properties);
+		vPreterite.setValues(properties);
+		vPerfekt.setValues(properties);
 	}
 
 }

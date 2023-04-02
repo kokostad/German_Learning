@@ -27,7 +27,7 @@ public class MainVerbPanel extends JPanel {
 				.withWidth(220)
 				.build();
 
-		separatable = new MyComboBox("Rozłączny/nierozłączny: ",
+		separatable = new MyComboBox("Nierozłączny/rozłączny: ",
 				new MyProperties(CFG_FILE).getValuesArray("VERB_SEPARABLE"));
 		regular = new MyComboBox("Regularny/nieregularny: ",
 				new MyProperties(CFG_FILE).getValuesArray("VERB_REGULAR"));

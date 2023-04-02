@@ -21,19 +21,18 @@ public class VerbIndikativII extends JPanel {
 	private AddVerbTens vFutur1;
 	private AddVerbTens vFutur2;
 
-	public VerbIndikativII() {
-//		new ScreenSetup().
+	public VerbIndikativII(String modus) {
 		int row = new MyProperties("screen.properties").getIntValue("VERB_ROW");
 		TitledBorder titlePlusquamperfekt = BorderFactory.createTitledBorder(Titel.setTitel("PLUSQUAMPERFEKT"));
-		vPlusquamperfekt = new AddVerbTens("PLUSQUAMPERFEKT");
+		vPlusquamperfekt = new AddVerbTens("PLUSQUAMPERFEKT", modus);
 		vPlusquamperfekt.setBorder(titlePlusquamperfekt);
 
 		TitledBorder titleFutur1 = BorderFactory.createTitledBorder(Titel.setTitel("FUTUR_I"));
-		vFutur1 = new AddVerbTens("FUTUR_I");
+		vFutur1 = new AddVerbTens("FUTUR_I", modus);
 		vFutur1.setBorder(titleFutur1);
 
 		TitledBorder titlevFutur2 = BorderFactory.createTitledBorder(Titel.setTitel("FUTUR_II"));
-		vFutur2 = new AddVerbTens("FUTUR_II");
+		vFutur2 = new AddVerbTens("FUTUR_II", modus);
 		vFutur2.setBorder(titlevFutur2);
 
 		GridLayout gl = new GridLayout(row, 1);
@@ -42,6 +41,15 @@ public class VerbIndikativII extends JPanel {
 		this.add(vPlusquamperfekt);
 		this.add(vFutur1);
 		this.add(vFutur2);
+	}
+
+	public List<Properties> getProperitesList() {
+		List<Properties> list = new LinkedList<>();
+		list.add(vPlusquamperfekt.getProperties());
+		list.add(vFutur1.getProperties());
+		list.add(vFutur2.getProperties());
+
+		return list;
 	}
 
 	public void clearEditFields() {
@@ -63,6 +71,14 @@ public class VerbIndikativII extends JPanel {
 			list.add(vFutur2.getMap());
 
 		return list;
+	}
+
+	public void setPresent(Properties properties) {
+		System.out.println("VerbIndikativII -> " + properties.toString());
+
+		vPlusquamperfekt.setValues(properties);
+		vFutur1.setValues(properties);
+		vFutur2.setValues(properties);
 	}
 
 }
