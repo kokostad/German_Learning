@@ -22,6 +22,11 @@ import edu.german.words.AddNewWordIntoDatabase;
 import edu.german.words.NewVerb;
 import edu.german.words.model.Verb;
 
+/**
+ * AddVerbs.java
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ *
+ */
 public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private ButtonsPanel bp;
@@ -35,7 +40,6 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private VerbIndikativ indikativ;
 	private VerbKonjunktiv konjunktiv;
 	private VerbImperativAndImpersonal imperativAndPartizip;
-//	private List<Map<String, List<Map<String, String>>>> verbList;
 	private String word;
 	private NewVerb newVerb ;
 	private NewVerb verb;
@@ -43,10 +47,9 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private List<Properties> propertiesList;
 	private ExecutorService es;
 	private String mainWord;
-//	private NewVerb newVerb;
 	private MainVerbPanel verbPanel;
-	private String separable = null; // = (VerbSeparable.untrennbare).toString();
-	private String regular = null; // = (VerbRegular.regelmäßig).toString();
+	private String separable = null;
+	private String regular = null;
 	private int oid;
 
 	public AddVerbs(int height, int width, String setTitel) {
@@ -98,7 +101,6 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		Object src = e.getSource();
 
 		if (src == checkBtn) {
-			// NOTICE to improve
 			word = verbPanel.getWord();
 			separable = verbPanel.getSeparatable();
 			regular = verbPanel.getRegular();
@@ -115,7 +117,6 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			List<Properties> propList = verb.getPropertiesList();
 			
 			propList.forEach(prop -> showPorperties(prop));
-			
 		}
 
 		
@@ -208,16 +209,6 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 //			});
 //		});
 	}
-
-//	private void showMap(String modus, Map<String, String> value) {
-//		String tens = "";
-//		if (value.containsKey("TENS")) {
-//			tens = value.get("TENS");
-//			System.out.println("MODUS: " + modus + ", TENS: " + tens);
-//			value.remove("TENS");
-//		}
-//		value.forEach((k, v) -> System.out.println("PERSON: " + k + ", VERB: " + v));
-//	}
 
 	private void clearAllEditFields() {
 		indikativ.clearEditFields();
