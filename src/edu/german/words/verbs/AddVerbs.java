@@ -18,6 +18,7 @@ import javax.swing.JTabbedPane;
 
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.buttons.ButtonsPanel;
+import edu.german.words.AddNewWordIntoDatabase;
 import edu.german.words.NewVerb;
 import edu.german.words.model.Verb;
 
@@ -35,15 +36,23 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private VerbKonjunktiv konjunktiv;
 	private VerbImperativAndImpersonal imperativAndPartizip;
 //	private List<Map<String, List<Map<String, String>>>> verbList;
+	private String word;
+	private NewVerb newVerb ;
+	private NewVerb verb;
 	private List<NewVerb> verbList;
+	private List<Properties> propertiesList;
 	private ExecutorService es;
 	private String mainWord;
+//	private NewVerb newVerb;
 	private MainVerbPanel verbPanel;
 	private String separable = null; // = (VerbSeparable.untrennbare).toString();
 	private String regular = null; // = (VerbRegular.regelmäßig).toString();
+	private int oid;
 
 	public AddVerbs(int height, int width, String setTitel) {
 		super(height, width, setTitel);
+		propertiesList = new LinkedList<>();
+		oid = -1;
 		es = Executors.newSingleThreadExecutor();
 		verbList = new LinkedList<NewVerb>();
 		verbPanel = new MainVerbPanel();
@@ -90,33 +99,31 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 
 		if (src == checkBtn) {
 			// NOTICE to improve
-			String word = verbPanel.getWord();
+			word = verbPanel.getWord();
 			separable = verbPanel.getSeparatable();
 			regular = verbPanel.getRegular();
+			
+			verb = new NewVerb.Builder()
+					.withWord(word)
+					.withIrregular(regular)
+					.withSeparable(separable)
+					.withOid(-1)
+					.withPropertiesList(null)
+					.build();
 
-			NewVerb newVerb = new NewVerb().prepareVerbFromRepository(word, regular, separable);
-			Properties prop = newVerb.getProperties();
-
-			String var = null;
-			if(prop.containsKey("MODUS"))
-				var = prop.get("MODUS").toString();
-
-			if (var != null && var.equals("INDIKATIV")) {
-				indikativ.fieldsFilling(prop);
-			}
-
-			if (var != null && var.contains("KONJUMKTIV")) {
-				konjunktiv.fieldsFilling(prop);
-			}
-
+			int verbId = verb.getOid();
+			List<Properties> propList = verb.getPropertiesList();
+			
+			propList.forEach(prop -> showPorperties(prop));
+			
 		}
 
+		
 		else if (src == clearEditFieldsBtn) {
 			clearAllEditFields();
 		}
 
 		else if (src == addToListBtn) {
-			List<Properties> propertiesList = new LinkedList<>();
 			separable = verbPanel.getSeparatable();
 			regular = verbPanel.getRegular();
 
@@ -124,8 +131,17 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			propertiesList.addAll(konjunktiv.getPropertiesList());
 			propertiesList.addAll(imperativAndPartizip.getPropertiesList());
 
-			propertiesList.forEach(prop -> System.out.println(prop));
+			verb = new NewVerb.Builder()
+					.withWord(word)
+					.withIrregular(regular)
+					.withSeparable(separable)
+					.withOid(newVerb.getOid())
+					.withPropertiesList(propertiesList)
+					.build();
 
+
+			verbList.add(verb);
+			
 //			String mainWord = verbPanel.getWord();
 //			if (mainWord != null)
 //				setMainWord(mainWord);
@@ -155,10 +171,15 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == addListToRepoBtn) {
+			System.out.println(getOid());
+			if (getOid() > -1) {
+				verbList.forEach(verb -> System.out.println(verb.getOid()));
+			}
+
 			if (!verbList.isEmpty()) {
 				es.submit(new PutVerbIntoRepository(verbList));
 			}
-				
+
 //				es.submit(new PutVerbIntoRepository(getMainWord(), verbList));
 		}
 
@@ -204,4 +225,24 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		imperativAndPartizip.clearEditFields();
 	}
 
+	public int getOid() {
+		return oid;
+	}
+
+	public void setOid(int oid) {
+		this.oid = oid;
+	}
+
+	private void showPorperties(Properties prop) {
+		String var = null;
+
+		if (prop.containsKey("MODUS"))
+			var = prop.get("MODUS").toString();
+
+		if (var != null && var.equals("INDIKATIV"))
+			indikativ.fieldsFilling(prop);
+
+		if (var != null && var.contains("KONJUMKTIV"))
+			konjunktiv.fieldsFilling(prop);
+	}
 }

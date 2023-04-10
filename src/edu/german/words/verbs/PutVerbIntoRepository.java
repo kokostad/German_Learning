@@ -2,6 +2,7 @@ package edu.german.words.verbs;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
@@ -22,7 +23,11 @@ public class PutVerbIntoRepository implements Runnable {
 	@Override
 	public void run() {
 		verbList.forEach(verb -> {
+			List<Properties> list = verb.getPropertiesList();
 			verb.showVerb();
+//			if (getOid() > -1) {
+			list.forEach(var -> System.out.println(var));
+//			}
 //			m.forEach((modus, list) -> {
 //				list.forEach(m2 -> {
 //					prepareVerb(modus, m2);

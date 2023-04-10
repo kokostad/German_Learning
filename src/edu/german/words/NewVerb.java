@@ -1,32 +1,34 @@
 package edu.german.words;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
+import edu.german.tools.MyProperties;
 
 public class NewVerb {
-	private static final String genus = "das Verb";
 	private int woid;
 	private int oid;
 	private String word;
 	private String meaning;
 	private String irregular;
 	private String separable;
-	private Properties properties;
+	private List<Properties> propertiesList;
 
 	public NewVerb() {
 	}
 
 	public NewVerb(int woid, int oid, String word, String meaning, String irregular, String separable,
-			Properties properties) {
+			List<Properties> propertiesList) {
 		this.woid = woid;
 		this.oid = oid;
 		this.word = word;
 		this.meaning = meaning;
 		this.irregular = irregular;
 		this.separable = separable;
-		this.properties = properties;
+		this.propertiesList = propertiesList;
 	}
 
 	public int getWoid() {
@@ -38,11 +40,20 @@ public class NewVerb {
 	}
 
 	public int getOid() {
+		if (oid <= 0)
+			prepereOid();
+
 		return oid;
 	}
 
 	public void setOid(int oid) {
 		this.oid = oid;
+	}
+
+	private void prepereOid() {
+		String query = new SqlQuery().getSql("get_verb_oid");
+//		System.out.println(query);
+		setOid(new QueryContractor().getVoid(query, word, irregular, separable));
 	}
 
 	public String getWord() {
@@ -77,36 +88,33 @@ public class NewVerb {
 		this.separable = separable;
 	}
 
-	public Properties getProperties() {
-		return properties;
+	public List<Properties> getPropertiesList() {
+		if (propertiesList == null)
+			preparePropertiesList(woid, oid, word, meaning, irregular, separable);
+
+		return propertiesList;
 	}
 
-	public void setProperties(Properties properties) {
-		this.properties = properties;
+	public void setPropertiesList(List<Properties> propertiesList) {
+		this.propertiesList = propertiesList;
 	}
 
-	public void prepareProperties(int woid, int oid, String word, String meaning, String irregular, String separable) {
-		String sql = new SqlQuery().getSql("get_full_verb");
-		setProperties(new QueryContractor().getVerbProperties(sql, oid));
-	}
+	public void preparePropertiesList(int woid, int oid, String word, String meaning, String irregular,
+			String separable) {
+		List<Properties> list = new LinkedList<>();
+		String sql = new SqlQuery().getSql("get_verb_property");
+		String[] tenses = new MyProperties("word.properties").getValuesArray("VERB_TENS");
+		String[] modus = new MyProperties("word.properties").getValuesArray("VERB_MODUS");
 
-	public NewVerb prepareVerbFromRepository(String word, String irregular, String separable) {
-		properties = new Properties();
-		String query = new SqlQuery().getSql("check_verb_in_main_tab");
-		boolean exist = new QueryContractor().executeQuery(query, word, genus);
+		for (String mod : modus)
+			for (String tens : tenses) {
+				Properties prop = new QueryContractor().getVerbProperties(sql, oid, tens, mod);
+				if (prop != null)
+					list.add(prop);
+			}
 
-		if (exist) {
-			query = new SqlQuery().getSql("get_woid_from_main_tab");
-			setWoid(new QueryContractor().getWoid(query, word, "das Verb"));
-			query = new SqlQuery().getSql("get_verb_oid");
-			setOid(new QueryContractor().getVerbId(query, word, irregular, separable));
-			query = new SqlQuery().getSql("get_verb_meaning");
-			setMeaning(new QueryContractor().getVerbMeaning(query, word, irregular, separable));
-		}
-
-		prepareProperties(woid, getOid(), word, meaning, irregular, separable);
-
-		return new NewVerb(woid, oid, word, meaning, irregular, separable, getProperties());
+		if (!list.isEmpty())
+			setPropertiesList(list);
 	}
 
 	public static class Builder {
@@ -116,7 +124,7 @@ public class NewVerb {
 		private String meaning;
 		private String irregular;
 		private String separable;
-		private Properties properties;
+		private List<Properties> propertiesList;
 
 		public Builder() {
 		}
@@ -151,19 +159,19 @@ public class NewVerb {
 			return this;
 		}
 
-		public Builder withProperties(Properties properties) {
-			this.properties = properties;
+		public Builder withPropertiesList(List<Properties> propertiesList) {
+			this.propertiesList = propertiesList;
 			return this;
 		}
 
 		public NewVerb build() {
-			return new NewVerb(woid, oid, word, meaning, irregular, separable, properties);
+			return new NewVerb(woid, oid, word, meaning, irregular, separable, propertiesList);
 		}
 
 	}
 
 	public void showVerb() {
-		System.out.println(word + " " + meaning + " " + oid + " "  + oid);
-		System.out.println(properties.toString());
+		System.out.println(word + " " + meaning + " " + oid + " " + oid);
+//		System.out.println(properties.toString());
 	}
 }

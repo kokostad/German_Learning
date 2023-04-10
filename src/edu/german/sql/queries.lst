@@ -34,6 +34,10 @@ EOSQL
 select * from ge.verbs_conjugation where void = ? ;
 EOSQL
 
+[get_verb_property]
+select * from ge.verbs_conjugation where void = ? and tens = ? and modus = ? ;
+EOSQL
+
 [check_verb_in_main_tab]
 SELECT * FROM ge.all_words_objects WHERE word = ? AND genus = ?;
 EOSQL

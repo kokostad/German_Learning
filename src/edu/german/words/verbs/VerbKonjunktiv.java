@@ -52,7 +52,6 @@ public class VerbKonjunktiv extends JPanel {
 
 	private void getFromProperties(Properties properties, String requirement) {
 		Object var = properties.get(requirement);
-		System.out.println(requirement + ": " + var.toString());
 	}
 
 	public List<Properties> getPropertiesList() {

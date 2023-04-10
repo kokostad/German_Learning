@@ -23,9 +23,8 @@ import edu.german.words.model.Word;
 /**
  * QueryContractor.java
  * 
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
- *
- *         The class performs SQL queries
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class performs
+ *         SQL queries
  */
 public class QueryContractor {
 	private DbConnect dbc;
@@ -62,8 +61,6 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, str1);
 
-			System.out.println(ps.toString());
-
 			return ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -81,8 +78,6 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, str1);
 			ps.setString(2, str2);
-
-			System.out.println(ps.toString());
 
 			return ps.execute();
 		} catch (SQLException e) {
@@ -103,8 +98,6 @@ public class QueryContractor {
 			ps.setString(2, str2);
 			ps.setString(3, str3);
 
-			System.out.println(ps.toString());
-
 			return ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -122,8 +115,6 @@ public class QueryContractor {
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, variable);
-
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -147,8 +138,6 @@ public class QueryContractor {
 			ps.setString(1, word);
 			ps.setString(2, genus);
 
-			System.out.println(ps.toString());
-
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 				return rs.getInt("woid");
@@ -170,8 +159,6 @@ public class QueryContractor {
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
 			ps.setString(2, genus);
-
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -219,8 +206,6 @@ public class QueryContractor {
 			ps.setString(2, irregular);
 			ps.setString(3, separable);
 
-			System.out.println(ps.toString());
-
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 				return rs.getString("meaning");
@@ -243,8 +228,6 @@ public class QueryContractor {
 			ps.setString(1, word);
 			ps.setString(2, genus);
 			ps.setInt(3, woid);
-
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -285,7 +268,6 @@ public class QueryContractor {
 
 	public List<String[]> getWordsList(String sql) {
 		List<String[]> list = new LinkedList<String[]>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -317,7 +299,6 @@ public class QueryContractor {
 
 	public List<String> getWordsAsStringList(String sql) {
 		List<String> list = new LinkedList<>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -352,7 +333,6 @@ public class QueryContractor {
 	 */
 	public List<String[]> getWordsList(String sql, String genus, int number) {
 		List<String[]> list = new ArrayList<String[]>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -379,7 +359,6 @@ public class QueryContractor {
 
 	public Map<Object, Object> getWordFromMainTable(String sql, String word) {
 		Map<Object, Object> wordMap = new HashMap<Object, Object>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -410,6 +389,7 @@ public class QueryContractor {
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				return rs.getInt("woid");
@@ -426,10 +406,8 @@ public class QueryContractor {
 
 	public List<Noun> getNounsList(String sql, int number) {
 		List<Noun> nounLst = new LinkedList<>();
-
 		int limit = number;
 		loadDriver();
-
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 
@@ -490,7 +468,6 @@ public class QueryContractor {
 
 	public List<Noun> getAllNounsList(String sql) {
 		List<Noun> nounLst = new LinkedList<>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -521,12 +498,10 @@ public class QueryContractor {
 
 	public List<Word> getAllWordList(String sql) {
 		List<Word> wordLst = new LinkedList<>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Word word = new Word();
@@ -549,12 +524,10 @@ public class QueryContractor {
 
 	public List<String[]> getSentencesList(String sql) {
 		List<String[]> list = new LinkedList<String[]>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int numOfCol = rsmd.getColumnCount();
@@ -582,7 +555,6 @@ public class QueryContractor {
 
 	public List<String> getSentencesAsList(String sql) {
 		List<String> list = new LinkedList<>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -614,7 +586,6 @@ public class QueryContractor {
 
 	public List<String> getSentencesList(String sql, String separationSign) {
 		List<String> list = new LinkedList<>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -646,7 +617,6 @@ public class QueryContractor {
 
 	public List<String> getSentencesList(String sql, String separationSign, String category) {
 		List<String> list = new LinkedList<>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -783,8 +753,6 @@ public class QueryContractor {
 			ps.setString(2, meaning);
 			ps.setString(3, genus);
 
-			System.out.println(ps.toString());
-
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -876,13 +844,8 @@ public class QueryContractor {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
-
-		System.out.println(sql);
-
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
-
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -901,7 +864,6 @@ public class QueryContractor {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
-
 		Verb verb = new Verb();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ResultSet rs = ps.executeQuery();
@@ -924,11 +886,9 @@ public class QueryContractor {
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 		Properties properties = new Properties();
-
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, oid);
 			ResultSet rs = ps.executeQuery();
-			
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int count = rsmd.getColumnCount();
 
@@ -954,13 +914,10 @@ public class QueryContractor {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
-
 		Verb verb = new Verb();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setInt(1, woid);
 			ps.setString(2, type);
-
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -980,7 +937,6 @@ public class QueryContractor {
 
 	public List<Verb> getVerbList(String sql) {
 		List<Verb> list = new LinkedList<>();
-
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -1011,9 +967,7 @@ public class QueryContractor {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
-
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1027,7 +981,6 @@ public class QueryContractor {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
-
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, sentence);
 			ps.setString(2, meaning);
@@ -1066,13 +1019,10 @@ public class QueryContractor {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
-
 		Sentence sentence = new Sentence();
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, sentenceStr);
 			ps.setString(2, meaningStr);
-
-//			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -1103,8 +1053,6 @@ public class QueryContractor {
 			ps.setString(1, word);
 			ps.setString(2, genus);
 
-			System.out.println(ps.toString());
-
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				return rs.getInt("woid");
@@ -1128,9 +1076,11 @@ public class QueryContractor {
 			ps.setString(2, irregular);
 			ps.setString(3, separable);
 
+			System.out.println(ps.toString());
+
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				return rs.getInt("void");
+				return rs.getInt(1);
 			}
 
 			System.out.println(ps.toString());
@@ -1141,5 +1091,43 @@ public class QueryContractor {
 		}
 
 		return -1;
+	}
+
+	public Properties getVerbProperties(String sql, int oid, String tens, String modus) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		Properties properties = new Properties();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, oid);
+			ps.setString(2, tens);
+			ps.setString(3, modus);
+
+			System.out.println(ps.toString());
+
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int count = rsmd.getColumnCount();
+
+			String[] headers = new String[count];
+			for (int i = 1, k = 0; i <= headers.length; i++, k++)
+				headers[k] = rsmd.getColumnName(i);
+
+			while (rs.next()) {
+				for (int k = 0; k < headers.length; k++)
+					if (rs.getObject(headers[k]) != null)
+						properties.put(headers[k].toUpperCase(), rs.getObject(headers[k]));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		if (!properties.isEmpty())
+			return properties;
+
+		return null;
 	}
 }

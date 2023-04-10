@@ -72,7 +72,6 @@ public class VerbIndikativI extends JPanel {
 	}
 
 	public void setPresent(Properties properties) {
-		System.out.println("VerbIndikativI -> " + properties.toString());
 		vPresent.setValues(properties);
 		vPreterite.setValues(properties);
 		vPerfekt.setValues(properties);
