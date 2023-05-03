@@ -80,4 +80,14 @@ public class VerbImperativAndImpersonal extends JPanel {
 		return list;
 	}
 
+	public void fieldsFilling(Properties prop) {
+		System.out.println(prop.toString());
+		getFromProperties(prop, "IMPERATIV");
+		getFromProperties(prop, "UNPERSÖNLICHE_FORMEN");
+	}
+
+	private void getFromProperties(Properties properties, String requirement) {
+		Object var = properties.get(requirement);
+	}
+
 }

@@ -90,4 +90,12 @@ public class VerbKonjunktiv2 extends JPanel {
 
 		return list;
 	}
+
+	public void setData(Properties properties) {
+		vPreterite.setValues(properties);
+		vPlusquamperfekt.setValues(properties);
+		vFutur1.setValues(properties);
+		vFutur2.setValues(properties);
+	}
+
 }

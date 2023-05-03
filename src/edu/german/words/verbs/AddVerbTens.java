@@ -105,6 +105,7 @@ public class AddVerbTens extends JPanel {
 		properties.put("ICH", new TextCleaner(i.getFirst()).getWord());
 		properties.put("JA", new TextCleaner(i.getSecond()).getWord());
 		properties.put("DU", new TextCleaner(youS.getFirst()).getWord());
+		properties.put("TY", new TextCleaner(youS.getSecond()).getWord());
 		properties.put("ER_SIE_ES", new TextCleaner(heSheIt.getFirst()).getWord());
 		properties.put("ON_ONA_ONO", new TextCleaner(heSheIt.getSecond()).getWord());
 		properties.put("WIR", new TextCleaner(we.getFirst()).getWord());

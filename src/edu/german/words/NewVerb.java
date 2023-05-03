@@ -52,8 +52,12 @@ public class NewVerb {
 
 	private void prepereOid() {
 		String query = new SqlQuery().getSql("get_verb_oid");
-//		System.out.println(query);
 		setOid(new QueryContractor().getVoid(query, word, irregular, separable));
+	}
+
+	private void prepereMeaning() {
+		String query = new SqlQuery().getSql("get_verb_meaning");
+		setMeaning(new QueryContractor().getVerbMeaning(query, word, irregular, separable));
 	}
 
 	public String getWord() {
@@ -65,6 +69,9 @@ public class NewVerb {
 	}
 
 	public String getMeaning() {
+		if (meaning == null && word != null)
+			prepereMeaning();
+
 		return meaning;
 	}
 
@@ -93,6 +100,25 @@ public class NewVerb {
 			preparePropertiesList(woid, oid, word, meaning, irregular, separable);
 
 		return propertiesList;
+	}
+
+	public List<Properties> getPropertiesList(int oid) {
+		List<Properties> list = new LinkedList<>();
+		String sql = new SqlQuery().getSql("get_verb_property");
+		String[] tenses = new MyProperties("word.properties").getValuesArray("VERB_TENS");
+		String[] modus = new MyProperties("word.properties").getValuesArray("VERB_MODUS");
+
+		for (String mod : modus)
+			for (String tens : tenses) {
+				Properties prop = new QueryContractor().getVerbProperties(sql, oid, tens, mod);
+				if (prop != null)
+					list.add(prop);
+			}
+
+		if (!list.isEmpty())
+			return list;
+
+		return null;
 	}
 
 	public void setPropertiesList(List<Properties> propertiesList) {
@@ -170,8 +196,4 @@ public class NewVerb {
 
 	}
 
-	public void showVerb() {
-		System.out.println(word + " " + meaning + " " + oid + " " + oid);
-//		System.out.println(properties.toString());
-	}
 }

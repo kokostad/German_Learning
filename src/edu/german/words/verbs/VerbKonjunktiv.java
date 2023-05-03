@@ -11,13 +11,11 @@ import javax.swing.JTabbedPane;
 
 public class VerbKonjunktiv extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private String modus;
 	private JTabbedPane tb;
 	private VerbKonjunktiv1 konjunktiv1;
 	private VerbKonjunktiv2 konjunktiv2;
 
-	public VerbKonjunktiv(String modus) {
-		this.modus = modus;
+	public VerbKonjunktiv() {
 		konjunktiv1 = new VerbKonjunktiv1();
 		konjunktiv2 = new VerbKonjunktiv2();
 
@@ -45,13 +43,13 @@ public class VerbKonjunktiv extends JPanel {
 	}
 
 	public void fieldsFilling(Properties properties) {
-		System.out.println(properties.toString());
-		getFromProperties(properties, "KONJUNKTIV I");
-		getFromProperties(properties, "KONJUNKTIV II");
-	}
+		if (properties.contains("KONJUNKTIV I")) {
+			konjunktiv1.setData(properties);
+		}
 
-	private void getFromProperties(Properties properties, String requirement) {
-		Object var = properties.get(requirement);
+		if (properties.contains("KONJUNKTIV II")) {
+			konjunktiv2.setData(properties);
+		}
 	}
 
 	public List<Properties> getPropertiesList() {

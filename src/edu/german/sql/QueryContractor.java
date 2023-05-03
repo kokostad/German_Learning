@@ -717,7 +717,7 @@ public class QueryContractor {
 			String presentInfinitivePl, String infinitivePerfectGe, String infinitivePerfectPl, String participleIGe,
 			String participleIPl, String participleIIGe, String participleIIPl) {
 
-		int i = -1;
+//		int i = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -1076,14 +1076,11 @@ public class QueryContractor {
 			ps.setString(2, irregular);
 			ps.setString(3, separable);
 
-			System.out.println(ps.toString());
-
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				return rs.getInt(1);
 			}
 
-			System.out.println(ps.toString());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -1102,8 +1099,6 @@ public class QueryContractor {
 			ps.setInt(1, oid);
 			ps.setString(2, tens);
 			ps.setString(3, modus);
-
-			System.out.println(ps.toString());
 
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -1130,4 +1125,79 @@ public class QueryContractor {
 
 		return null;
 	}
+
+	public void addVerb(String query, String word, String meaning, String irregular, String separable) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, word);
+			ps.setString(2, meaning);
+			ps.setString(3, irregular);
+			ps.setString(4, separable);
+//			System.out.println(ps.toString());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+	}
+
+	public void addVerbProperties(String query) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(query)) {
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+	}
+
+	public void addVerbProperties(String query, int oid, String word, String irregular, String separable,
+			Properties prop) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(query)) {
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+	}
+
+	// NOTICE similar is: executeQuery method
+	public boolean existVerbConjugation(String sql) {
+		loadDriver();
+		int id = -1;
+
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				id = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		if(id > 0)
+			return true;
+		
+		return false;
+	}
+
 }

@@ -47,6 +47,10 @@ EOSQL
 SELECT v.oid FROM ge.verbs_conjugation v WHERE v.woid = ? AND v.tens = ? ;
 EOSQL
 
+[add_new_verb]
+INSERT INTO ge.verbs(word, meaning, irregular, separable) VALUES(?, ?, ?, ?);
+EOSQL
+
 [add_new_verbs_conjugation]
 INSERT INTO ge.verbs_conjugation(modus, tens, ich, ja, du, ty, er_sie_es, on_ona_ono, wir, my,
  ihr, wy, sie_sie, oni_panstwo, woid)

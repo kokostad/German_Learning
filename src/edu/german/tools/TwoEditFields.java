@@ -1,5 +1,6 @@
 package edu.german.tools;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public class TwoEditFields extends JPanel {
 		one = new JTextField();
 		one.setFont(font);
 		one.setBounds(defaultLabelWidth, 0, editFieldLong, editFieldHight);
+		one.setBackground(Color.white);
 
 		JPanel p1 = new JPanel();
 		p1.setLayout(null);
@@ -47,6 +49,7 @@ public class TwoEditFields extends JPanel {
 		two = new JTextField();
 		two.setFont(font);
 		two.setBounds(defaultLabelWidth, 0, editFieldLong, editFieldHight);
+		two.setBackground(Color.white);
 
 		JPanel p2 = new JPanel();
 		p2.setLayout(null);
@@ -108,6 +111,7 @@ public class TwoEditFields extends JPanel {
 		one = new JTextField();
 		one.setFont(font);
 		one.setBounds(defaultLabelWidth, 0, editFieldLong, editFieldHight);
+		one.setBackground(Color.white);
 
 		JPanel p1 = new JPanel();
 		p1.setLayout(null);
@@ -120,6 +124,7 @@ public class TwoEditFields extends JPanel {
 		two = new JTextField();
 		two.setFont(font);
 		two.setBounds(defaultLabelWidth, 0, editFieldLong, editFieldHight);
+		two.setBackground(Color.white);
 
 		JPanel p2 = new JPanel();
 		p2.setLayout(null);

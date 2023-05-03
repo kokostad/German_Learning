@@ -91,4 +91,11 @@ public class VerbKonjunktiv1 extends JPanel {
 		return list;
 	}
 
+	public void setData(Properties properties) {
+		vPresent.setValues(properties);
+		vPerfekt.setValues(properties);
+		vFutur1.setValues(properties);
+		vFutur2.setValues(properties);
+	}
+
 }

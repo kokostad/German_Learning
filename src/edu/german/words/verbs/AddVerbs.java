@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,9 +17,7 @@ import javax.swing.JTabbedPane;
 
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.words.AddNewWordIntoDatabase;
 import edu.german.words.NewVerb;
-import edu.german.words.model.Verb;
 
 /**
  * AddVerbs.java
@@ -41,8 +38,6 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private VerbKonjunktiv konjunktiv;
 	private VerbImperativAndImpersonal imperativAndPartizip;
 	private String word;
-	private NewVerb newVerb ;
-	private NewVerb verb;
 	private List<NewVerb> verbList;
 	private List<Properties> propertiesList;
 	private ExecutorService es;
@@ -76,7 +71,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		addListToRepoBtn.addActionListener(this);
 
 		indikativ = new VerbIndikativ("INDIKATIV");
-		konjunktiv = new VerbKonjunktiv("KONJUNKTIV");
+		konjunktiv = new VerbKonjunktiv();
 		imperativAndPartizip = new VerbImperativAndImpersonal("IMPERATIV UND UNPERSÖNLICHE FORMEN");
 
 		tb = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -105,18 +100,21 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			separable = verbPanel.getSeparatable();
 			regular = verbPanel.getRegular();
 			
-			verb = new NewVerb.Builder()
+			NewVerb verb = new NewVerb.Builder()
 					.withWord(word)
+					.withMeaning(null)
 					.withIrregular(regular)
 					.withSeparable(separable)
 					.withOid(-1)
 					.withPropertiesList(null)
 					.build();
 
-			int verbId = verb.getOid();
-			List<Properties> propList = verb.getPropertiesList();
-			
-			propList.forEach(prop -> showPorperties(prop));
+			setOid(verb.getOid());
+
+			List<Properties> propList = verb.getPropertiesList(getOid());
+
+			if (propList != null)
+				propList.forEach(prop -> showPorperties(prop));
 		}
 
 		
@@ -132,60 +130,25 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			propertiesList.addAll(konjunktiv.getPropertiesList());
 			propertiesList.addAll(imperativAndPartizip.getPropertiesList());
 
-			verb = new NewVerb.Builder()
+			NewVerb verb = new NewVerb.Builder()
 					.withWord(word)
+					.withMeaning(null)
 					.withIrregular(regular)
 					.withSeparable(separable)
-					.withOid(newVerb.getOid())
+					.withOid(oid)
 					.withPropertiesList(propertiesList)
 					.build();
 
-
 			verbList.add(verb);
-			
-//			String mainWord = verbPanel.getWord();
-//			if (mainWord != null)
-//				setMainWord(mainWord);
-//			else
-//				setMainWord(indikativ.getMainWord());
-//
-//			Map<String, List<Map<String, String>>> indikativMap = indikativ.getMap();
-//			if (indikativMap != null && indikativMap.size() > 0)
-//				verbList.add(indikativMap);
-//
-//			Map<String, List<Map<String, String>>> konjunktivMapI = konjunktiv.getMapOne();
-//			if (konjunktivMapI != null && konjunktivMapI.size() > 0)
-//				verbList.add(konjunktivMapI);
-//
-//			Map<String, List<Map<String, String>>> konjunktivMapII = konjunktiv.getMapTwo();
-//			if (konjunktivMapII != null)
-//				verbList.add(konjunktivMapII);
-//
-//			Map<String, List<Map<String, String>>> imperative = imperativAndPartizip.getMapImperativ();
-//			if (imperative != null)
-//				verbList.add(imperative);
-//
-//			Map<String, List<Map<String, String>>> impersonal = imperativAndPartizip.getMapImpersonal();
-//			if (impersonal != null)
-//				verbList.add(impersonal);
-//
 		}
 
 		else if (src == addListToRepoBtn) {
-			System.out.println(getOid());
-			if (getOid() > -1) {
-				verbList.forEach(verb -> System.out.println(verb.getOid()));
-			}
-
-			if (!verbList.isEmpty()) {
+			if (verbList != null)
 				es.submit(new PutVerbIntoRepository(verbList));
-			}
-
-//				es.submit(new PutVerbIntoRepository(getMainWord(), verbList));
 		}
 
 		else if (src == showListBtn) {
-
+			verbList.forEach(v -> show(v));
 		}
 
 		else if (src == clearListBtn) {
@@ -194,20 +157,18 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 
 	}
 
+	private Object show(NewVerb v) {
+		List<Properties> prop = v.getPropertiesList();
+		prop.forEach(vb -> System.out.println(vb));
+		return null;
+	}
+
 	public String getMainWord() {
 		return mainWord;
 	}
 
 	public void setMainWord(String mainWord) {
 		this.mainWord = mainWord;
-	}
-
-	private void showList() {
-//		verbList.forEach(map -> {
-//			map.forEach((key, map2) -> {
-//				map2.forEach(value -> showMap(key, value));
-//			});
-//		});
 	}
 
 	private void clearAllEditFields() {
@@ -233,7 +194,10 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		if (var != null && var.equals("INDIKATIV"))
 			indikativ.fieldsFilling(prop);
 
-		if (var != null && var.contains("KONJUMKTIV"))
+		if (var != null && (var.contains("KONJUNKTIV I") || var.contains("KONJUNKTIV II")))
 			konjunktiv.fieldsFilling(prop);
+	
+		if (var != null && var.contains("UNPERSÖNLICHE FORMEN"))
+			imperativAndPartizip.fieldsFilling(prop);
 	}
 }

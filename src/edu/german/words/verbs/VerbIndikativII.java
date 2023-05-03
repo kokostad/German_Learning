@@ -11,9 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import edu.german.tools.MyProperties;
-import edu.german.tools.ScreenSetup;
 import edu.german.tools.Titel;
-import edu.german.words.verbs.AddVerbTens;
 
 public class VerbIndikativII extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -74,8 +72,6 @@ public class VerbIndikativII extends JPanel {
 	}
 
 	public void setPresent(Properties properties) {
-		System.out.println("VerbIndikativII -> " + properties.toString());
-
 		vPlusquamperfekt.setValues(properties);
 		vFutur1.setValues(properties);
 		vFutur2.setValues(properties);

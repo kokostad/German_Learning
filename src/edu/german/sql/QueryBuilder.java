@@ -1,6 +1,11 @@
 package edu.german.sql;
 
+import java.util.Properties;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import edu.german.tools.MyProperties;
+import edu.german.tools.Translator;
 
 public class QueryBuilder {
 
@@ -78,7 +83,6 @@ public class QueryBuilder {
 	public String addNewSentenceToRepository(String sentence, String meaning, String genus, String mode, String tens,
 			String word, String wordMeaning, String wordGenus) {
 
-		// sentence, meaning, type, category, tens, word, woid
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO ge.sentences(sentence, meaning, type, category, tens, word, woid) VALUES(");
 		sb.append("'" + sentence + "', '" + meaning + "', '" + genus + "', '" + mode + "', '" + tens + "', '" + word
@@ -88,7 +92,6 @@ public class QueryBuilder {
 		return null;
 	}
 
-	// sentence, meaning, type, category, tens, word, woid
 	public String addNewSentenceWithWoid(String sentence, String meaning, String type, String category, String tens,
 			String word, int woid) {
 
@@ -142,6 +145,79 @@ public class QueryBuilder {
 
 		sb.append(";");
 
+		return sb.toString();
+	}
+
+	public String addVerbConjugation(int oid, String word, String irregular, String separable, Properties prop) {
+		String[] tableHeaders = new MyProperties("table_headers.properties")
+				.getValuesArray("VERBS_CONJUGATION_TABLE_HEADER");
+
+		ArrayList<String> headersList = new ArrayList<String>();
+
+		String tens = prop.getProperty("TENS");
+		prop.remove("TENS");
+		String modus = prop.getProperty("MODUS");
+		prop.remove("MODUS");
+
+		for (String s : tableHeaders)
+			headersList.add(s.toUpperCase());
+
+		StringBuilder sbK = new StringBuilder();
+		StringBuilder sbV = new StringBuilder();
+
+		int enough = headersList.size();
+
+		int i = 0;
+		for (String st : headersList) {
+			Object key = headersList.get(i);
+			Object value = prop.get(headersList.get(i));
+			if (value != null && !(value.toString()).isEmpty()) {
+				if (i > 0)
+					sbK.append(",");
+				sbK.append(headersList.get(i));
+
+				if (i > 0)
+					sbV.append(",");
+				sbV.append("'");
+				sbV.append(value);
+				sbV.append("'");
+			}
+			i++;
+		}
+
+		if ((sbK.toString()).contains("ICH") && tens != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("INSERT INTO ge.verbs_conjugation (TENS,MODUS,VOID,");
+			sb.append(sbK.toString());
+			sb.append(") VALUES(");
+			sb.append("'");
+			sb.append(tens);
+			sb.append("','");
+			sb.append(modus);
+			sb.append("',");
+			sb.append(oid);
+			sb.append(",");
+			sb.append(sbV.toString());
+			sb.append(") ;");
+
+			return sb.toString();
+		}
+
+		return null;
+	}
+
+	public String existVerbConjugation(int oid, String tens, String modus) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT oid FROM ge.verbs_conjugation WHERE tens = '");
+		sb.append(tens);
+		sb.append("' AND modus ='");
+		sb.append(modus);
+		sb.append("' AND void = ");
+		sb.append(oid);
+		sb.append(" ;");
+
+		System.out.println(sb.toString());
+		
 		return sb.toString();
 	}
 
