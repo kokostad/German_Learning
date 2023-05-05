@@ -22,9 +22,8 @@ import edu.german.words.model.Word;
 
 /**
  * QueryContractor.java
- * 
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class performs
- *         SQL queries
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com 
+ * The class performs SQL queries
  */
 public class QueryContractor {
 	private DbConnect dbc;
@@ -683,7 +682,6 @@ public class QueryContractor {
 			String erSieEs, String onOnaOno, String wir, String my, String ihr, String wy, String sieSie,
 			String oniPanstwo) {
 
-		int i = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -717,7 +715,6 @@ public class QueryContractor {
 			String presentInfinitivePl, String infinitivePerfectGe, String infinitivePerfectPl, String participleIGe,
 			String participleIPl, String participleIIGe, String participleIIPl) {
 
-//		int i = -1;
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -1136,7 +1133,7 @@ public class QueryContractor {
 			ps.setString(2, meaning);
 			ps.setString(3, irregular);
 			ps.setString(4, separable);
-//			System.out.println(ps.toString());
+
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1174,7 +1171,6 @@ public class QueryContractor {
 		}
 	}
 
-	// NOTICE similar is: executeQuery method
 	public boolean existVerbConjugation(String sql) {
 		loadDriver();
 		int id = -1;
@@ -1194,9 +1190,9 @@ public class QueryContractor {
 			dbc.closeConnection(con);
 		}
 
-		if(id > 0)
+		if (id > 0)
 			return true;
-		
+
 		return false;
 	}
 
