@@ -147,4 +147,9 @@ public class TwoEditFields extends JPanel {
 		two.setText(s2);
 	}
 
+	public void setData(String valueOne, String valueSec) {
+		one.setText(valueOne);
+		two.setText(valueSec);
+	}
+
 }

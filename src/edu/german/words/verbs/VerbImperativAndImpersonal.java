@@ -3,10 +3,8 @@ package edu.german.words.verbs;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
@@ -42,32 +40,6 @@ public class VerbImperativAndImpersonal extends JPanel {
 		this.add(split);
 	}
 
-	public Map<String, List<Map<String, String>>> getMapImperativ() {
-		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
-		if (imperative.getMap() != null)
-			list.add(imperative.getMap());
-
-		if (!list.isEmpty()) {
-			Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
-			modusMap.put(imperative.getTens(), list);
-			return modusMap;
-		}
-		return null;
-	}
-
-	public Map<String, List<Map<String, String>>> getMapImpersonal() {
-		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
-		if (impersonal.getMap() != null)
-			list.add(impersonal.getMap());
-
-		if (!list.isEmpty()) {
-			Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
-			modusMap.put(impersonal.getTens(), list);
-			return modusMap;
-		}
-		return null;
-	}
-
 	public void clearEditFields() {
 		imperative.clearEditFields();
 		impersonal.clearEditFields();
@@ -81,13 +53,11 @@ public class VerbImperativAndImpersonal extends JPanel {
 	}
 
 	public void fieldsFilling(Properties prop) {
-		System.out.println(prop.toString());
-		getFromProperties(prop, "IMPERATIV");
-		getFromProperties(prop, "UNPERSÖNLICHE_FORMEN");
-	}
+		if (prop.contains("IMPERATIV"))
+			imperative.setData(prop);
 
-	private void getFromProperties(Properties properties, String requirement) {
-		Object var = properties.get(requirement);
+		if (prop.contains("UNPERSÖNLICHE FORMEN"))
+			impersonal.setData(prop);
 	}
 
 }

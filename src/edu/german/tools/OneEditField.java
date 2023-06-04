@@ -42,7 +42,7 @@ public class OneEditField extends JPanel {
 		if (hint != null)
 			editField.setToolTipText(hint);
 
-		var gl = new GroupLayout(this);
+		GroupLayout gl = new GroupLayout(this);
 		GroupLayout.SequentialGroup sg = gl.createSequentialGroup();
 		sg.addComponent(label).addGap(2).addComponent(editField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 				GroupLayout.PREFERRED_SIZE);

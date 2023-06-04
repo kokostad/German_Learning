@@ -13,18 +13,27 @@ import edu.german.tools.ScreenSetup;
 public class MainVerbPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private String CFG_FILE ="word.properties";
-	private OneEditField mainVerbField;
+	private OneEditField word;
+	private OneEditField meaning;
 	private Font font = new ScreenSetup().DEFAULT_FONT;
 	private MyComboBox separatable;
 	private MyComboBox regular;
 
 	public MainVerbPanel() {
-		mainVerbField = new OneEditField.Builder()
+		word = new OneEditField.Builder()
 				.withTitle("Wpisz czasownik: ")
 				.withHint("czasownik w wersji podstawowej")
 				.withFont(font)
 				.withHeight(30)
-				.withWidth(220)
+				.withWidth(160)
+				.build();
+
+		meaning = new OneEditField.Builder()
+				.withTitle("znaczenie: ")
+				.withHint("znaczenie czasownika")
+				.withFont(font)
+				.withHeight(30)
+				.withWidth(160)
 				.build();
 
 		separatable = new MyComboBox("Nierozłączny/rozłączny: ",
@@ -32,13 +41,18 @@ public class MainVerbPanel extends JPanel {
 		regular = new MyComboBox("Regularny/nieregularny: ",
 				new MyProperties(CFG_FILE).getValuesArray("VERB_REGULAR"));
 
-		this.add(mainVerbField);
+		this.add(word);
+		this.add(meaning);
 		this.add(regular);
 		this.add(separatable);
 	}
 
 	public String getWord() {
-		return mainVerbField.getValue();
+		return word.getValue();
+	}
+
+	public String getMeaing() {
+		return meaning.getValue();
 	}
 
 	public String getSeparatable() {
@@ -47,6 +61,11 @@ public class MainVerbPanel extends JPanel {
 
 	public String getRegular() {
 		return regular.getValue();
+	}
+
+	public void clearEditFields() {
+		word.clearField();
+		meaning.clearField();
 	}
 
 }

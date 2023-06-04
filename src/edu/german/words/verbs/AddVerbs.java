@@ -17,7 +17,7 @@ import javax.swing.JTabbedPane;
 
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.words.NewVerb;
+import edu.german.words.Verb;
 
 /**
  * AddVerbs.java
@@ -38,7 +38,8 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private VerbKonjunktiv konjunktiv;
 	private VerbImperativAndImpersonal imperativAndPartizip;
 	private String word;
-	private List<NewVerb> verbList;
+	private String meaning;
+	private List<Verb> verbList;
 	private List<Properties> propertiesList;
 	private ExecutorService es;
 	private String mainWord;
@@ -52,7 +53,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		propertiesList = new LinkedList<>();
 		oid = -1;
 		es = Executors.newSingleThreadExecutor();
-		verbList = new LinkedList<NewVerb>();
+		verbList = new LinkedList<Verb>();
 		verbPanel = new MainVerbPanel();
 
 		bp = new ButtonsPanel("CHECK_IN_DATABASE", "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "SHOW_LIST", "CLEAR_LIST",
@@ -97,12 +98,13 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 
 		if (src == checkBtn) {
 			word = verbPanel.getWord();
+			meaning = verbPanel.getMeaing();
 			separable = verbPanel.getSeparatable();
 			regular = verbPanel.getRegular();
 			
-			NewVerb verb = new NewVerb.Builder()
+			Verb verb = new Verb.Builder()
 					.withWord(word)
-					.withMeaning(null)
+					.withMeaning(meaning)
 					.withIrregular(regular)
 					.withSeparable(separable)
 					.withOid(-1)
@@ -130,9 +132,9 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			propertiesList.addAll(konjunktiv.getPropertiesList());
 			propertiesList.addAll(imperativAndPartizip.getPropertiesList());
 
-			NewVerb verb = new NewVerb.Builder()
+			Verb verb = new Verb.Builder()
 					.withWord(word)
-					.withMeaning(null)
+					.withMeaning(meaning)
 					.withIrregular(regular)
 					.withSeparable(separable)
 					.withOid(oid)
@@ -157,7 +159,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 
 	}
 
-	private Object show(NewVerb v) {
+	private Object show(Verb v) {
 		List<Properties> prop = v.getPropertiesList();
 		prop.forEach(vb -> System.out.println(vb));
 		return null;
@@ -172,6 +174,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	}
 
 	private void clearAllEditFields() {
+		verbPanel.clearEditFields();
 		indikativ.clearEditFields();
 		konjunktiv.clearEditFields();
 		imperativAndPartizip.clearEditFields();

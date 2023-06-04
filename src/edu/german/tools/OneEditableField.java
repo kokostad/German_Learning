@@ -31,7 +31,7 @@ public class OneEditableField extends JPanel {
 		if (tipInfo != null)
 			textField.setToolTipText(tipInfo);
 
-		var gl = new GroupLayout(this);
+		 GroupLayout gl = new GroupLayout(this);
 		GroupLayout.SequentialGroup sg = gl.createSequentialGroup();
 		sg.addComponent(label).addGap(2).addComponent(getTextField(), GroupLayout.DEFAULT_SIZE,
 				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);
@@ -48,7 +48,7 @@ public class OneEditableField extends JPanel {
 		if (tipInfo != null)
 			getTextField().setToolTipText(tipInfo);
 
-		var gl = new GroupLayout(this);
+		GroupLayout gl = new GroupLayout(this);
 		GroupLayout.SequentialGroup sg = gl.createSequentialGroup();
 		sg.addComponent(label).addGap(2).addComponent(getTextField(), GroupLayout.DEFAULT_SIZE,
 				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);
@@ -66,7 +66,7 @@ public class OneEditableField extends JPanel {
 		if (tipInfo != null)
 			getTextField().setToolTipText(tipInfo);
 
-		var gl = new GroupLayout(this);
+		GroupLayout gl = new GroupLayout(this);
 		GroupLayout.SequentialGroup sg = gl.createSequentialGroup();
 		sg.addComponent(label).addGap(2).addComponent(getTextField(), GroupLayout.DEFAULT_SIZE,
 				GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE);

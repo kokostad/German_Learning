@@ -3,7 +3,6 @@ package edu.german.words.verbs;
 import java.awt.BorderLayout;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JPanel;
@@ -27,14 +26,6 @@ public class VerbKonjunktiv extends JPanel {
 		add(tb, BorderLayout.CENTER);
 		setVisible(true);
 		repaint();
-	}
-
-	public Map<String, List<Map<String, String>>> getMapOne() {
-		return konjunktiv1.getMap();
-	}
-
-	public Map<String, List<Map<String, String>>> getMapTwo() {
-		return konjunktiv2.getMap();
 	}
 
 	public void clearEditFields() {

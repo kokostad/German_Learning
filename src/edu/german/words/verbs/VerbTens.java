@@ -1,8 +1,6 @@
 package edu.german.words.verbs;
 
 import java.awt.GridLayout;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JPanel;
@@ -10,8 +8,9 @@ import javax.swing.JPanel;
 import edu.german.tools.TextCleaner;
 import edu.german.tools.TwoEditFields;
 
-public class AddVerbTens extends JPanel {
+public class VerbTens extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private String tens;
 	private String modus;
 	private TwoEditFields i;
 	private TwoEditFields youS;
@@ -19,9 +18,8 @@ public class AddVerbTens extends JPanel {
 	private TwoEditFields we;
 	private TwoEditFields youP;
 	private TwoEditFields they;
-	private String tens;
 
-	public AddVerbTens(String tens, String modus) {
+	public VerbTens(String tens, String modus) {
 		this.tens = tens;
 		this.modus = modus;
 		i = new TwoEditFields("ich", "ja");
@@ -60,44 +58,6 @@ public class AddVerbTens extends JPanel {
 		they.clear();
 	}
 
-	public Map<String, String> getMap() {
-		if (!i.getFirst().isBlank()) {
-			Map<String, String> map = new HashMap<String, String>();
-			map.put("ICH", new TextCleaner(i.getFirst()).getWord());
-			map.put("JA", new TextCleaner(i.getSecond()).getWord());
-			map.put("DU", new TextCleaner(youS.getFirst()).getWord());
-			map.put("TY", new TextCleaner(youS.getSecond()).getWord());
-			map.put("ER_SIE_ES", new TextCleaner(heSheIt.getFirst()).getWord());
-			map.put("ON_ONA_ONO", new TextCleaner(heSheIt.getSecond()).getWord());
-			map.put("WIR", new TextCleaner(we.getFirst()).getWord());
-			map.put("MY", new TextCleaner(we.getSecond()).getWord());
-			map.put("IHR", new TextCleaner(youP.getFirst()).getWord());
-			map.put("WY", new TextCleaner(youP.getSecond()).getWord());
-			map.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
-			map.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
-			map.put("TENS", tens);
-			return map;
-		}
-		return null;
-	}
-
-	public String getMainWord() {
-		return new TextCleaner(we.getFirst()).getWord();
-	}
-
-	public void setValue(String s1, String s2) {
-		i.setValue(s1, s2);
-	}
-
-	public void setValues(Properties properties) {
-		i.setValue(properties.getProperty("ICH"), properties.getProperty("JA"));
-		youS.setValue(properties.getProperty("DU"), properties.getProperty("TY"));
-		heSheIt.setValue(properties.getProperty("ER_SIE_ES"), properties.getProperty("ON_ONA_ONO"));
-		we.setValue(properties.getProperty("WIR"), properties.getProperty("MY"));
-		youP.setValue(properties.getProperty("IHR"), properties.getProperty("WY"));
-		they.setValue(properties.getProperty("SIE_SIE"), properties.getProperty("ONI_PANSTWO"));
-	}
-
 	public Properties getProperties() {
 		Properties properties = new Properties();
 		properties.put("MODUS", modus);
@@ -116,6 +76,15 @@ public class AddVerbTens extends JPanel {
 		properties.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
 
 		return properties;
+	}
+
+	public void setValues(Properties properties) {
+		i.setValue(properties.getProperty("ICH"), properties.getProperty("JA"));
+		youS.setValue(properties.getProperty("DU"), properties.getProperty("TY"));
+		heSheIt.setValue(properties.getProperty("ER_SIE_ES"), properties.getProperty("ON_ONA_ONO"));
+		we.setValue(properties.getProperty("WIR"), properties.getProperty("MY"));
+		youP.setValue(properties.getProperty("IHR"), properties.getProperty("WY"));
+		they.setValue(properties.getProperty("SIE_SIE"), properties.getProperty("ONI_PANSTWO"));
 	}
 
 }

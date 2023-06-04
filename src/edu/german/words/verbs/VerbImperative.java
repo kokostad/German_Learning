@@ -1,8 +1,6 @@
 package edu.german.words.verbs;
 
 import java.awt.GridLayout;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JPanel;
@@ -49,23 +47,6 @@ public class VerbImperative extends JPanel {
 		this.add(they);
 	}
 
-	public Map<String, String> getMap() {
-		Map<String, String> map = new HashMap<String, String>();
-		if (!youS.getFirst().isBlank()) {
-			map.put("DU", new TextCleaner(youS.getFirst()).getWord());
-			map.put("TY", new TextCleaner(youS.getSecond()).getWord());
-			map.put("WIR", new TextCleaner(we.getFirst()).getWord());
-			map.put("MY", new TextCleaner(we.getSecond()).getWord());
-			map.put("IHR", new TextCleaner(youP.getFirst()).getWord());
-			map.put("WY", new TextCleaner(youP.getSecond()).getWord());
-			map.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
-			map.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
-			map.put("TENS", getTens());
-			return map;
-		}
-		return null;
-	}
-
 	public String getTens() {
 		return tens;
 	}
@@ -79,6 +60,8 @@ public class VerbImperative extends JPanel {
 
 	public Properties getProperties() {
 		Properties properties = new Properties();
+		properties.put("TENS", getTens());
+		properties.put("MODUS", "IMPERATIV");
 		properties.put("DU", new TextCleaner(youS.getFirst()).getWord());
 		properties.put("TY", new TextCleaner(youS.getSecond()).getWord());
 		properties.put("WIR", new TextCleaner(we.getFirst()).getWord());
@@ -87,9 +70,14 @@ public class VerbImperative extends JPanel {
 		properties.put("WY", new TextCleaner(youP.getSecond()).getWord());
 		properties.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
 		properties.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
-		properties.put("TENS", getTens());
-		properties.put("MODUS", "IMPERATIV");
 
 		return properties;
+	}
+
+	public void setData(Properties prop) {
+		youS.setData(prop.getProperty("DU"), prop.getProperty("TY"));
+		we.setData(prop.getProperty("WIR"), prop.getProperty("MY"));
+		youP.setData(prop.getProperty("IHR"), prop.getProperty("WY"));
+		they.setData(prop.getProperty("SIE_SIE"), prop.getProperty("ONI_PANSTWO"));
 	}
 }

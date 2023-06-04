@@ -1,120 +1,91 @@
 package edu.german.words.model;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Properties;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 
 public class Word implements WordModel {
-	private Map<Object, Object> wordMap;
+	private Properties properites;
 	private int woid;
 	private int oid;
 	private String word;
-	private String menaing;
+	private String meaning;
+	private String[] meanings;
 	private String genus;
-	private List<Map<Object, Object>> propertiesList;
+	private List<Properties> propertiesList;
 
 	public Word() {
-		wordMap = new HashMap<>();
+		properites = new Properties();
 		propertiesList = new LinkedList<>();
 	}
 
 	public Word(String word, String meaning, String genus) {
-		wordMap = new HashMap<>();
+		properites = new Properties();
 		propertiesList = new LinkedList<>();
 		setWord(word);
 		setMeaning(meaning);
 		setGenus(genus);
 		setWoid(new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus));
-		addToPropertiesList();
 	}
 
 	@Override
 	public int getOid() {
-		if (wordMap.containsKey("OID"))
-			return Integer.parseInt(wordMap.get("OID").toString());
-
-		return -1;
+		return oid;
 	}
 
 	@Override
 	public String getMainWord() {
-		if (wordMap.containsKey("WORD"))
-			return wordMap.get("WORD").toString();
-
-		return null;
+		return word;
 	}
 
 	@Override
 	public String getMeaning() {
-		if (wordMap.containsKey("MEANING"))
-			return wordMap.get("MEANING").toString();
-
-		return null;
+		return meaning;
 	}
 
 	@Override
 	public String[] getMeanings() {
-		if (wordMap.containsKey("MEANINGS"))
-			return (String[]) wordMap.get("MEANINGS");
-
-		return null;
+		return meanings;
 	}
 
 	@Override
 	public void setOid(int oid) {
-		wordMap.put("OID", oid);
+		this.oid = oid;
 	}
 
 	@Override
 	public void setMainWord(String word) {
-		wordMap.put("WORD", word);
+		this.word = word;
 	}
 
 	@Override
 	public void setMeaning(String meaning) {
-		wordMap.put("MEANING", meaning);
+		this.meaning = meaning;
 	}
 
 	@Override
 	public void setMeanings(String[] meanings) {
-		if (meanings != null)
-			wordMap.put("MEANINGS", meanings);
+		this.meanings = meanings;
 	}
 
 	public String getGenus() {
-		if (wordMap.containsKey("GENUS"))
-			return wordMap.get("GENUS").toString();
-
-		return null;
+		return genus;
 	}
 
 	public void setGenus(String genus) {
-		wordMap.put("GENUS", genus);
-	}
-
-	public Map<Object, Object> getWordMap() {
-		return wordMap;
-	}
-
-	public void setWordMap(Map<Object, Object> wordMap) {
-		this.wordMap = wordMap;
+		this.genus = genus;
 	}
 
 	@Override
 	public int getWoid() {
-		if (wordMap.containsKey("WOID"))
-			return Integer.parseInt(wordMap.get("WOID").toString());
-
-		return -1;
+		return woid;
 	}
 
-	// TODO to improve
 	public int getWoid(String word, String genus) {
-		if (getWoid() < 0)
+		if (woid < 0)
 			return new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus);
 
 		return -1;
@@ -122,20 +93,17 @@ public class Word implements WordModel {
 
 	@Override
 	public void setWoid(int woid) {
-		wordMap.put("WOID", woid);
+		this.woid = woid;
 	}
 
 	@Override
 	public String getWord() {
-		if (wordMap.containsKey("WORD"))
-			return wordMap.get("WORD").toString();
-
-		return null;
+		return word;
 	}
 
 	@Override
 	public void setWord(String word) {
-		wordMap.put("WORD", word);
+		this.word = word;
 	}
 
 	@Override
@@ -162,7 +130,16 @@ public class Word implements WordModel {
 		return list;
 	}
 
-	public void addToPropertiesList() {
-		propertiesList.add(wordMap);
+	public void addToPropertiesList(Properties properties) {
+		propertiesList.add(properties);
 	}
+	
+	public List<Properties> getPropertiesList() {
+			return propertiesList;
+	}
+
+	public void setPropertiesList(List<Properties> propertiesList) {
+		this.propertiesList = propertiesList;
+	}
+
 }

@@ -2,10 +2,9 @@ package edu.german.sql;
 
 import java.util.Properties;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Map;
 
 import edu.german.tools.MyProperties;
-import edu.german.tools.Translator;
 
 public class QueryBuilder {
 
@@ -148,7 +147,7 @@ public class QueryBuilder {
 		return sb.toString();
 	}
 
-	public String addVerbConjugation(int oid, String word, String irregular, String separable, Properties prop) {
+	public String addVerbConjugation(int oid, Properties prop) {
 		String[] tableHeaders = new MyProperties("table_headers.properties")
 				.getValuesArray("VERBS_CONJUGATION_TABLE_HEADER");
 
@@ -165,29 +164,27 @@ public class QueryBuilder {
 		StringBuilder sbK = new StringBuilder();
 		StringBuilder sbV = new StringBuilder();
 
-		int enough = headersList.size();
-
-		int i = 0;
-		for (String st : headersList) {
+		for (int i = 0; i < headersList.size(); i++) {
 			Object key = headersList.get(i);
-			Object value = prop.get(headersList.get(i));
+			Object value = prop.get(key);
 			if (value != null && !(value.toString()).isEmpty()) {
 				if (i > 0)
 					sbK.append(",");
+
 				sbK.append(headersList.get(i));
 
 				if (i > 0)
 					sbV.append(",");
+
 				sbV.append("'");
 				sbV.append(value);
 				sbV.append("'");
 			}
-			i++;
 		}
 
 		if ((sbK.toString()).contains("ICH") && tens != null) {
 			StringBuilder sb = new StringBuilder();
-			sb.append("INSERT INTO ge.verbs_conjugation (TENS,MODUS,VOID,");
+			sb.append("INSERT INTO ge.verbs_conjugation(TENS,MODUS,VOID,");
 			sb.append(sbK.toString());
 			sb.append(") VALUES(");
 			sb.append("'");
@@ -216,9 +213,33 @@ public class QueryBuilder {
 		sb.append(oid);
 		sb.append(" ;");
 
-		System.out.println(sb.toString());
-		
 		return sb.toString();
+	}
+
+	public String addNewVerb(String word, String meaning, String irregular, String separable) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT INTO ge.verbs(WORD,MEANING,IRREGULAR,SEPARABLE) ");
+		sb.append("VALUES('" + word + "', '" + meaning + "', " + irregular + "', '" + separable + "');");
+
+		return sb.toString();
+	}
+
+	public String addUnpersonalForms(int oid, Properties prop) {
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("INSERT INTO ge.verbs_conjugation(");
+
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append(" VALUES(");
+
+		for (Map.Entry<Object, Object> entry : prop.entrySet()) {
+			sb1.append(entry.getKey() + ", ");
+			sb2.append("'" + entry.getValue() + "', ");
+		}
+
+		sb1.append("VOID)");
+		sb2.append(oid + ");");
+
+		return sb1.toString() + sb2.toString();
 	}
 
 }

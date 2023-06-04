@@ -49,23 +49,6 @@ public class ImpersonalForm extends JPanel {
 		this.add(participleTwo);
 	}
 
-	public Map<String, String> getMap() {
-		Map<String, String> map = new HashMap<String, String>();
-		if (!presentInfinitive.getFirst().isBlank()) {
-			map.put("PRESENT_INFINITIVE", new TextCleaner(presentInfinitive.getFirst()).getWord());
-			map.put("CZAS_TERAZNIEJSZ", new TextCleaner(presentInfinitive.getSecond()).getWord());
-			map.put("INFINITIVE_PERFECT", new TextCleaner(InfinitivePerfect.getFirst()).getWord());
-			map.put("CZAS_DOKONANY", new TextCleaner(InfinitivePerfect.getSecond()).getWord());
-			map.put("PARTICIPLE_I", new TextCleaner(participleOne.getFirst()).getWord());
-			map.put("IMIESLOW_I", new TextCleaner(participleOne.getSecond()).getWord());
-			map.put("PARTICIPLE_II", new TextCleaner(participleTwo.getFirst()).getWord());
-			map.put("IMIESLOW_II", new TextCleaner(participleTwo.getSecond()).getWord());
-			map.put("TENS", getTens());
-			return map;
-		}
-		return null;
-	}
-
 	public String getTens() {
 		return tens;
 	}
@@ -79,6 +62,8 @@ public class ImpersonalForm extends JPanel {
 
 	public Properties getProperties() {
 		Properties properties = new Properties();
+		properties.put("TENS", getTens());
+		properties.put("MODUS", "IMPERSONAL");
 		properties.put("PRESENT_INFINITIVE", new TextCleaner(presentInfinitive.getFirst()).getWord());
 		properties.put("CZAS_TERAZNIEJSZ", new TextCleaner(presentInfinitive.getSecond()).getWord());
 		properties.put("INFINITIVE_PERFECT", new TextCleaner(InfinitivePerfect.getFirst()).getWord());
@@ -87,10 +72,15 @@ public class ImpersonalForm extends JPanel {
 		properties.put("IMIESLOW_I", new TextCleaner(participleOne.getSecond()).getWord());
 		properties.put("PARTICIPLE_II", new TextCleaner(participleTwo.getFirst()).getWord());
 		properties.put("IMIESLOW_II", new TextCleaner(participleTwo.getSecond()).getWord());
-		properties.put("TENS", getTens());
-		properties.put("MODUS", "IMPERSONAL");
 
 		return properties;
+	}
+
+	public void setData(Properties prop) {
+		presentInfinitive.setData(prop.getProperty("PRESENT_INFINITIVE"), prop.getProperty("CZAS_TERAZNIEJSZ"));
+		InfinitivePerfect.setData(prop.getProperty("INFINITIVE_PERFECT"), prop.getProperty("CZAS_DOKONANY"));
+		participleOne.setData(prop.getProperty("PARTICIPLE_I"), prop.getProperty("IMIESLOW_I"));
+		participleTwo.setData(prop.getProperty("PARTICIPLE_II"), prop.getProperty("IMIESLOW_II"));
 	}
 
 }

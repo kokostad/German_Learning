@@ -1,10 +1,8 @@
 package edu.german.words.verbs;
 
 import java.awt.BorderLayout;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JPanel;
@@ -30,21 +28,8 @@ public class VerbIndikativ extends JPanel {
 	}
 
 	public void clearEditFields() {
-	}
-
-	public Map<String, List<Map<String, String>>> getMap() {
-		List<Map<String, String>> list = new LinkedList<Map<String, String>>();
-
-		Map<String, List<Map<String, String>>> modusMap = new HashMap<String, List<Map<String, String>>>();
-		List<Map<String, String>> list1 = vi1.getList();
-		List<Map<String, String>> list2 = vi2.getList();
-
-		list.addAll(list1);
-		list.addAll(list2);
-
-		modusMap.put(modus, list);
-
-		return modusMap;
+		vi1.clearEditFields();
+		vi2.clearEditFields();
 	}
 
 	public String getMainWord() {

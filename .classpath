@@ -11,5 +11,7 @@
 	<classpathentry kind="lib" path="lib/postgresql-42.2.9.jar"/>
 	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry kind="lib" path="lib/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="/home/kokos/git/German_Learning/lib/log4j-api-2.20.0.jar"/>
+	<classpathentry kind="lib" path="/home/kokos/git/German_Learning/lib/log4j-core-2.20.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

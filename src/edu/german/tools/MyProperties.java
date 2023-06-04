@@ -65,9 +65,9 @@ public class MyProperties {
 			e.printStackTrace();
 		}
 		if (change)
-			pattern = new ReplaceSpaces().replaceSpaceWithUnderscore(pattern);
+			pattern = new PrepareString().replaceSpaceWithUnderscore(pattern);
 		else
-			pattern = new ReplaceSpaces().replaceUnderscoreWithSpace(pattern);
+			pattern = new PrepareString().replaceUnderscoreWithSpace(pattern);
 
 		return properties.getProperty(pattern);
 	}

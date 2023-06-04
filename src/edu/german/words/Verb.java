@@ -4,11 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import edu.german.sql.QueryContractor;
+import edu.german.sql.VerbQueryContractor;
 import edu.german.sql.SqlQuery;
 import edu.german.tools.MyProperties;
+import edu.german.words.model.Word;
 
-public class NewVerb {
+public class Verb extends Word {
 	private int woid;
 	private int oid;
 	private String word;
@@ -17,10 +18,10 @@ public class NewVerb {
 	private String separable;
 	private List<Properties> propertiesList;
 
-	public NewVerb() {
+	public Verb() {
 	}
 
-	public NewVerb(int woid, int oid, String word, String meaning, String irregular, String separable,
+	public Verb(int woid, int oid, String word, String meaning, String irregular, String separable,
 			List<Properties> propertiesList) {
 		this.woid = woid;
 		this.oid = oid;
@@ -31,14 +32,7 @@ public class NewVerb {
 		this.propertiesList = propertiesList;
 	}
 
-	public int getWoid() {
-		return woid;
-	}
-
-	public void setWoid(int woid) {
-		this.woid = woid;
-	}
-
+	@Override
 	public int getOid() {
 		if (oid <= 0)
 			prepereOid();
@@ -46,28 +40,32 @@ public class NewVerb {
 		return oid;
 	}
 
+	@Override
 	public void setOid(int oid) {
 		this.oid = oid;
 	}
 
 	private void prepereOid() {
 		String query = new SqlQuery().getSql("get_verb_oid");
-		setOid(new QueryContractor().getVoid(query, word, irregular, separable));
+		setOid(new VerbQueryContractor().getVoid(query, word, irregular, separable));
 	}
 
 	private void prepereMeaning() {
 		String query = new SqlQuery().getSql("get_verb_meaning");
-		setMeaning(new QueryContractor().getVerbMeaning(query, word, irregular, separable));
+		setMeaning(new VerbQueryContractor().getVerbMeaning(query, word, irregular, separable));
 	}
 
+	@Override
 	public String getWord() {
 		return word;
 	}
 
+	@Override
 	public void setWord(String word) {
 		this.word = word;
 	}
 
+	@Override
 	public String getMeaning() {
 		if (meaning == null && word != null)
 			prepereMeaning();
@@ -75,6 +73,8 @@ public class NewVerb {
 		return meaning;
 	}
 
+
+	@Override
 	public void setMeaning(String meaning) {
 		this.meaning = meaning;
 	}
@@ -95,6 +95,7 @@ public class NewVerb {
 		this.separable = separable;
 	}
 
+	@Override
 	public List<Properties> getPropertiesList() {
 		if (propertiesList == null)
 			preparePropertiesList(woid, oid, word, meaning, irregular, separable);
@@ -110,7 +111,7 @@ public class NewVerb {
 
 		for (String mod : modus)
 			for (String tens : tenses) {
-				Properties prop = new QueryContractor().getVerbProperties(sql, oid, tens, mod);
+				Properties prop = new VerbQueryContractor().getVerbProperties(sql, oid, tens, mod);
 				if (prop != null)
 					list.add(prop);
 			}
@@ -121,6 +122,7 @@ public class NewVerb {
 		return null;
 	}
 
+	@Override
 	public void setPropertiesList(List<Properties> propertiesList) {
 		this.propertiesList = propertiesList;
 	}
@@ -134,7 +136,7 @@ public class NewVerb {
 
 		for (String mod : modus)
 			for (String tens : tenses) {
-				Properties prop = new QueryContractor().getVerbProperties(sql, oid, tens, mod);
+				Properties prop = new VerbQueryContractor().getVerbProperties(sql, oid, tens, mod);
 				if (prop != null)
 					list.add(prop);
 			}
@@ -190,8 +192,8 @@ public class NewVerb {
 			return this;
 		}
 
-		public NewVerb build() {
-			return new NewVerb(woid, oid, word, meaning, irregular, separable, propertiesList);
+		public Verb build() {
+			return new Verb(woid, oid, word, meaning, irregular, separable, propertiesList);
 		}
 
 	}

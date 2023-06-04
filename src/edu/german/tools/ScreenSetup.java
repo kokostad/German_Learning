@@ -31,6 +31,7 @@ public class ScreenSetup {
 	public int EDIT_FIELD_WIDTH = SCR_DEFAULT_WIDTH / 2;
 	public int EDIT_FIELD_HEIGHT = 30;
 
+	public int SMALL_FONT_SIZE = 14;
 	public int DEFAULT_FONT_SIZE = 16;
 	public int GAME_FONT_SIZE = 18;
 	public int GAME_BIG_FONT_SIZE = 24;
@@ -40,7 +41,7 @@ public class ScreenSetup {
 	public String STANDART_FONT_ART = "Serif";
 	public String GAME_FONT_ART = "MV Boli";
 
-	public Font DEFAULT_FONT = new Font(STANDART_FONT_ART, Font.ITALIC, DEFAULT_FONT_SIZE);
+	public Font DEFAULT_FONT = new Font(STANDART_FONT_ART, Font.ITALIC, SMALL_FONT_SIZE);
 	public Font GAME_FONT = new Font(GAME_FONT_ART, Font.BOLD | Font.ITALIC, GAME_FONT_SIZE);
 	public Font NORMAL_FONT = new MyFont().myFont(DEFAULT_FONT_SIZE);
 
