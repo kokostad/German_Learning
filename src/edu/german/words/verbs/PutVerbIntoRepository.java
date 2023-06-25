@@ -6,6 +6,7 @@ import java.util.Properties;
 import edu.german.sql.QueryBuilder;
 import edu.german.sql.SqlQuery;
 import edu.german.sql.VerbQueryContractor;
+import edu.german.tools.ShowMessage;
 import edu.german.words.Verb;
 
 public class PutVerbIntoRepository implements Runnable {
@@ -26,15 +27,21 @@ public class PutVerbIntoRepository implements Runnable {
 			String irregular = verb.getIrregular();
 			String separable = verb.getSeparable();
 
-			if (oid < 0) {
-				String query = new SqlQuery().getSql("add_new_verb");
-				new VerbQueryContractor().addVerb(query, word, meaning, irregular, separable);
-				oid = new VerbQueryContractor().getVerbId(meaning, word, irregular, separable);
+			if (word == null || meaning == null) {
+				new ShowMessage("EMPTY_FIELDS");
 			}
 
+			if (oid < 0 && (word != null && meaning != null)) {
+				String query = new SqlQuery().getSql("add_new_verb");
+				new VerbQueryContractor().addVerb(query, word, meaning, irregular, separable);
+
+			}
+			
 			if (!propList.isEmpty()) {
+				oid = new VerbQueryContractor().getVerbId(meaning, word, irregular, separable);
 				propList.forEach(prop -> putVerbIntoRepository(oid, prop));
 			}
+
 		});
 	}
 

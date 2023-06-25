@@ -5,7 +5,10 @@ import javax.swing.JOptionPane;
 
 public class ShowMessage extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private static final String FILE_CFG = "../cfg/messages.properties";
+	private static final String FILE_CFG = "../config/messages.properties";
+
+	public ShowMessage() {
+	}
 
 	public ShowMessage(String pattern) {
 		JOptionPane.showMessageDialog(this, new MyProperties(FILE_CFG).getValuesArray(pattern));
@@ -16,4 +19,7 @@ public class ShowMessage extends JFrame {
 		JOptionPane.showMessageDialog(this, information + " (" + hint + ")");
 	}
 
+	public void directMessage(String message) {
+		JOptionPane.showMessageDialog(this, message);
+	}
 }

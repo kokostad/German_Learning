@@ -14,8 +14,10 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JLabel;
 
 import edu.german.tools.MyInternalFrame;
+import edu.german.tools.ShowMessage;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.Verb;
 
@@ -46,6 +48,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	private MainVerbPanel verbPanel;
 	private String separable = null;
 	private String regular = null;
+	private String searchResult = "Result of search: ";
 	private int oid;
 
 	public AddVerbs(int height, int width, String setTitel) {
@@ -113,18 +116,23 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 
 			setOid(verb.getOid());
 
+			if (getOid() > 0)
+				new ShowMessage().directMessage(searchResult + getOid());
+
 			List<Properties> propList = verb.getPropertiesList(getOid());
 
 			if (propList != null)
 				propList.forEach(prop -> showPorperties(prop));
+
 		}
 
-		
 		else if (src == clearEditFieldsBtn) {
 			clearAllEditFields();
 		}
 
 		else if (src == addToListBtn) {
+			word = verbPanel.getWord();
+			meaning = verbPanel.getMeaing();
 			separable = verbPanel.getSeparatable();
 			regular = verbPanel.getRegular();
 
@@ -137,7 +145,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 					.withMeaning(meaning)
 					.withIrregular(regular)
 					.withSeparable(separable)
-					.withOid(oid)
+					.withOid(getOid())
 					.withPropertiesList(propertiesList)
 					.build();
 

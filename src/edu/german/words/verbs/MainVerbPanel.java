@@ -4,10 +4,10 @@ import java.awt.Font;
 
 import javax.swing.JPanel;
 
-import edu.german.tools.ArrayFromEnum;
 import edu.german.tools.MyComboBox;
 import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditField;
+import edu.german.tools.PrepareString;
 import edu.german.tools.ScreenSetup;
 
 public class MainVerbPanel extends JPanel {
@@ -18,8 +18,10 @@ public class MainVerbPanel extends JPanel {
 	private Font font = new ScreenSetup().DEFAULT_FONT;
 	private MyComboBox separatable;
 	private MyComboBox regular;
+	private PrepareString prs;
 
 	public MainVerbPanel() {
+		prs = new PrepareString();
 		word = new OneEditField.Builder()
 				.withTitle("Wpisz czasownik: ")
 				.withHint("czasownik w wersji podstawowej")
@@ -48,11 +50,11 @@ public class MainVerbPanel extends JPanel {
 	}
 
 	public String getWord() {
-		return word.getValue();
+		return prs.cutSpaces(word.getValue());
 	}
 
 	public String getMeaing() {
-		return meaning.getValue();
+		return prs.cutSpaces(meaning.getValue());
 	}
 
 	public String getSeparatable() {

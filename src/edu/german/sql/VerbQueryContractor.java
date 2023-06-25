@@ -405,6 +405,27 @@ public class VerbQueryContractor {
 		return list;
 	}
 
+	public int getVoid(String sql, String word) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, word);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return -1;
+	}
+
 	public int getVoid(String sql, String word, String irregular, String separable) {
 		loadDriver();
 		dbc = new DbConnect();
@@ -441,6 +462,8 @@ public class VerbQueryContractor {
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int count = rsmd.getColumnCount();
+			
+			String q = ps.toString();
 
 			String[] headers = new String[count];
 			for (int i = 1, k = 0; i <= headers.length; i++, k++)
@@ -535,6 +558,25 @@ public class VerbQueryContractor {
 			return true;
 
 		return false;
+	}
+
+	public void updateVerb(String sql, int id, String word, String irregular, String separable) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, irregular);
+			ps.setString(2, separable);
+			ps.setInt(3, id);
+			ps.setString(4, word);
+
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
 	}
 
 }

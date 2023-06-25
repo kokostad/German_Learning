@@ -2,6 +2,11 @@ package edu.german.tools;
 
 import java.util.regex.Pattern;
 
+/**
+ * PrepareString.java
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ * Class for manipulating strings
+ */
 public class PrepareString {
 	private String string;
 	private String regex = "_";

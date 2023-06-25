@@ -46,8 +46,15 @@ public class Verb extends Word {
 	}
 
 	private void prepereOid() {
-		String query = new SqlQuery().getSql("get_verb_oid");
-		setOid(new VerbQueryContractor().getVoid(query, word, irregular, separable));
+		int id = new VerbQueryContractor().getVoid(new SqlQuery().getSql("get_verb_oid"), word, irregular, separable);
+
+		if (id < 0) {
+			id = new VerbQueryContractor().getVoid(new SqlQuery().getSql("get_simple_verb_oid"), word);
+			new VerbQueryContractor().updateVerb(new SqlQuery().getSql("update_simple_verb_with_oid"), id, word,
+					irregular, separable);
+		}
+
+		setOid(id);
 	}
 
 	private void prepereMeaning() {
@@ -111,7 +118,7 @@ public class Verb extends Word {
 
 		for (String mod : modus)
 			for (String tens : tenses) {
-				Properties prop = new VerbQueryContractor().getVerbProperties(sql, oid, tens, mod);
+				Properties prop = new VerbQueryContractor().getVerbProperties(sql, getOid(), tens, mod);
 				if (prop != null)
 					list.add(prop);
 			}

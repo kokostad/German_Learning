@@ -22,6 +22,10 @@ EOSQL
 SELECT oid FROM ge.verbs WHERE word = ? LIMIT 1;
 EOSQL
 
+[get_simple_verb_oid]
+SELECT oid FROM ge.verbs WHERE word = ? LIMIT 1;
+EOSQL
+
 [get_verb_oid]
 SELECT oid FROM ge.verbs WHERE word = ? AND irregular = ? AND separable = ? LIMIT 1;
 EOSQL
@@ -49,6 +53,10 @@ EOSQL
 
 [add_new_verb]
 INSERT INTO ge.verbs(word, meaning, irregular, separable) VALUES(?, ?, ?, ?);
+EOSQL
+
+[pdate_simple_verb_with_oid]
+UPDATE ge.verbs SET irregular = ?, separable = ? WHERE oid = ? AND word = ?;
 EOSQL
 
 [add_new_verbs_conjugation]
