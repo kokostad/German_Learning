@@ -14,7 +14,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JLabel;
 
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.ShowMessage;

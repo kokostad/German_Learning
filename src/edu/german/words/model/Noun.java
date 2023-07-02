@@ -1,143 +1,86 @@
 package edu.german.words.model;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.Arrays;
+
+import edu.german.sql.QueryContractor;
+import edu.german.sql.SqlQuery;
 
 public class Noun extends Word {
-	private String genus = "das Substantiv";
-	private List<Map<Object, Object>> propertyList;
+	private static final String genus = "das Substantiv";
+	private int oid;
+	private String[] noun;
+	private String article;
+	private String mainPart;
+	private String wordPlural;
+	private String meanigPlural;
 
 	public Noun() {
-		propertyList = new LinkedList<Map<Object, Object>>();
-		super.setGenus(genus);
 	}
 
-	private Object getObjectFromList(String key) {
-		for (Map<Object, Object> m : propertyList)
-			if (m.containsKey(key))
-				return m.get(key);
-
-		return null;
+	public Noun(String wordSingular, String meanigSingular, String wordPlural, String meanigPlural) {
+		super(wordSingular, meanigSingular, genus);
+		this.wordPlural = wordPlural;
+		this.meanigPlural = meanigPlural;
+		setOid(wordSingular, meanigSingular);
+		setNoun(wordSingular);
+		setArticle(wordSingular);
+		setMainPart(wordSingular);
 	}
 
-	private void setObjectToList(Object key, Object value) {
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		map.put(key, value);
-		propertyList.add(map);
-	}
-
-	public int getOid() {
-		if (Integer.parseInt("OID") > -1)
-			return Integer.parseInt("OID");
-		else
-			return -1;
-	}
-
-	public String getExample() {
-		if (getObjectFromList("SENTENCE") != null)
-			return getObjectFromList("SENTENCE").toString();
-
-		return null;
-	}
-
-	public void setExample(String sentence) {
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		map.put("SENTENCE", sentence);
-		propertyList.add(map);
-	}
-
-	public String getWord() {
-		return getObjectFromList("WORD").toString();
-	}
-
-	public String getMeaning() {
-		return getObjectFromList("MEANING").toString();
-	}
-
-	public String[] getMeanings() {
-		return (getObjectFromList("MEANING").toString()).split(" ");
-	}
-
-	public void setOid(int oid) {
-		if (oid > -1)
-			setObjectToList("OID", oid);
-	}
-
-	public void setWord(String word) {
-		if (!word.isBlank())
-			setObjectToList("WORD", word);
-	}
-
-	public void setMeaning(String meaning) {
-		if (!meaning.isBlank())
-			setObjectToList("MEANING", meaning);
-	}
-
-	public void setMeanings(String[] meanings) {
-		setObjectToList("MEANINGS", meanings);
-	}
-
-	public int getWoid() {
-		int num = Integer.parseInt(getObjectFromList("WOID").toString());
-
-		if (num > -1)
-			return num;
-		else
-			return -1;
-	}
-
-	public void setWoid(Integer woid) {
-		if (woid > -1)
-			setObjectToList("WOID", woid);
+	private void setOid(String word, String meanig) {
+		String sql = new SqlQuery().getSql("get_noun_oid");
+		oid = new QueryContractor().getId(sql, word, meanig);
 	}
 
 	public String getArticle() {
-		String[] arr = getNoun();
-		return arr[0];
+		return article;
 	}
 
-	public void setArticle(String article) {
-		setObjectToList("ARTICLE", article);
+	public void setNoun(String word) {
+		this.noun = word.split(" ");
 	}
 
 	public String[] getNoun() {
-		if (!(getObjectFromList("NOUN").toString().isBlank())) {
-			return (getObjectFromList("NOUN").toString()).split(" ");
-		}
-		return null;
+		return noun;
 	}
 
-	public void setNoun(String[] noun) {
-		if (noun.length > 0) {
-			setObjectToList("NOUN", noun);
-		}
+	public void setArticle(String word) {
+		String[] noun = word.split(" ");
+		this.article = noun[0];
 	}
 
-	public List<Map<Object, Object>> getPropertyList() {
-		return propertyList;
+	public String getWordPlural() {
+		return wordPlural;
 	}
 
-	public void setPropertyList(List<Map<Object, Object>> propertyList) {
-		this.propertyList = propertyList;
+	public void setWordPlural(String wordPlural) {
+		this.wordPlural = wordPlural;
 	}
 
-	public void addPropertyToList(Map<Object, Object> propertyMap) {
-		propertyList.add(propertyMap);
+	public String getMeanigPlural() {
+		return meanigPlural;
 	}
 
-	public String getGenus() {
-		return genus;
+	public void setMeanigPlural(String meanigPlural) {
+		this.meanigPlural = meanigPlural;
 	}
 
-	public void setWoid(int woid) {
-		setObjectToList("WOID", woid);
+	public int getOid() {
+		return oid;
 	}
 
-	public void setExample1(String string) {
-		Map<Object, Object> map = new HashMap<Object, Object>();
-		map.put("SENTENCE", string);
+	public String getMainPart() {
+		return mainPart;
 	}
 
+	public void setMainPart(String mainPart) {
+		String[] noun = word.split(" ");
+		this.mainPart = noun[1];
+	}
+
+	@Override
+	public String toString() {
+		return "Noun [ genus: " + genus +  ", oid=" + oid + ", noun=" + word + ", article=" + article + ", word plural="
+				+ wordPlural + ", meaning plural=" + meanigPlural + ", noun tema: " + mainPart + "]";
+	}
 }

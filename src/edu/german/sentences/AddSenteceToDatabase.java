@@ -45,7 +45,7 @@ public class AddSenteceToDatabase {
 			Word newWord = new Word(word, wordMeaning, wordGenus);
 			// TODO improve this method
 			int woid1 = newWord.getWoid(word, wordGenus);
-			int woid = newWord.getWoid();
+			int woid = newWord.getWoid(word, wordGenus);
 
 			if (woid < 0) {
 				newWord.putIntoRepository(word, wordMeaning, wordGenus);

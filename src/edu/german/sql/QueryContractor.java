@@ -148,14 +148,14 @@ public class QueryContractor {
 		return -1;
 	}
 
-	public int getId(String sql, String word, String genus) {
+	public int getId(String sql, String word, String meaning) {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
 			ps.setString(1, word);
-			ps.setString(2, genus);
+			ps.setString(2, meaning);
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -370,7 +370,6 @@ public class QueryContractor {
 				Noun noun = new Noun();
 				noun.setOid(rs.getInt("oid"));
 				noun.setWoid(rs.getInt("woid"));
-				noun.setNoun(rs.getString("word").split(" "));
 				noun.setWord(rs.getString("word"));
 				String[] article = rs.getString("word").split(" ", 1);
 				noun.setArticle(article[0]);
@@ -401,7 +400,6 @@ public class QueryContractor {
 				noun.setWoid(rs.getInt("woid"));
 				noun.setOid(rs.getInt("oid"));
 				noun.setWord(rs.getString("word"));
-				noun.setNoun(rs.getString("word").split(" "));
 				String[] article = rs.getString("word").split(" ", 1);
 				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
@@ -430,7 +428,6 @@ public class QueryContractor {
 				noun.setWoid(rs.getInt("woid"));
 				noun.setOid(rs.getInt("oid"));
 				noun.setWord(rs.getString("word"));
-				noun.setNoun(rs.getString("word").split(" "));
 				String[] array = rs.getString("word").split(" ");
 				noun.setArticle(array[0]);
 				noun.setMeaning(rs.getString("meaning"));
@@ -681,15 +678,11 @@ public class QueryContractor {
 
 			while (rs.next()) {
 				Noun noun = new Noun();
-				noun.setNoun(rs.getString("word").split(" "));
 				noun.setWord(rs.getString("word"));
 				String[] article = rs.getString("word").split(" ");
 				noun.setArticle(article[0]);
 				noun.setMeaning(rs.getString("meaning"));
 				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
-
-				if (rs.getString("sentence") != null)
-					noun.setExample(rs.getString("sentence"));
 
 				list.add(noun);
 			}

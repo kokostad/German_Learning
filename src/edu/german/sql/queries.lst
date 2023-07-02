@@ -22,6 +22,10 @@ EOSQL
 SELECT oid FROM ge.verbs WHERE word = ? LIMIT 1;
 EOSQL
 
+[get_noun_oid]
+SELECT oid FROM ge.nouns WHERE word = ? AND meaning = ? LIMIT 1;
+EOSQL
+
 [get_simple_verb_oid]
 SELECT oid FROM ge.verbs WHERE word = ? LIMIT 1;
 EOSQL

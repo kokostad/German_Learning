@@ -8,26 +8,26 @@ import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 
 public class Word implements WordModel {
-	private Properties properites;
 	private int woid;
 	private int oid;
-	private String word;
-	private String meaning;
+	public String word;
+	public String meaning;
 	private String[] meanings;
 	private String genus;
+	private Properties properties;
 	private List<Properties> propertiesList;
 
 	public Word() {
-		properites = new Properties();
-		propertiesList = new LinkedList<>();
+		this.properties = new Properties();
+		this.propertiesList = new LinkedList<>();
 	}
 
 	public Word(String word, String meaning, String genus) {
-		properites = new Properties();
+		properties = new Properties();
 		propertiesList = new LinkedList<>();
-		setWord(word);
-		setMeaning(meaning);
-		setGenus(genus);
+		this.word = word;
+		this.meaning = meaning;
+		this.genus = genus;
 		setWoid(new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus));
 	}
 
@@ -71,19 +71,12 @@ public class Word implements WordModel {
 		this.meanings = meanings;
 	}
 
-	public String getGenus() {
-		return genus;
-	}
-
+	@Override
 	public void setGenus(String genus) {
 		this.genus = genus;
 	}
 
 	@Override
-	public int getWoid() {
-		return woid;
-	}
-
 	public int getWoid(String word, String genus) {
 		if (woid < 0)
 			return new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus);
@@ -133,13 +126,30 @@ public class Word implements WordModel {
 	public void addToPropertiesList(Properties properties) {
 		propertiesList.add(properties);
 	}
-	
+
+	@Override
 	public List<Properties> getPropertiesList() {
-			return propertiesList;
+		return propertiesList;
 	}
 
+	@Override
 	public void setPropertiesList(List<Properties> propertiesList) {
 		this.propertiesList = propertiesList;
+	}
+
+	@Override
+	public Properties getProperites() {
+		return properties;
+	}
+
+	@Override
+	public void setProperites(Properties properties) {
+		this.properties = properties;
+	}
+
+	@Override
+	public String getGenus() {
+		return genus;
 	}
 
 }

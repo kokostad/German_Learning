@@ -1,10 +1,13 @@
 package edu.german.words.model;
 
 import java.util.List;
+import java.util.Properties;
 
 public interface WordModel {
 
-	int getWoid();
+	String getGenus();
+
+	int getWoid(String word, String genus);
 
 	int getOid();
 
@@ -15,6 +18,14 @@ public interface WordModel {
 	String getMeaning();
 
 	String[] getMeanings();
+
+	Properties getProperites();
+
+	List<Properties> getPropertiesList();
+
+	List<Word> getAllWords();
+
+	void setGenus(String genus);
 
 	void setWoid(int woid);
 
@@ -28,10 +39,12 @@ public interface WordModel {
 
 	void setWord(String word);
 
+	void setProperites(Properties properties);
+
+	void setPropertiesList(List<Properties> propertiesList);
+
 	boolean isExist(String word, String genus);
 
 	void putIntoRepository(String word, String meaning, String genus);
-
-	List<Word> getAllWords();
 
 }
