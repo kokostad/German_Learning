@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import edu.german.dao.DbConnect;
 import edu.german.sentences.Sentence;
@@ -20,12 +21,13 @@ import edu.german.words.model.Word;
 
 /**
  * QueryContractor.java
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com 
- * The class performs SQL queries
+ * 
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class performs
+ *         SQL queries
  */
 public class QueryContractor {
-	private DbConnect dbc;
-	private Connection con;
+	protected DbConnect dbc;
+	protected Connection con;
 
 	public void loadDriver() {
 		try {
@@ -789,29 +791,6 @@ public class QueryContractor {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				return rs.getInt("woid");
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-
-		return -1;
-	}
-
-	public int getVoid(String sql, String word, String irregular, String separable) {
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, word);
-			ps.setString(2, irregular);
-			ps.setString(3, separable);
-
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				return rs.getInt(1);
 			}
 
 		} catch (SQLException e) {

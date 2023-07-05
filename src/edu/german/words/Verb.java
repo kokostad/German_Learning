@@ -118,7 +118,7 @@ public class Verb extends Word {
 
 		for (String mod : modus)
 			for (String tens : tenses) {
-				Properties prop = new VerbQueryContractor().getVerbProperties(sql, getOid(), tens, mod);
+				Properties prop = new VerbQueryContractor().getProperties(sql, getOid(), tens, mod);
 				if (prop != null)
 					list.add(prop);
 			}
@@ -143,7 +143,7 @@ public class Verb extends Word {
 
 		for (String mod : modus)
 			for (String tens : tenses) {
-				Properties prop = new VerbQueryContractor().getVerbProperties(sql, oid, tens, mod);
+				Properties prop = new VerbQueryContractor().getProperties(sql, oid, tens, mod);
 				if (prop != null)
 					list.add(prop);
 			}

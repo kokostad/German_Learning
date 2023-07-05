@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,7 +14,6 @@ import javax.swing.JSplitPane;
 
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.buttons.ButtonsPanel;
-
 import edu.german.words.model.Noun;
 
 public class AddNouns extends MyInternalFrame implements ActionListener {
@@ -26,6 +27,7 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 	private JButton addListToRepoBtn;
 	private NounEditPanel editPanel;
 	private MainNounPanel nounPanel;
+	private List<Properties> list;
 
 	public AddNouns(int height, int width, String setTitel) {
 		super(height, width, setTitel);
@@ -63,14 +65,14 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
-		
-		if (src == checkBtn) {
-			Noun noun = new Noun(editPanel.getWordSingular(), editPanel.getMeanigSingular(), editPanel.getWordPlural(),
-					editPanel.getMeanigPlural());
-			
-			System.out.println(noun.toString());
-		}
 
+		if (src == checkBtn) {
+			int id = new Noun().getOid(editPanel.getWordSingular());
+
+			if (id > 0) {
+				editPanel.setValues(new Noun().prepareById(id));
+			}
+		}
 	}
 
 }

@@ -4,15 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import edu.german.tools.MyFont;
 import edu.german.tools.MyProperties;
+import edu.german.tools.ScreenSetup;
 
 public class ButtonsPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private Color bgColor = ScreenSetup.BG_COLOR;
 	private static final String CFG_FILE = "buttons.properties";
 	private MyFont myFont;
 	private JButton b1;
@@ -39,6 +42,7 @@ public class ButtonsPanel extends JPanel {
 	public ButtonsPanel(Object t1) {
 		myFont = new MyFont();
 		JPanel up = new JPanel();
+		up.setBackground(bgColor);
 		GridBagLayout g = new GridBagLayout();
 		up.setLayout(g);
 		GridBagConstraints c = new GridBagConstraints();
@@ -57,11 +61,13 @@ public class ButtonsPanel extends JPanel {
 		BorderLayout bl = new BorderLayout();
 		this.setLayout(bl);
 		this.add(up, BorderLayout.NORTH);
+		this.setBackground(bgColor);
 	}
 
 	public ButtonsPanel(String t1, String t2) {
 		myFont = new MyFont();
 		JPanel up = new JPanel();
+		up.setBackground(bgColor);
 		GridBagLayout g = new GridBagLayout();
 		up.setLayout(g);
 		GridBagConstraints c = new GridBagConstraints();
@@ -89,11 +95,13 @@ public class ButtonsPanel extends JPanel {
 		BorderLayout bl = new BorderLayout();
 		setLayout(bl);
 		this.add(up, BorderLayout.NORTH);
+		this.setBackground(bgColor);
 	}
 
 	public ButtonsPanel(String t1, String t2, String t3) {
 		myFont = new MyFont();
 		JPanel up = new JPanel();
+		up.setBackground(bgColor);
 		GridBagLayout g = new GridBagLayout();
 		up.setLayout(g);
 		GridBagConstraints c = new GridBagConstraints();
@@ -130,11 +138,13 @@ public class ButtonsPanel extends JPanel {
 		BorderLayout bl = new BorderLayout();
 		setLayout(bl);
 		this.add(up, BorderLayout.NORTH);
+		this.setBackground(bgColor);
 	}
 
 	public ButtonsPanel(String t1, String t2, String t3, String t4) {
 		myFont = new MyFont();
 		JPanel up = new JPanel();
+		up.setBackground(bgColor);
 		GridBagLayout g = new GridBagLayout();
 		up.setLayout(g);
 		GridBagConstraints c = new GridBagConstraints();
@@ -180,11 +190,13 @@ public class ButtonsPanel extends JPanel {
 		BorderLayout bl = new BorderLayout();
 		setLayout(bl);
 		this.add(up, BorderLayout.NORTH);
+		this.setBackground(bgColor);
 	}
 
 	public ButtonsPanel(String t1, String t2, String t3, String t4, String t5) {
 		myFont = new MyFont();
 		JPanel up = new JPanel();
+		up.setBackground(bgColor);
 		GridBagLayout g = new GridBagLayout();
 		up.setLayout(g);
 		GridBagConstraints c = new GridBagConstraints();
@@ -239,11 +251,13 @@ public class ButtonsPanel extends JPanel {
 		BorderLayout bl = new BorderLayout();
 		setLayout(bl);
 		this.add(up, BorderLayout.NORTH);
+		this.setBackground(bgColor);
 	}
 
 	public ButtonsPanel(String t1, String t2, String t3, String t4, String t5, String t6) {
 		myFont = new MyFont();
 		JPanel up = new JPanel();
+		up.setBackground(bgColor);
 		GridBagLayout g = new GridBagLayout();
 		up.setLayout(g);
 		GridBagConstraints c = new GridBagConstraints();
@@ -307,11 +321,13 @@ public class ButtonsPanel extends JPanel {
 		BorderLayout bl = new BorderLayout();
 		setLayout(bl);
 		this.add(up, BorderLayout.NORTH);
+		this.setBackground(bgColor);
 	}
 
 	public ButtonsPanel(String t1, String t2, String t3, String t4, String t5, String t6, String t7) {
 		myFont = new MyFont();
 		JPanel up = new JPanel();
+		up.setBackground(bgColor);
 		GridBagLayout g = new GridBagLayout();
 		up.setLayout(g);
 		GridBagConstraints c = new GridBagConstraints();
@@ -384,6 +400,7 @@ public class ButtonsPanel extends JPanel {
 		BorderLayout bl = new BorderLayout();
 		setLayout(bl);
 		this.add(up, BorderLayout.NORTH);
+		this.setBackground(bgColor);
 	}
 
 	public JButton getB1() {

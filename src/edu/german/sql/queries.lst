@@ -26,6 +26,14 @@ EOSQL
 SELECT oid FROM ge.nouns WHERE word = ? AND meaning = ? LIMIT 1;
 EOSQL
 
+[get_noun_id_by_word]
+SELECT oid FROM ge.nouns WHERE word = ? LIMIT 1;
+EOSQL
+
+[get_noun_by_id]
+SELECT * FROM ge.nouns WHERE oid = ? ;
+EOSQL
+
 [get_simple_verb_oid]
 SELECT oid FROM ge.verbs WHERE word = ? LIMIT 1;
 EOSQL
@@ -85,6 +93,10 @@ EOSQL
 
 [add_new_sentence]
 INSERT INTO ge.sentences (sentence, meaning, type) VALUES(?, ?, ?);
+EOSQL
+
+[get_noun_property]
+select * from ge.nouns where oid = ?;
 EOSQL
 
 ## Checking

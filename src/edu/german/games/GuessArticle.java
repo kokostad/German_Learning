@@ -177,7 +177,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		article = noun[0];
 		gameWord = noun[1];
 		wordMeaning = nounFromList.getMeaning();
-		example = nounFromList.getExample();
+//		example = nounFromList.getExample();
 		gameWordLbl.setText(" " + gameWord + " ");
 	}
 

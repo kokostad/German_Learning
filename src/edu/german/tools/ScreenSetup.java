@@ -7,6 +7,9 @@ import java.awt.Toolkit;
 
 public class ScreenSetup {
 
+	private static String CFG_FILE = "screen.properties";
+	private static MyProperties mp = new MyProperties(CFG_FILE);
+
 	Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public int SCR_WIDTH = dim.width;
 	public int SCR_HEIGHT = dim.height;
@@ -48,5 +51,6 @@ public class ScreenSetup {
 //	Color parameters
 	public Color LABEL_COLOR = new Color(139, 69, 19);
 	public Color LABEL_COLOR_2 = new Color(51, 51, 255);
+	public static Color BG_COLOR = new Color(mp.getIntValue("BG_R"), mp.getIntValue("BG_G"), mp.getIntValue("BG_B"));
 
 }

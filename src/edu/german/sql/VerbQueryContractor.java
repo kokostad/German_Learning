@@ -22,133 +22,11 @@ import edu.german.words.model.Word;
 
 /**
  * VerbQueryContractor.java
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com 
- * The class performs SQL queries
+ * 
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class performs
+ *         SQL queries
  */
-public class VerbQueryContractor {
-	private DbConnect dbc;
-	private Connection con;
-
-	public void loadDriver() {
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public boolean executeQuery(String sql) {
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			return ps.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-
-		return false;
-	}
-
-	public boolean executeQuery(String sql, String str1) {
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, str1);
-
-			return ps.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-
-		return false;
-	}
-
-	public boolean executeQuery(String sql, String str1, String str2) {
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, str1);
-			ps.setString(2, str2);
-
-			return ps.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-
-		return false;
-	}
-
-	public boolean executeQuery(String sql, String str1, String str2, String str3) {
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, str1);
-			ps.setString(2, str2);
-			ps.setString(3, str3);
-
-			return ps.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-
-		return false;
-	}
-
-	public int getId(String sql, String variable) {
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, variable);
-
-			ResultSet rs = ps.executeQuery();
-			while (rs.next())
-				return rs.getInt(1);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-
-		return -1;
-	}
-
-	public int getId(String sql, String word, String genus) {
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, word);
-			ps.setString(2, genus);
-
-			ResultSet rs = ps.executeQuery();
-			while (rs.next())
-				return rs.getInt(1);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-
-		return -1;
-	}
+public class VerbQueryContractor extends QueryContractor {
 
 	public int getVerbId(String sql, String word, String irregular, String separable) {
 		loadDriver();
@@ -449,7 +327,7 @@ public class VerbQueryContractor {
 		return -1;
 	}
 
-	public Properties getVerbProperties(String sql, int oid, String tens, String modus) {
+	public Properties getProperties(String sql, int oid, String tens, String modus) {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
@@ -462,7 +340,7 @@ public class VerbQueryContractor {
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int count = rsmd.getColumnCount();
-			
+
 			String q = ps.toString();
 
 			String[] headers = new String[count];
@@ -578,5 +456,4 @@ public class VerbQueryContractor {
 			dbc.closeConnection(con);
 		}
 	}
-
 }

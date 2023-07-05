@@ -1,6 +1,5 @@
 package edu.german.words.nouns;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -9,6 +8,7 @@ import javax.swing.JPanel;
 import edu.german.tools.OneEditField;
 import edu.german.tools.PrepareString;
 import edu.german.tools.ScreenSetup;
+import edu.german.words.model.Noun;
 import edu.german.words.model.Word;
 
 public class NounEditPanel extends JPanel {
@@ -18,8 +18,8 @@ public class NounEditPanel extends JPanel {
 	private OneEditField wordPlural;
 	private OneEditField meaningPlural;
 	private Font font = new ScreenSetup().DEFAULT_FONT;
-	private int height = 30;
-	private int width = 250;
+	private int height = new ScreenSetup().EDIT_FIELD_HEIGHT;
+	private int width = new ScreenSetup().WORD_FIELD_WIDTH;
 	
 	public NounEditPanel() {
 		wordSingular = new OneEditField.Builder()
@@ -54,7 +54,7 @@ public class NounEditPanel extends JPanel {
 				.withWidth(width)
 				.build();
 
-		this.setLayout(new GridLayout(2, 2));
+		this.setLayout(new GridLayout(2, 2, 10, 10));
 		this.add(wordSingular);
 		this.add(meaningSingular);
 		this.add(wordPlural);
@@ -87,6 +87,13 @@ public class NounEditPanel extends JPanel {
 		meaningSingular.clearField();
 		wordPlural.clearField();
 		meaningPlural.clearField();
+	}
+
+	public void setValues(Noun noun) {
+		wordSingular.setValue(noun.getWord());
+		meaningSingular.setValue(noun.getMeaning());
+		wordPlural.setValue(noun.getWordPlural());
+		meaningPlural.setValue(noun.getMeanigPlural());
 	}
 
 }

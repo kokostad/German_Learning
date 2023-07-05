@@ -31,7 +31,10 @@ public class PrepareString {
 	}
 
 	public String cutSpaces(String str) {
-		return str.strip();
+		if (str != null)
+			return str.strip();
+
+		return null;
 	}
 
 	public boolean emptyString() {
