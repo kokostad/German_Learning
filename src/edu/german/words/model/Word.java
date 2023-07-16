@@ -152,4 +152,10 @@ public class Word implements WordModel {
 		return genus;
 	}
 
+	@Override
+	public List<Properties> getPropertiesList(int oid) {
+		// TODO Auto-generated method stub
+		return propertiesList;
+	}
+
 }

@@ -22,6 +22,8 @@ public interface WordModel {
 	Properties getProperites();
 
 	List<Properties> getPropertiesList();
+	
+	List<Properties> getPropertiesList(int oid);
 
 	List<Word> getAllWords();
 

@@ -110,8 +110,8 @@ public class Verb extends Word {
 		return propertiesList;
 	}
 
+	@Override
 	public List<Properties> getPropertiesList(int oid) {
-		List<Properties> list = new LinkedList<>();
 		String sql = new SqlQuery().getSql("get_verb_property");
 		String[] tenses = new MyProperties("word.properties").getValuesArray("VERB_TENS");
 		String[] modus = new MyProperties("word.properties").getValuesArray("VERB_MODUS");
@@ -120,11 +120,11 @@ public class Verb extends Word {
 			for (String tens : tenses) {
 				Properties prop = new VerbQueryContractor().getProperties(sql, getOid(), tens, mod);
 				if (prop != null)
-					list.add(prop);
+					propertiesList.add(prop);
 			}
 
-		if (!list.isEmpty())
-			return list;
+		if (!propertiesList.isEmpty())
+			return propertiesList;
 
 		return null;
 	}
@@ -133,7 +133,7 @@ public class Verb extends Word {
 	public void setPropertiesList(List<Properties> propertiesList) {
 		this.propertiesList = propertiesList;
 	}
-
+	
 	public void preparePropertiesList(int woid, int oid, String word, String meaning, String irregular,
 			String separable) {
 		List<Properties> list = new LinkedList<>();

@@ -14,7 +14,8 @@ public class Noun extends Word {
 	private static final String genus = "das Substantiv";
 	private int oid;
 	private String[] noun;
-	private String wordSingular;
+	private String word;
+	private String meaning;
 	private String article;
 	private String mainPart;
 	private String wordPlural;
@@ -34,7 +35,7 @@ public class Noun extends Word {
 			this.oid = oid;
 
 		if (wordSingular != null)
-			this.wordSingular = wordSingular;
+			this.word = wordSingular;
 		
 		if (wordPlural != null)
 			this.wordPlural = wordPlural;
@@ -56,8 +57,17 @@ public class Noun extends Word {
 		}
 
 		setNoun(wordSingular);
+		setMeaning(meanigSingular);
 		setArticle(wordSingular);
 		setMainPart(wordSingular);
+		setWordPlural(wordPlural);
+		setMeanigPlural(meanigPlural);
+		setPropertiesList(propertiesList);
+	}
+
+	@Override
+	public String getGenus() {
+		return genus;
 	}
 
 	private void setOid(String word, String meanig) {
@@ -75,12 +85,12 @@ public class Noun extends Word {
 
 	@Override
 	public void setWord(String wordSingular) {
-		this.wordSingular = wordSingular;
+		this.word = wordSingular;
 	}
 
 	@Override
 	public String getWord() {
-		return wordSingular;
+		return word;
 	}
 
 	public String[] getNoun() {
@@ -139,7 +149,7 @@ public class Noun extends Word {
 
 	@Override
 	public String toString() {
-		return "Noun [ genus: " + genus + ", oid=" + oid + ", noun=" + wordSingular + ", meaning: " + meaning + ", article="
+		return "Noun [ genus: " + genus + ", oid=" + oid + ", noun=" + word + ", meaning: " + meaning + ", article="
 				+ article + ", word plural=" + wordPlural + ", meaning plural=" + meanigPlural + ", noun tema: "
 				+ mainPart + "]";
 	}
@@ -163,7 +173,8 @@ public class Noun extends Word {
 	public static class Builder extends Noun {
 		private int oid;
 		private String[] noun;
-		private String wordSingular;
+		private String word;
+		private String meaning;
 		private String wordPlural;
 		private String meanigPlural;
 		private List<Properties> propertiesList;
@@ -176,8 +187,8 @@ public class Noun extends Word {
 			return this;
 		}
 
-		public Builder withWord(String wordSingular) {
-			this.wordSingular = wordSingular;
+		public Builder withWord(String word) {
+			this.word = word;
 			return this;
 		}
 
@@ -202,13 +213,13 @@ public class Noun extends Word {
 		}
 
 		public Noun build() {
-			return new Noun(oid, wordSingular, meaning, wordPlural, meanigPlural, propertiesList);
+			return new Noun(oid, word, meaning, wordPlural, meanigPlural, propertiesList);
 		}
 	}
 
-	public int getOid(String wordSingular, String meanigSingular) {
+	public int getOid(String word, String meanig) {
 		String sql = new SqlQuery().getSql("get_noun_oid");
-		oid = new QueryContractor().getId(sql, wordSingular, meanigSingular);
+		oid = new QueryContractor().getId(sql, word, meanig);
 		return oid;
 	}
 
@@ -217,9 +228,9 @@ public class Noun extends Word {
 		return new NounQueryContractor().getById(sql, id);
 	}
 
-	public int getOid(String wordSingular) {
+	public int getOid(String word) {
 		String sql = new SqlQuery().getSql("get_noun_id_by_word");
-		oid = new QueryContractor().getId(sql, wordSingular);
+		oid = new QueryContractor().getId(sql, word);
 		return oid;
 	}
 }

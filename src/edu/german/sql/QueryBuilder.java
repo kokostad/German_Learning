@@ -242,4 +242,23 @@ public class QueryBuilder {
 		return sb1.toString() + sb2.toString();
 	}
 
+	public String putNewNounIntoDbQuery(String word, String meaning, String wordPlural, String meaningPlural) {
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("INSERT INTO ge.nouns(word, meaning");
+
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append("VALUES(");
+		sb2.append("'" + word + "', '" + meaning + "'");
+
+		if (wordPlural != null) {
+			sb1.append(", word_plural, meaning_plural");
+			sb2.append(", '" + wordPlural + "', '" + meaningPlural + "'");
+		}
+
+		sb1.append(") ");
+		sb2.append("); ");
+
+		return sb1.toString() + sb2.toString();
+	}
+
 }

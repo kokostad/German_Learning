@@ -19,6 +19,7 @@ import edu.german.tools.MyInternalFrame;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.Verb;
+import edu.german.words.model.Word;
 
 /**
  * AddVerbs.java
@@ -104,7 +105,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			separable = verbPanel.getSeparatable();
 			regular = verbPanel.getRegular();
 			
-			Verb verb = new Verb.Builder()
+			Word verb = new Verb.Builder()
 					.withWord(word)
 					.withMeaning(meaning)
 					.withIrregular(regular)
