@@ -22,7 +22,6 @@ import edu.german.tools.MyProperties;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.model.Noun;
-import edu.german.words.model.Word;
 
 public class AddNouns extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -84,9 +83,9 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 		if (src == checkBtn) {
 			id = new Noun().getOid(editPanel.getWordSingular());
 
-			if (id > 0) {
+			if (id > 0)
 				editPanel.setValues(new Noun().prepareById(id));
-			}
+
 		}
 
 		else if (src == clearEditFieldsBtn) {
@@ -95,11 +94,9 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 
 		else if (src == addToListBtn) {
 			Noun noun = new Noun();
-			if (id < 0) {
-				id = new Noun().getOid(editPanel.getWordSingular());
+			if (id > 0)
 				noun.setOid(id);
-			}
-//			noun.setOid(-1);
+
 			noun.setWord(editPanel.getWordSingular());
 			noun.setMeaning(editPanel.getMeanigSingular());
 			noun.setWordPlural(editPanel.getWordPlural());
@@ -113,6 +110,7 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == clearListBtn) {
+			wordList.clear();
 			propertiesList.clear();
 			tb.clearTable();
 		}
@@ -120,6 +118,8 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 		else if (src == addListToRepoBtn) {
 			if (wordList != null)
 				es.submit(new ExecutorPutNounIntoDatabase(wordList));
+			
+			tb.clearTable();
 		}
 	}
 

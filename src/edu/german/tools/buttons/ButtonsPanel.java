@@ -25,10 +25,9 @@ public class ButtonsPanel extends JPanel {
 	private JButton b5;
 	private JButton b6;
 	private JButton b7;
-	private Integer defaultFontSize = 16;
+	private Integer defaultFontSize = new MyProperties("screen.properties").getIntValue("DEFAULT_BUTTON_FONT_SIZE");
 
 	public ButtonsPanel() {
-		// NOTICE Nothing to do
 	}
 
 	public void setFontSize(Integer size) {

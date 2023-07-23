@@ -23,22 +23,23 @@ public class ExecutorPutNounIntoDatabase implements Runnable {
 		String sql;
 		int id = -1;
 		for (Noun word : list) {
-			if (word.getOid() <= 0) {
+			id = word.getOid();
+			if (id <= 0) {
 				sql = new SqlQuery().getSql("get_noun_oid");
-				System.out.println(sql);
+//				System.out.println(sql);
 				id = new QueryContractor().getId(sql, word.getWord(), word.getMeaning());
-				System.out.println("id: " + id);
+//				System.out.println("id: " + id);
 			}
 
 			if (id < 0) {
-				sql = new QueryBuilder().putNewNounIntoDbQuery(word.getWord(), word.getMeaning(), word.getWordPlural(),
+				sql = new QueryBuilder().putNewNounIntoDb(word.getWord(), word.getMeaning(), word.getWordPlural(),
 						word.getMeaningPlural());
-				System.out.println(sql);
+//				System.out.println(sql);
 				new QueryContractor().executeQuery(sql);
 			} else {
 				sql = new QueryBuilder().updateNoun(id, word.getWord(), word.getMeaning(), word.getWordPlural(),
 						word.getMeaningPlural());
-				System.out.println(sql);
+//				System.out.println(sql);
 				new QueryContractor().executeQuery(sql);
 			}
 		}

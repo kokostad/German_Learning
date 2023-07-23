@@ -242,7 +242,7 @@ public class QueryBuilder {
 		return sb1.toString() + sb2.toString();
 	}
 
-	public String putNewNounIntoDbQuery(String word, String meaning, String wordPlural, String meaningPlural) {
+	public String putNewNounIntoDb(String word, String meaning, String wordPlural, String meaningPlural) {
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("INSERT INTO ge.nouns(word, meaning");
 
@@ -261,21 +261,20 @@ public class QueryBuilder {
 		return sb1.toString() + sb2.toString();
 	}
 
-	// UPDATE table_name SET column1 = value1, column2 = value2...., columnN = valueN WHERE [condition];
 	public String updateNoun(int id, String word, String meaning, String wordPlural, String meaningPlural) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("UPDATE ge.nouns SET word = 'word'");
+		sb.append("UPDATE ge.nouns SET word = '" + word + "'");
 
 		if (meaning != null)
-			sb.append(", meaning = 'meaning'");
+			sb.append(", meaning = '" + meaning + "'");
 
 		if (wordPlural != null)
-			sb.append(", word_plural = 'wordPlural'");
+			sb.append(", word_plural = '" + wordPlural + "'");
 
 		if (meaningPlural != null)
-			sb.append(", meaning_plural = 'meaningPlural'");
+			sb.append(", meaning_plural = '" + meaningPlural + "'");
 
-		sb.append(" WHERE oid = id ;");
+		sb.append(" WHERE oid = " + id);
 
 		return sb.toString();
 	}

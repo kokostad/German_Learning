@@ -9,7 +9,6 @@ import edu.german.tools.OneEditField;
 import edu.german.tools.PrepareString;
 import edu.german.tools.ScreenSetup;
 import edu.german.words.model.Noun;
-import edu.german.words.model.Word;
 
 public class NounEditPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -75,11 +74,6 @@ public class NounEditPanel extends JPanel {
 
 	public String getMeanigPlural() {
 		return new PrepareString().cutSpaces(meaningPlural.getValue());
-	}
-
-	public Word getWord(){
-		Word word = new Word();
-		return word;
 	}
 
 	public void clearEditFields() {

@@ -9,6 +9,11 @@ import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 import edu.german.tools.MyProperties;
 
+/**
+ * Noun.java
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ *
+ */
 public class Noun extends Word implements WordModel {
 	private static final String genus = "das Substantiv";
 	private int oid;
@@ -35,7 +40,7 @@ public class Noun extends Word implements WordModel {
 
 		if (wordSingular != null)
 			this.word = wordSingular;
-		
+
 		if (wordPlural != null)
 			this.wordPlural = wordPlural;
 		else {
@@ -168,6 +173,23 @@ public class Noun extends Word implements WordModel {
 		return null;
 	}
 
+	public int getOid(String word, String meanig) {
+		String sql = new SqlQuery().getSql("get_noun_oid");
+		oid = new QueryContractor().getId(sql, word, meanig);
+		return oid;
+	}
+
+	public Noun prepareById(int id) {
+		String sql = new SqlQuery().getSql("get_noun_by_id");
+		return new NounQueryContractor().getById(sql, id);
+	}
+
+	public int getOid(String word) {
+		String sql = new SqlQuery().getSql("get_noun_id_by_word");
+		oid = new QueryContractor().getId(sql, word);
+		return oid;
+	}
+
 	// TODO Need to add Builder
 	public static class Builder extends Noun {
 		private int oid;
@@ -216,20 +238,4 @@ public class Noun extends Word implements WordModel {
 		}
 	}
 
-	public int getOid(String word, String meanig) {
-		String sql = new SqlQuery().getSql("get_noun_oid");
-		oid = new QueryContractor().getId(sql, word, meanig);
-		return oid;
-	}
-
-	public Noun prepareById(int id) {
-		String sql = new SqlQuery().getSql("get_noun_by_id");
-		return new NounQueryContractor().getById(sql, id);
-	}
-
-	public int getOid(String word) {
-		String sql = new SqlQuery().getSql("get_noun_id_by_word");
-		oid = new QueryContractor().getId(sql, word);
-		return oid;
-	}
 }
