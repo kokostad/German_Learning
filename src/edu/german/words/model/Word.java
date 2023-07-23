@@ -10,8 +10,8 @@ import edu.german.sql.SqlQuery;
 public class Word implements WordModel {
 	private int woid;
 	private int oid;
-	public String word;
-	public String meaning;
+	private String word;
+	private String meaning;
 	private String[] meanings;
 	private String genus;
 	private Properties properties;
@@ -154,7 +154,6 @@ public class Word implements WordModel {
 
 	@Override
 	public List<Properties> getPropertiesList(int oid) {
-		// TODO Auto-generated method stub
 		return propertiesList;
 	}
 

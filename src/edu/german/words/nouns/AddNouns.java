@@ -22,6 +22,7 @@ import edu.german.tools.MyProperties;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.model.Noun;
+import edu.german.words.model.Word;
 
 public class AddNouns extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -98,6 +99,7 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 				id = new Noun().getOid(editPanel.getWordSingular());
 				noun.setOid(id);
 			}
+//			noun.setOid(-1);
 			noun.setWord(editPanel.getWordSingular());
 			noun.setMeaning(editPanel.getMeanigSingular());
 			noun.setWordPlural(editPanel.getWordPlural());
@@ -123,7 +125,7 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 
 	private void showList(List<Noun> wordList) {
 		for (Noun word : wordList) {
-			String[] fullWord = { word.getWord(), word.getMeaning(), word.getWordPlural(), word.getMeanigPlural() };
+			String[] fullWord = { word.getWord(), word.getMeaning(), word.getWordPlural(), word.getMeaningPlural() };
 			tb.showRow(fullWord);
 		}
 		repaint();

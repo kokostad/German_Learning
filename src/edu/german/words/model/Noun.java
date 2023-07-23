@@ -7,10 +7,9 @@ import java.util.Properties;
 import edu.german.sql.NounQueryContractor;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
-import edu.german.sql.VerbQueryContractor;
 import edu.german.tools.MyProperties;
 
-public class Noun extends Word {
+public class Noun extends Word implements WordModel {
 	private static final String genus = "das Substantiv";
 	private int oid;
 	private String[] noun;
@@ -120,7 +119,7 @@ public class Noun extends Word {
 		this.wordPlural = wordPlural;
 	}
 
-	public String getMeanigPlural() {
+	public String getMeaningPlural() {
 		return meanigPlural;
 	}
 

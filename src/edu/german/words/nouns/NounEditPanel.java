@@ -93,7 +93,7 @@ public class NounEditPanel extends JPanel {
 		wordSingular.setValue(noun.getWord());
 		meaningSingular.setValue(noun.getMeaning());
 		wordPlural.setValue(noun.getWordPlural());
-		meaningPlural.setValue(noun.getMeanigPlural());
+		meaningPlural.setValue(noun.getMeaningPlural());
 	}
 
 }
