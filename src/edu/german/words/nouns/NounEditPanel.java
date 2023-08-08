@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import edu.german.tools.OneEditField;
 import edu.german.tools.PrepareString;
 import edu.german.tools.ScreenSetup;
-import edu.german.words.model.Noun;
+import edu.german.words.Noun;
 
 public class NounEditPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

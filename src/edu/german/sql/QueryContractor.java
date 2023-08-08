@@ -10,13 +10,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import edu.german.dao.DbConnect;
 import edu.german.sentences.Sentence;
 import edu.german.tools.PrepareArrayFromString;
 import edu.german.tools.TextCleaner;
-import edu.german.words.model.Noun;
+import edu.german.words.Noun;
 import edu.german.words.model.Word;
 
 /**

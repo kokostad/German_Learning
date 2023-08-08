@@ -1,24 +1,16 @@
 package edu.german.sql;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import edu.german.dao.DbConnect;
-import edu.german.sentences.Sentence;
 import edu.german.tools.PrepareArrayFromString;
-import edu.german.tools.TextCleaner;
 import edu.german.words.Verb;
-import edu.german.words.model.Noun;
-import edu.german.words.model.Word;
 
 /**
  * VerbQueryContractor.java
@@ -340,8 +332,6 @@ public class VerbQueryContractor extends QueryContractor {
 			ResultSet rs = ps.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int count = rsmd.getColumnCount();
-
-			String q = ps.toString();
 
 			String[] headers = new String[count];
 			for (int i = 1, k = 0; i <= headers.length; i++, k++)

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import edu.german.dao.DbConnect;
-import edu.german.words.model.Noun;
+import edu.german.words.Noun;
 
 public class NounQueryContractor extends QueryContractor {
 
@@ -98,7 +98,7 @@ public class NounQueryContractor extends QueryContractor {
 				noun.setNoun(word);
 				noun.setWord(word);
 				noun.setArticle(word);
-				noun.setMainPart(word);
+				noun.setNounDomain(word);
 				noun.setMeaning(rs.getString("meaning"));
 				if (rs.getString("word_plural") != null)
 					noun.setWordPlural(rs.getString("word_plural"));

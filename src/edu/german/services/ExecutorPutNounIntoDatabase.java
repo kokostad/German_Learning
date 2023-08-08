@@ -5,7 +5,7 @@ import java.util.List;
 import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
-import edu.german.words.model.Noun;
+import edu.german.words.Noun;
 
 public class ExecutorPutNounIntoDatabase implements Runnable {
 	private List<Noun> list;
@@ -22,24 +22,20 @@ public class ExecutorPutNounIntoDatabase implements Runnable {
 	private void putNounIntoDatabase() {
 		String sql;
 		int id = -1;
-		for (Noun word : list) {
-			id = word.getOid();
+		for (Noun noun : list) {
+			id = noun.getOid();
 			if (id <= 0) {
 				sql = new SqlQuery().getSql("get_noun_oid");
-//				System.out.println(sql);
-				id = new QueryContractor().getId(sql, word.getWord(), word.getMeaning());
-//				System.out.println("id: " + id);
+				id = new QueryContractor().getId(sql, noun.getWord(), noun.getMeaning());
 			}
 
 			if (id < 0) {
-				sql = new QueryBuilder().putNewNounIntoDb(word.getWord(), word.getMeaning(), word.getWordPlural(),
-						word.getMeaningPlural());
-//				System.out.println(sql);
+				sql = new QueryBuilder().putNewNounIntoDb(noun.getWord(), noun.getMeaning(), noun.getWordPlural(),
+						noun.getMeaningPlural());
 				new QueryContractor().executeQuery(sql);
 			} else {
-				sql = new QueryBuilder().updateNoun(id, word.getWord(), word.getMeaning(), word.getWordPlural(),
-						word.getMeaningPlural());
-//				System.out.println(sql);
+				sql = new QueryBuilder().updateNoun(id, noun.getWord(), noun.getMeaning(), noun.getWordPlural(),
+						noun.getMeaningPlural());
 				new QueryContractor().executeQuery(sql);
 			}
 		}

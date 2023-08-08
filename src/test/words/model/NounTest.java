@@ -4,7 +4,7 @@ package test.words.model;
 
 //import org.junit.jupiter.api.Test;
 
-import edu.german.words.model.Noun;
+import edu.german.words.Noun;
 
 class NounTest {
 

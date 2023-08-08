@@ -3,13 +3,15 @@ package edu.german.words.model;
 import java.util.List;
 import java.util.Properties;
 
-public interface WordModel {
+public interface IWord {
 
 	String getGenus();
 
 	int getWoid(String word, String genus);
 
 	int getOid();
+
+	int hashCode(int oid, String word);
 
 	String getMainWord();
 
@@ -21,9 +23,9 @@ public interface WordModel {
 
 	Properties getProperites();
 
-	List<Properties> getPropertiesList();
-	
-	List<Properties> getPropertiesList(int oid);
+	List<Properties> getPropertyList();
+
+	List<Properties> getPropertyList(int oid);
 
 	List<Word> getAllWords();
 
@@ -43,7 +45,7 @@ public interface WordModel {
 
 	void setProperites(Properties properties);
 
-	void setPropertiesList(List<Properties> propertiesList);
+	void setPropertyList(List<Properties> propertiesList);
 
 	boolean isExist(String word, String genus);
 

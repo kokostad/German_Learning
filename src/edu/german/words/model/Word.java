@@ -7,7 +7,7 @@ import java.util.Properties;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 
-public class Word implements WordModel {
+public class Word implements IWord {
 	private int woid;
 	private int oid;
 	private String word;
@@ -15,19 +15,23 @@ public class Word implements WordModel {
 	private String[] meanings;
 	private String genus;
 	private Properties properties;
-	private List<Properties> propertiesList;
+	private List<Properties> propertyList;
 
 	public Word() {
-		this.properties = new Properties();
-		this.propertiesList = new LinkedList<>();
+		this.setProperties(new Properties());
+		this.propertyList = new LinkedList<>();
 	}
 
 	public Word(String word, String meaning, String genus) {
-		properties = new Properties();
-		propertiesList = new LinkedList<>();
+		setProperties(new Properties());
+		propertyList = new LinkedList<>();
 		this.word = word;
 		this.meaning = meaning;
 		this.genus = genus;
+
+		if (!isExist(word, genus) && (meaning != null))
+			new QueryContractor().addNewWord(new SqlQuery().getSql("add_new_word"), word, meaning, genus);
+
 		setWoid(new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus));
 	}
 
@@ -123,28 +127,28 @@ public class Word implements WordModel {
 		return list;
 	}
 
-	public void addToPropertiesList(Properties properties) {
-		propertiesList.add(properties);
+	public void addToPropertyList(Properties properties) {
+		propertyList.add(properties);
 	}
 
 	@Override
-	public List<Properties> getPropertiesList() {
-		return propertiesList;
+	public List<Properties> getPropertyList() {
+		return propertyList;
 	}
 
 	@Override
-	public void setPropertiesList(List<Properties> propertiesList) {
-		this.propertiesList = propertiesList;
+	public void setPropertyList(List<Properties> propertiesList) {
+		this.propertyList = propertiesList;
 	}
 
 	@Override
 	public Properties getProperites() {
-		return properties;
+		return getProperties();
 	}
 
 	@Override
 	public void setProperites(Properties properties) {
-		this.properties = properties;
+		this.setProperties(properties);
 	}
 
 	@Override
@@ -153,8 +157,21 @@ public class Word implements WordModel {
 	}
 
 	@Override
-	public List<Properties> getPropertiesList(int oid) {
-		return propertiesList;
+	public List<Properties> getPropertyList(int oid) {
+		return propertyList;
+	}
+
+	@Override
+	public int hashCode(int oid, String word) {
+		return 0;
+	}
+
+	public Properties getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Properties properties) {
+		this.properties = properties;
 	}
 
 }

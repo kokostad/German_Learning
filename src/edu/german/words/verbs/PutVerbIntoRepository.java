@@ -20,7 +20,7 @@ public class PutVerbIntoRepository implements Runnable {
 	@Override
 	public void run() {
 		verbList.forEach(verb -> {
-			List<Properties> propList = verb.getPropertiesList();
+			List<Properties> propList = verb.getPropertyList();
 			oid = verb.getOid();
 			String word = verb.getWord();
 			String meaning = verb.getMeaning();

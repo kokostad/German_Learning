@@ -5,7 +5,7 @@ import java.util.concurrent.Callable;
 
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
-import edu.german.words.model.Noun;
+import edu.german.words.Noun;
 
 public class ExecutorDoCallNoun implements Callable<List<Noun>> {
 	private List<Noun> list;

@@ -119,7 +119,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 			if (getOid() > 0)
 				new ShowMessage().directMessage(searchResult + getOid());
 
-			List<Properties> propList = verb.getPropertiesList(getOid());
+			List<Properties> propList = verb.getPropertyList(getOid());
 
 			if (propList != null)
 				propList.forEach(prop -> showPorperties(prop));
@@ -168,7 +168,7 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 	}
 
 	private Object show(Verb v) {
-		List<Properties> prop = v.getPropertiesList();
+		List<Properties> prop = v.getPropertyList();
 		prop.forEach(vb -> System.out.println(vb));
 		return null;
 	}

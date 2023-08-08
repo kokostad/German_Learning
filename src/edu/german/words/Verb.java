@@ -103,7 +103,7 @@ public class Verb extends Word {
 	}
 
 	@Override
-	public List<Properties> getPropertiesList() {
+	public List<Properties> getPropertyList() {
 		if (propertiesList == null)
 			preparePropertiesList(woid, oid, word, meaning, irregular, separable);
 
@@ -111,7 +111,7 @@ public class Verb extends Word {
 	}
 
 	@Override
-	public List<Properties> getPropertiesList(int oid) {
+	public List<Properties> getPropertyList(int oid) {
 		String sql = new SqlQuery().getSql("get_verb_property");
 		String[] tenses = new MyProperties("word.properties").getValuesArray("VERB_TENS");
 		String[] modus = new MyProperties("word.properties").getValuesArray("VERB_MODUS");
@@ -130,7 +130,7 @@ public class Verb extends Word {
 	}
 
 	@Override
-	public void setPropertiesList(List<Properties> propertiesList) {
+	public void setPropertyList(List<Properties> propertiesList) {
 		this.propertiesList = propertiesList;
 	}
 	
@@ -149,7 +149,7 @@ public class Verb extends Word {
 			}
 
 		if (!list.isEmpty())
-			setPropertiesList(list);
+			setPropertyList(list);
 	}
 
 	public static class Builder {

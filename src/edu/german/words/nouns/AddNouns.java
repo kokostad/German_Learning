@@ -21,20 +21,20 @@ import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProperties;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.words.model.Noun;
+import edu.german.words.Noun;
 
 public class AddNouns extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private ButtonsPanel bp;
-	private JButton checkBtn;
-	private JButton clearEditFieldsBtn;
-	private JButton clearListBtn;
-	private JButton addToListBtn;
-	private JButton addListToRepoBtn;
+	private JButton check;
+	private JButton clearEditFields;
+	private JButton clearList;
+	private JButton addToList;
+	private JButton putListIntoRepo;
 	private NounEditPanel editPanel;
 	private int id;
-	private List<Noun> wordList;
-	private List<Properties> propertiesList;
+	private List<Noun> words;
+	private List<Properties> propertyList;
 	private String[] header;
 	private TableHanlder tb;
 	private ExecutorService es;
@@ -43,21 +43,21 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 		super(height, width, setTitel);
 		es = Executors.newSingleThreadExecutor();
 		id = -1;
-		propertiesList = new LinkedList<Properties>();
-		wordList = new LinkedList<Noun>();
+		propertyList = new LinkedList<Properties>();
+		words = new LinkedList<Noun>();
 
 		bp = new ButtonsPanel("CHECK_IN_DATABASE", "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "CLEAR_LIST",
 				"ADD_LIST_TO_REPOSITORY");
-		checkBtn = bp.getB1();
-		checkBtn.addActionListener(this);
-		clearEditFieldsBtn = bp.getB2();
-		clearEditFieldsBtn.addActionListener(this);
-		addToListBtn = bp.getB3();
-		addToListBtn.addActionListener(this);
-		clearListBtn = bp.getB4();
-		clearListBtn.addActionListener(this);
-		addListToRepoBtn = bp.getB5();
-		addListToRepoBtn.addActionListener(this);
+		check = bp.getB1();
+		check.addActionListener(this);
+		clearEditFields = bp.getB2();
+		clearEditFields.addActionListener(this);
+		addToList = bp.getB3();
+		addToList.addActionListener(this);
+		clearList = bp.getB4();
+		clearList.addActionListener(this);
+		putListIntoRepo = bp.getB5();
+		putListIntoRepo.addActionListener(this);
 
 		editPanel = new NounEditPanel();
 
@@ -80,19 +80,18 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object src = e.getSource();
 
-		if (src == checkBtn) {
+		if (src == check) {
 			id = new Noun().getOid(editPanel.getWordSingular());
 
 			if (id > 0)
-				editPanel.setValues(new Noun().prepareById(id));
-
+				editPanel.setValues(new Noun().nounPreparedById(id));
 		}
 
-		else if (src == clearEditFieldsBtn) {
+		else if (src == clearEditFields) {
 			editPanel.clearEditFields();
 		}
 
-		else if (src == addToListBtn) {
+		else if (src == addToList) {
 			Noun noun = new Noun();
 			if (id > 0)
 				noun.setOid(id);
@@ -101,32 +100,32 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 			noun.setMeaning(editPanel.getMeanigSingular());
 			noun.setWordPlural(editPanel.getWordPlural());
 			noun.setMeanigPlural(editPanel.getMeanigPlural());
-			wordList.add(noun);
+			words.add(noun);
 
-			if (wordList != null) {
-				showList(wordList);
+			if (words != null) {
+				showData(words);
 				editPanel.clearEditFields();
 			}
 		}
 
-		else if (src == clearListBtn) {
-			wordList.clear();
-			propertiesList.clear();
+		else if (src == clearList) {
+			words.clear();
+			propertyList.clear();
 			tb.clearTable();
 		}
 
-		else if (src == addListToRepoBtn) {
-			if (wordList != null)
-				es.submit(new ExecutorPutNounIntoDatabase(wordList));
-			
+		else if (src == putListIntoRepo) {
+			if (words != null)
+				es.submit(new ExecutorPutNounIntoDatabase(words));
+
 			tb.clearTable();
 		}
 	}
 
-	private void showList(List<Noun> wordList) {
-		for (Noun word : wordList) {
-			String[] fullWord = { word.getWord(), word.getMeaning(), word.getWordPlural(), word.getMeaningPlural() };
-			tb.showRow(fullWord);
+	private void showData(List<Noun> nouns) {
+		for (Noun noun : nouns) {
+			String[] row = { noun.getWord(), noun.getMeaning(), noun.getWordPlural(), noun.getMeaningPlural() };
+			tb.showRow(row);
 		}
 		repaint();
 	}

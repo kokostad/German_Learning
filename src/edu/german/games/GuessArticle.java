@@ -29,9 +29,11 @@ import edu.german.tools.ShowMessage;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 import edu.german.words.WordSelectionPanel;
-import edu.german.words.model.Noun;
+import edu.german.words.Noun;
 
 /**
+ * GuessArticle.java
+ * 
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
  *
  */
@@ -55,7 +57,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private String newWord;
 	private String example;
 	private ShowResultAsImage showImage;
-	private List<Noun> allNounList;
+	private List<Noun> nouns;
 	private List<Noun> severalNouns;
 	private int actualDraw = 0;
 	private int numberOfWords;
@@ -173,11 +175,10 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 			controlWord = nounFromList.getWord();
 
 		newWord = nounFromList.getWord();
-		String[] noun = nounFromList.getWord().split(" ");
-		article = noun[0];
-		gameWord = noun[1];
+		String[] arr = nounFromList.getWord().split(" ");
+		article = arr[0];
+		gameWord = arr[1];
 		wordMeaning = nounFromList.getMeaning();
-//		example = nounFromList.getExample();
 		gameWordLbl.setText(" " + gameWord + " ");
 	}
 
@@ -241,7 +242,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	}
 
 	private void setInitialParams() {
-		allNounList = tryToGetList();
+		nouns = tryToGetList();
 		article = null;
 		wordMeaning = null;
 	}
@@ -249,8 +250,8 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private List<Noun> getSeveral(int number) {
 		List<Noun> list = new LinkedList<>();
 		for (int i = 0; i < number; i++) {
-			if (allNounList.size() > i)
-				list.add(allNounList.get(i));
+			if (nouns.size() > i)
+				list.add(nouns.get(i));
 		}
 		return list;
 	}
@@ -285,7 +286,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		if (src == drawBtn) {
 			showImage.showIndifference();
 
-			if (allNounList.size() == 0) {
+			if (nouns.size() == 0) {
 				new ShowMessage("EMPTY_LIST");
 			}
 
@@ -295,7 +296,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 				setInitScore();
 
 				for (int i = 0; i < severalNouns.size(); i++) {
-					allNounList.remove(0);
+					nouns.remove(0);
 				}
 			}
 
@@ -305,7 +306,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 				setInitScore();
 
 				for (int i = 0; i < severalNouns.size(); i++) {
-					allNounList.remove(0);
+					nouns.remove(0);
 				}
 			}
 
@@ -344,12 +345,10 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 			} else
 				negativeScoreUpdate();
 		}
-
 	}
 
 	private void setInitScore() {
 		setActualDraw(0);
 		actualScore = 0;
 	}
-
 }
