@@ -27,7 +27,6 @@ import edu.german.tools.ScreenSetup;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ModelButton;
 import edu.german.words.AddAdjective;
-import edu.german.words.SimpleWordAddition;
 import edu.german.words.nouns.AddNouns;
 import edu.german.words.verbs.AddVerbs;
 
@@ -38,7 +37,6 @@ public class Learning extends JFrame implements ActionListener {
 	private JMenuItem miImport;
 	private JMenuItem miExport;
 	private JMenuItem exit;
-	private JMenuItem miSimpleWordsAddition;
 	private JMenuItem miAddAdjective;
 	private JMenuItem miAddVerbs;
 	private JMenuItem miAddNouns;
@@ -82,9 +80,6 @@ public class Learning extends JFrame implements ActionListener {
 		mOption.add(miExport);
 		mOption.addSeparator();
 		mOption.add(exit);
-		
-		miSimpleWordsAddition = new JMenuItem(Titel.setTitel("SIMPLE_WORDS_ADDITION"));
-		miSimpleWordsAddition.addActionListener(this);
 
 		miSentencesAddition = new JMenuItem(Titel.setTitel("SENTENCES_ADDITION"));
 		miSentencesAddition.addActionListener(this);
@@ -104,7 +99,6 @@ public class Learning extends JFrame implements ActionListener {
 		miAddRules.addActionListener(this);
 
 		JMenu mAddition = new JMenu(Titel.setTitel("MENU_ADDITION"));
-		mAddition.add(miSimpleWordsAddition);
 		mAddition.add(mAddWords);
 		mAddition.add(new JSeparator());
 		mAddition.add(miSentencesAddition);
@@ -202,14 +196,6 @@ public class Learning extends JFrame implements ActionListener {
 			dsk.repaint();
 		}
 
-		else if (src == miSimpleWordsAddition) {
-			SimpleWordAddition swa = new SimpleWordAddition(dsk.getHeight(), dsk.getWidth(),
-					Titel.setTitel("SIMPLE_WORDS_ADDITION"));
-			dsk.add(swa);
-			dsk.moveToFront(swa);
-			dsk.repaint();
-		}
-
 		else if (src == miAddAdjective) {
 			AddAdjective aa = new AddAdjective(dsk.getHeight(), dsk.getWidth(), Titel.setTitel("ADD_ADDJECTIVES"));
 			dsk.add(aa);
@@ -267,7 +253,5 @@ public class Learning extends JFrame implements ActionListener {
 			dsk.moveToFront(addRule);
 			dsk.repaint();
 		}
-
 	}
-
 }
