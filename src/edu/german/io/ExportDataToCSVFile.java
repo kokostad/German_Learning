@@ -1,16 +1,15 @@
-package edu.german.services;
+package edu.german.io;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
-public class ExportSentencesToCSVFile implements Runnable {
-	private List<String> toExport;
+public class ExportDataToCSVFile implements Runnable {
 	private String filePath;
+	private String data;
 
-	public ExportSentencesToCSVFile(List<String> toExport, String filePath) {
-		this.toExport = toExport;
+	public ExportDataToCSVFile(String data, String filePath) {
+		this.data = data;
 		this.filePath = filePath;
 	}
 
@@ -22,7 +21,9 @@ public class ExportSentencesToCSVFile implements Runnable {
 	private void writeToFile() {
 		try {
 			FileWriter writer = new FileWriter(new File(filePath));
-			toExport.forEach((s) -> {
+			data
+			.lines()
+			.forEach((s) -> {
 				try {
 					writer.write(s + "\n");
 				} catch (IOException e) {
@@ -34,5 +35,4 @@ public class ExportSentencesToCSVFile implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
 }

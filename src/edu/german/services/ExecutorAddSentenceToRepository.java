@@ -7,14 +7,14 @@ import edu.german.sql.QueryContractor;
 import edu.german.sql.QueryBuilder;
 import edu.german.tools.MyProgressBar;
 
-public class ExecutorTaskAddSentenceToRepository implements Runnable {
+public class ExecutorAddSentenceToRepository implements Runnable {
 	private List<String[]> list;
 
 	private int sum;
 	private boolean order;
 	private MyProgressBar bar;
 
-	public ExecutorTaskAddSentenceToRepository(List<String[]> list, MyProgressBar bar, boolean order) {
+	public ExecutorAddSentenceToRepository(List<String[]> list, MyProgressBar bar, boolean order) {
 		this.bar = bar;
 		this.list = list;
 		this.order = order;

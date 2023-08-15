@@ -51,10 +51,10 @@ public class ImportConfigPanel extends JPanel {
 		sentencesOrWordsBox = new MyCheckBox(secondParamTitle, "Wyrazy", secondHint);
 
 		String[] selectionList = new MyProperties(WORD_FILE_CFG).getValuesArray("GENUS_LIST");
-		wordGenusBox = new MyComboBox(Titel.setTitel("WORDS_GENUS"), selectionList);
+		wordGenusBox = new MyComboBox(Titel.setTitel("WORDS_GENUS"), selectionList, "Puste oznacza wszystko");
 
 		FileKind[] fileKind = FileKind.values();
-		fileTypeBox = new MyComboBox("Typ eksportu", fileKind);
+		fileTypeBox = new MyComboBox("Typ pliku", fileKind);
 
 		upPanel.add(sentencesOrWordsBox);
 		upPanel.add(orderBox);

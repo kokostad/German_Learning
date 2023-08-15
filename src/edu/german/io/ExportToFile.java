@@ -19,8 +19,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import edu.german.services.ExportSentencesToCSVFile;
-import edu.german.services.ExportSentencesToJSONFile;
 import edu.german.services.GetWordsAsList;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
@@ -44,7 +42,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private ExecutorService es;
 	private JTabbedPane tp;
 	private MyProgressBar bar;
-	private List<String> toExport = null;
 	private boolean textImportState = false;
 	private ExportConfigPanel exportConfigPanel;
 	private List<JButton> buttonList;
@@ -107,42 +104,50 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 
 		else if (src == showBtn) {
 			textArea.setText(null);
-			toExport = prepareDataToExport(exportConfigPanel.exportConfigParam());
 			setTextImportState(true);
-			putIntoTextArea(toExport);
+			putIntoTextArea(prepareDataToExport(exportConfigPanel.exportConfigParam()));
 		}
 
 		else if (src == exportBtn) {
+			String data = null;
+			String exportType = null;
+			boolean wordOrSentence = false;
+
 			if (exportConfigPanel.getFilePath() == null) {
 				new ShowMessage("NO_DATA", "uzupełnij brakujące dane");
 				return;
+			} else {
+				data = textArea.getText();
+				exportType = exportConfigPanel.exportType();
+				wordOrSentence = exportConfigPanel.sentencesOrWords();
+
+				if (data.isBlank())
+					data = getString(prepareDataToExport(exportConfigPanel.exportConfigParam()));
 			}
 
-			if (!isTextImportState())
-				toExport = prepareDataToExport(exportConfigPanel.exportConfigParam());
-
-			/*
-			 * NOTICE Default is SENTENCE if word put words into file if CSV put into CSV file else
-			 * put into JSON file into JSON file
-			 */
-			boolean val = exportConfigPanel.sentencesOrWords(); // true is WORD, false is SENTENCE
-			if (val)
-				if ((exportConfigPanel.exportType()).equals("CSV"))
-					es.submit(new ExportWordsToCSVFile(toExport, getFilePath()));
+			if (wordOrSentence) {
+				if (data.trim().length() > 0 && "CSV".equals(exportType))
+					es.submit(new ExportDataToCSVFile(data, getFilePath()));
 				else
-					es.submit(new ExportWordsToJSONFile(toExport, getFilePath()));
-
-			/*
-			 * NOTICE If parameter equals "sentence" then chose only sentences and than put into
-			 * file, if CSV put into CSV file otherwise into JSON file
-			 */
-			else if ((exportConfigPanel.exportType()).equals("CSV"))
-				es.submit(new ExportSentencesToCSVFile(toExport, getFilePath()));
-			else
-				es.submit(new ExportSentencesToJSONFile(toExport, getFilePath()));
-
-			setTextImportState(false);
+					new ExportDataToJSONFile(data, getFilePath(), "WORDS");
+			} else {
+				if ("CSV".equals(exportType))
+					es.submit(new ExportDataToCSVFile(data, getFilePath()));
+				else
+					es.submit(new ExportDataToJSONFile(data, getFilePath(), "SENTENCES"));
+			}
+			textArea.setText(null);
 		}
+	}
+
+	private String getString(List<String> toExport) {
+		StringBuilder sb = new StringBuilder();
+
+		toExport
+		.stream()
+		.forEach(l -> sb.append(l + "\n"));
+
+		return sb.toString();
 	}
 
 	private String getFilePath() {
@@ -152,7 +157,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private void clearAll() {
 		bar.setNull();
 		textArea.setText(null);
-		toExport.clear();
 		exportConfigPanel.clear();
 		setTextImportState(false);
 	}
@@ -164,8 +168,12 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	 */
 	private List<String> prepareDataToExport(HashMap<String, String> map) {
 		List<String> list = new LinkedList<>();
-		Optional<String> option = map.entrySet().stream().filter(e -> "word".equals(e.getValue()))
-				.map(Map.Entry::getKey).findFirst();
+		Optional<String> option = map
+				.entrySet()
+				.stream()
+				.filter(e -> "word".equals(e.getValue()))
+				.map(Map.Entry::getKey)
+				.findFirst();
 
 		String wordGenus = null;
 		if (map.containsKey("WORD_GENUS"))

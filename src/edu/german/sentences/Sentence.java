@@ -1,39 +1,38 @@
 package edu.german.sentences;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
 
+import edu.german.sentences.model.ISentence;
+import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
-import edu.german.sql.QueryBuilder;
 
-public class Sentence {
-	private int oid;
-	private int woid;
+//  TODO need to improve this class
+public class Sentence implements ISentence {
+	private Integer oid = -1;
+	private int woid = -1;
 	private String sentence;
 	private String meaning;
 	private String type;
 	private String category;
 	private String tens;
 	private String word;
-	private Map<String, Object> sentenceMap;
+	private List<Properties> propertyList;
 
 	public Sentence() {
-		oid = -1;
-		woid = -1;
-		sentenceMap = new HashMap<String, Object>();
+		this.propertyList = new LinkedList<>();
 	}
 
 	public Sentence(String sentence, String meaning, String type, String category, String tens, String word) {
-		oid = -1;
-		woid = -1;
 		this.sentence = sentence;
 		this.meaning = meaning;
 		this.type = type;
 		this.category = category;
 		this.tens = tens;
 		this.word = word;
-		sentenceMap = new HashMap<String, Object>();
+		this.propertyList = new LinkedList<>();
 	}
 
 	public int getWoid() {
@@ -41,48 +40,45 @@ public class Sentence {
 			setWoid(new QueryContractor().getWoidFromSentence(new SqlQuery().getSql("get_woid_from_sentence"),
 					getOid()));
 
-		return -1;
+		return woid;
 	}
 
 	public void setWoid(int woid) {
 		this.woid = woid;
-		sentenceMap.put("WOID", woid);
 	}
 
-	public int getOid() {
+	@Override
+	public Integer getOid() {
 		if (oid < 0) {
 			oid = new QueryContractor().getId(new SqlQuery().getSql("get_sentence_oid"), sentence);
-			sentenceMap.put("OID", oid);
 		}
 
 		return oid;
 	}
 
-	public void setOid(int oid) {
+	@Override
+	public void setOid(Integer oid) {
 		this.oid = oid;
-		sentenceMap.put("OID", oid);
 	}
 
+	@Override
 	public String getSentence() {
 		return sentence;
 	}
 
+	@Override
 	public void setSentence(String sentence) {
 		this.sentence = sentence;
-		sentenceMap.put("SENTENCE", sentence);
 	}
 
+	@Override
 	public String getMeaning() {
 		return meaning;
 	}
 
+	@Override
 	public void setMeaning(String meaning) {
 		this.meaning = meaning;
-		sentenceMap.put("MEANING", meaning);
-	}
-
-	public Map<String, Object> getSentenceMap() {
-		return sentenceMap;
 	}
 
 	public String getType() {
@@ -90,16 +86,16 @@ public class Sentence {
 	}
 
 	public void setType(String type) {
-		sentenceMap.put("TYPE", type);
 		this.type = type;
 	}
 
+	@Override
 	public String getCategory() {
 		return category;
 	}
 
+	@Override
 	public void setCategory(String category) {
-		sentenceMap.put("CATEGORY", category);
 		this.category = category;
 	}
 
@@ -108,7 +104,6 @@ public class Sentence {
 	}
 
 	public void setTens(String tens) {
-		sentenceMap.put("TENS", tens);
 		this.tens = tens;
 	}
 
@@ -117,12 +112,17 @@ public class Sentence {
 	}
 
 	public void setWord(String word) {
-		sentenceMap.put("WORD", word);
 		this.word = word;
 	}
 
-	public void setSentenceMap(Map<String, Object> sentenceMap) {
-		this.sentenceMap = sentenceMap;
+	@Override
+	public void setPropertyList(List<Properties> propertyList) {
+		this.propertyList = propertyList;
+	}
+
+	@Override
+	public List<Properties> getPropertyList() {
+		return propertyList;
 	}
 
 	public static class Builder {
@@ -169,12 +169,10 @@ public class Sentence {
 		public Sentence build() {
 			return new Sentence(sentence, meaning, type, category, tens, word);
 		}
-
 	}
 
 	/*
-	 * NOTICE
-	 * have to check are this methods below needed? If they are needed, are
+	 * NOTICE have to check are this methods below needed? If they are needed, are
 	 * they like this?
 	 */
 	public boolean isExist(String sentence, String category) {
@@ -197,9 +195,8 @@ public class Sentence {
 	}
 
 	/*
-	 * NOTICE
-	 * to describe the methods below, what they do exactly? maybe need to change the
-	 * name
+	 * NOTICE to describe the methods below, what they do exactly? maybe need to
+	 * change the name
 	 */
 	public void addToRepository(int woid) {
 		String sql = new QueryBuilder().addNewSentenceWithWoid(sentence, meaning, type, category, tens, word, woid);
@@ -214,6 +211,12 @@ public class Sentence {
 	public void addToRepository(String sql, String sentence, String meaning) {
 		if (sentence != null && (!sentence.isBlank() && !meaning.isBlank()))
 			new QueryContractor().executeQuery(sql, sentence, meaning);
+	}
+
+	@Override
+	public String toString() {
+		return "Sentence [oid=" + oid + ", woid=" + woid + ", sentence=" + sentence + ", meaning=" + meaning + ", type="
+				+ type + ", category=" + category + ", tens=" + tens + ", word=" + word + "]";
 	}
 
 }

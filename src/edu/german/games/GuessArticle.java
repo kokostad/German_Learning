@@ -40,12 +40,12 @@ import edu.german.words.Noun;
 public class GuessArticle extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private WordSelectionPanel selectionPan;
-	private ButtonsPanel bp;
+	private ButtonsPanel functionalButtons;
 	private JButton drawBtn;
-	private ButtonsPanel bpAnswer;
-	private JButton derBtn;
-	private JButton dieBtn;
-	private JButton dasBtn;
+	private ButtonsPanel gameButtons;
+	private JButton der;
+	private JButton die;
+	private JButton das;
 	private JLabel gameWordLbl;
 	private String[] fullWord;
 	private String answer;
@@ -82,25 +82,31 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 
 		showImage = new ShowResultAsImage(200, 200);
 
-		bp = new ButtonsPanel("NEW_DRAW");
-		drawBtn = bp.getB1();
+		functionalButtons = new ButtonsPanel("NEW_DRAW");
+		drawBtn = functionalButtons.getB1();
 		drawBtn.addActionListener(this);
 
 		selectionPan = new WordSelectionPanel(false);
 
-		bpAnswer = new ButtonsPanel("DER", "DIE", "DAS");
-		derBtn = bpAnswer.getB1();
-		derBtn.setPreferredSize(new Dimension(100, 54));
-		derBtn.setFont(new Font(fontArt, Font.ITALIC, bigFontSize));
-		derBtn.addActionListener(this);
-		dieBtn = bpAnswer.getB2();
-		dieBtn.setPreferredSize(new Dimension(100, 54));
-		dieBtn.setFont(new Font(fontArt, Font.ITALIC, bigFontSize));
-		dieBtn.addActionListener(this);
-		dasBtn = bpAnswer.getB3();
-		dasBtn.setPreferredSize(new Dimension(100, 54));
-		dasBtn.setFont(new Font(fontArt, Font.ITALIC, bigFontSize));
-		dasBtn.addActionListener(this);
+		String[] arr = { "DER", "DIE", "DAS" };
+		gameButtons = new ButtonsPanel(arr);
+
+		List<JButton> list = gameButtons.getButtonList();
+
+		der = list.get(0);
+		der.setPreferredSize(new Dimension(100, 54));
+		der.setFont(new Font(fontArt, Font.ITALIC, bigFontSize));
+		der.addActionListener(this);
+
+		die = list.get(1);
+		die.setPreferredSize(new Dimension(100, 54));
+		die.setFont(new Font(fontArt, Font.ITALIC, bigFontSize));
+		die.addActionListener(this);
+
+		das = list.get(2);
+		das.setPreferredSize(new Dimension(100, 54));
+		das.setFont(new Font(fontArt, Font.ITALIC, bigFontSize));
+		das.addActionListener(this);
 
 		gameWordLbl = new JLabel();
 		gameWordLbl.setText(Titel.setTitel("WORD_TO_CHECK"));
@@ -114,7 +120,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 
 		JPanel leftPanel = new JPanel();
 		leftPanel.add(showImage);
-		leftPanel.add(bpAnswer);
+		leftPanel.add(gameButtons);
 
 		answerLab = new JLabel();
 		answerLab.setFont(new Font(fontArt, Font.ITALIC, bigFontSize));
@@ -140,7 +146,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 
 		setInitialParams();
 
-		this.add(bp, BorderLayout.EAST);
+		this.add(functionalButtons, BorderLayout.EAST);
 		this.add(sp, BorderLayout.CENTER);
 		this.setVisible(true);
 	}
@@ -316,7 +322,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 				new ShowMessage("THE_SAME_WORD");
 		}
 
-		else if (src == derBtn) {
+		else if (src == der) {
 			setAnswer("der");
 			answerPanel.setAnsweredWord(getAnswer() + " " + gameWord);
 
@@ -326,7 +332,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 				negativeScoreUpdate();
 		}
 
-		else if (src == dieBtn) {
+		else if (src == die) {
 			setAnswer("die");
 			answerPanel.setAnsweredWord(getAnswer() + " " + gameWord);
 
@@ -336,7 +342,7 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 				negativeScoreUpdate();
 		}
 
-		else if (src == dasBtn) {
+		else if (src == das) {
 			setAnswer("das");
 			answerPanel.setAnsweredWord(getAnswer() + " " + gameWord);
 

@@ -33,6 +33,27 @@ public class MyComboBox extends JPanel {
 		this.add(boxPanel);
 	}
 
+	public MyComboBox(String labelInfo, Object[] array, String tip) {
+		JPanel boxPanel = new JPanel();
+		JLabel label = new JLabel(labelInfo);
+		ScreenSetup ss = new ScreenSetup();
+
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		label.setFont(ss.DEFAULT_FONT);
+		boxPanel.add(label);
+		boxPanel.add(Box.createRigidArea(new Dimension(5, 2)));
+		if (array != null) {
+			box = new JComboBox<Object>(array);
+			box.setFont(ss.DEFAULT_FONT);
+			box.setAlignmentX(CENTER_ALIGNMENT);
+			box.setToolTipText(tip);
+			boxPanel.add(box);
+		}
+
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+		this.add(boxPanel);
+	}
+
 	public MyComboBox(String labelInfo, Object[] array, Font font) {
 		JPanel boxPanel = new JPanel();
 		JLabel label = new JLabel(labelInfo);
@@ -52,6 +73,27 @@ public class MyComboBox extends JPanel {
 		this.add(boxPanel);
 	}
 
+	public MyComboBox(String labelInfo, Object[] array, Font font, String tip) {
+		JPanel boxPanel = new JPanel();
+		JLabel label = new JLabel(labelInfo);
+
+		label.setAlignmentX(LEFT_ALIGNMENT);
+		label.setFont(font);
+		boxPanel.add(label);
+		boxPanel.add(Box.createRigidArea(new Dimension(5, 2)));
+		if (array != null) {
+			box = new JComboBox<Object>(array);
+			box.setFont(font);
+			box.setAlignmentX(CENTER_ALIGNMENT);
+			box.setToolTipText(tip);
+			boxPanel.add(box);
+		}
+
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+		this.add(boxPanel);
+	}
+
+	
 	public void setValue(String value) {
 		box.setSelectedItem(value);
 	}

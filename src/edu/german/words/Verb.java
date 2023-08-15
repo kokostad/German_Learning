@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Properties;
 
 import edu.german.sql.VerbQueryContractor;
+import edu.german.sql.QueryBuilder;
 import edu.german.sql.SqlQuery;
 import edu.german.tools.MyProperties;
 import edu.german.words.model.Word;
@@ -37,7 +38,7 @@ public class Verb extends Word {
 		if (oid <= 0)
 			prepereOid();
 
-		return oid;
+		return -1;
 	}
 
 	@Override
@@ -46,13 +47,17 @@ public class Verb extends Word {
 	}
 
 	private void prepereOid() {
-		int id = new VerbQueryContractor().getVoid(new SqlQuery().getSql("get_verb_oid"), word, irregular, separable);
+		// TODO need to improve this solution because of the "irregular" and "separable" options that may not be there
+//		int id = new VerbQueryContractor().getVoid(new SqlQuery().getSql("get_verb_oid"), word, irregular, separable);
+		int id = -1;
+		String sql = new QueryBuilder().addNewVerb(word, meaning, irregular, separable);
+		System.out.println(sql);
 
-		if (id < 0) {
-			id = new VerbQueryContractor().getVoid(new SqlQuery().getSql("get_simple_verb_oid"), word);
-			new VerbQueryContractor().updateVerb(new SqlQuery().getSql("update_simple_verb_with_oid"), id, word,
-					irregular, separable);
-		}
+//		if (id < 0) {
+//			id = new VerbQueryContractor().getVoid(new SqlQuery().getSql("get_simple_verb_oid"), word);
+//			new VerbQueryContractor().updateVerb(new SqlQuery().getSql("update_simple_verb_with_oid"), id, word,
+//					irregular, separable);
+//		}
 
 		setOid(id);
 	}
@@ -119,8 +124,9 @@ public class Verb extends Word {
 		for (String mod : modus)
 			for (String tens : tenses) {
 				Properties prop = new VerbQueryContractor().getProperties(sql, getOid(), tens, mod);
-				if (prop != null)
-					propertiesList.add(prop);
+				if (prop != null) {
+//					propertiesList.add(prop);
+				}
 			}
 
 		if (!propertiesList.isEmpty())

@@ -217,11 +217,33 @@ public class QueryBuilder {
 	}
 
 	public String addNewVerb(String word, String meaning, String irregular, String separable) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("INSERT INTO ge.verbs(WORD,MEANING,IRREGULAR,SEPARABLE) ");
-		sb.append("VALUES('" + word + "', '" + meaning + "', " + irregular + "', '" + separable + "');");
+		// NOTICE what if parameters 'irregular' and 'separable' is null?
+		StringBuilder sb1 = new StringBuilder();
+		StringBuilder sb2 = new StringBuilder();
+//		sb.append("INSERT INTO ge.verbs(WORD,MEANING,IRREGULAR,SEPARABLE) ");
+		sb1.append("INSERT INTO ge.verbs(WORD");
+		sb2.append(" VALUES('" + word);
 
-		return sb.toString();
+		if (meaning != null) {
+			sb1.append(",MEANING");
+			sb2.append("', '" + meaning);
+		}
+
+		if (irregular != null) {
+			sb1.append(",IRREGULAR");
+			sb2.append("', '" + irregular);
+		}
+
+		if (separable != null) {
+			sb1.append(",SEPARABLE");
+			sb2.append("', '" + separable);
+		}
+
+//		sb.append("VALUES('" + word + "', '" + meaning + "', " + irregular + "', '" + separable + "');");
+		sb1.append(")");
+		sb2.append("');");
+
+		return (sb1.toString() + sb2.toString());
 	}
 
 	public String addUnpersonalForms(int oid, Properties prop) {

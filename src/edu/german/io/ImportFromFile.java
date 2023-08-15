@@ -2,12 +2,18 @@ package edu.german.io;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,7 +25,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import edu.german.services.ExecutorTaskAddSentenceToRepository;
+import edu.german.sentences.Sentence;
+import edu.german.services.ExecutorAddSentenceListToRepository;
+import edu.german.services.ExecutorAddSentenceToRepository;
 import edu.german.services.ExecutorWordTask;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
@@ -31,8 +39,8 @@ import edu.german.tools.buttons.ButtonsPanel;
 /**
  * ImportFromFile.java
  * 
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
- * The class for importing data from JSON and CSV files
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class for
+ *         importing data from JSON and CSV files
  */
 public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -65,11 +73,9 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		jp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
 		importConfigPanel = new ImportConfigPanel.Builder()
-				.withFirstParamTitle("Zmień porządek importu: ")
-				.withFirstHint("Porządek importu (niemiecki/polski)")
-				.withSecondParamTitle("Ustaw import wyrazów: ")
-				.withSecondHint("Import (domyślnie: zdania)")
-				.build();
+				.withFirstParamTitle(Titel.setTitel("CHANGE_ORDER_OF_IMPORT"))
+				.withFirstHint("Porządek importu (niemiecki/polski)").withSecondParamTitle("Ustaw import wyrazów: ")
+				.withSecondHint("Import (domyślnie: zdania)").build();
 
 		tp = new JTabbedPane();
 		tp.add(Titel.setTitel("IMPORT_CONFIGURATION"), importConfigPanel);
@@ -109,60 +115,95 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 		else if (src == importBtn) {
 			String filePath = getFilePath();
+
 			if (filePath != null) {
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(filePath));
-					if (br != null) {
-						what = importConfigPanel.sentencesOrWordsAsString();
-						fileType = importConfigPanel.fileType();
-						if (fileType.equals("CSV")) {
-							if (what.equals("SENTENCE")) {
+				String data = txtArea.getText();
+//				BufferedInputStream bis = null;
+//				try {
+//					bis = new BufferedInputStream(new FileInputStream(getFilePath()));
+//				} catch (FileNotFoundException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+
+				if (data.trim().length() > 0) {
+					// TODO code
+					what = importConfigPanel.sentencesOrWordsAsString();
+					fileType = importConfigPanel.fileType();
+
+					if (fileType.equals("CSV") && what.equals("SENTENCE")) {
+						// TODO code
+//						System.out.println(data);
+						SentencesListPreparationFromCSVFile prepCSV = new SentencesListPreparationFromCSVFile(data,
+								separationSign);
+						List<Sentence> list = prepCSV.getSentenceList();
+//						list.forEach(s -> s.toString());
+						// is an ID (oid) needed? maybe for removing from list?
+						if (list != null)
+							es.submit(new ExecutorAddSentenceListToRepository(list, bar, getOrder()));
+
+					}
+
+					if (fileType.equals("JSON") && what.equals("SENTENCE")) {
+						// TODO code
+						System.out.println(data);
+					}
+
+					if (fileType.equals("CSV") && what.equals("WORDS")) {
+						// TODO code
+						System.out.println(data);
+					}
+
+					if (fileType.equals("JSON") && what.equals("WORDS")) {
+						// TODO code
+						System.out.println(data);
+					}
+				} else {
+					try {
+						BufferedReader br = new BufferedReader(new FileReader(filePath));
+						BufferedInputStream bis = new BufferedInputStream(new FileInputStream(getFilePath()));
+						if (br != null) {
+							what = importConfigPanel.sentencesOrWordsAsString();
+							fileType = importConfigPanel.fileType();
+							if (fileType.equals("CSV") && what.equals("SENTENCE")) {
 								SentencesListPreparationFromCSVFile prepCSV = new SentencesListPreparationFromCSVFile(
 										br, separationSign);
 								List<String[]> list = prepCSV.getList();
 								if (list != null)
-									es.submit(new ExecutorTaskAddSentenceToRepository(list, bar, getOrder()));
-							} else {
-								es.submit(new ExecutorWordTask(br, separationSign, getGenus(), bar, getOrder()));
+									es.submit(new ExecutorAddSentenceToRepository(list, bar, getOrder()));
+								else {
+									es.submit(new ExecutorWordTask(br, separationSign, getGenus(), bar, getOrder()));
+								}
+							}
+
+							else {
+								// NOTICE file type equals JSON
+								if (what.equals("SENTENCE")) {
+									SentenceListPreparationFromJSONFile prepJSON = new SentenceListPreparationFromJSONFile(
+											br);
+									prepJSON.readFromBR();
+								}
 							}
 						}
-
-						else {
-							// NOTICE file type equals JSON
-							if (what.equals("SENTENCE")) {
-								SentenceListPreparationFromJSONFile prepJSON = new SentenceListPreparationFromJSONFile(
-										br);
-								prepJSON.readFromBR();
-
-//								List<String[]> list = prepJSON.getList();
-//								if (list != null) {
-//									for (String[] array : list) {
-//										for (String str : array)
-//											System.out.println(str);
-							}
-						}
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
 					}
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
 				}
 				txtArea.setText(null);
 				repaint();
 			}
 		}
 
-		else if (src == showBtn) {
+		else if (src == showBtn)
+
+		{
 			bar.setNull();
 			txtArea.setText(null);
 			String filePath = getFilePath();
 			if (filePath != null) {
+				Path p = Paths.get(filePath);
 				try {
-					String line;
-					try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-						while ((line = br.readLine()) != null) {
-							if (line.length() > 1)
-								txtArea.append(line + "\n");
-						}
-					}
+					Files.lines(p).forEach(s -> txtArea.append(s + "\n"));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -197,4 +238,14 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 	}
 
+	private void showJSONData(SentenceListPreparationFromJSONFile prepJSON) {
+		// TODO to improve. Is it needed?
+		List<String[]> list = prepJSON.getList(fileType);
+		if (list != null) {
+			for (String[] array : list) {
+				for (String str : array)
+					System.out.println(str);
+			}
+		}
+	}
 }

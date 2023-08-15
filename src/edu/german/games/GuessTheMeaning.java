@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,14 +17,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTextField;
 
 import edu.german.services.ExecutorDoCallWord;
-import edu.german.services.ExecutorPrepareNounView;
 import edu.german.services.ExecutorPrepareWordView;
 import edu.german.tools.MyInternalFrame;
+import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditField;
-import edu.german.tools.OneEditableField;
 import edu.german.tools.ResultsPanel;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
@@ -35,6 +32,7 @@ import edu.german.words.WordSelectionPanel;
 import edu.german.words.model.Word;
 
 /**
+ * GuessTheMeaning.java
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
  *
  */
@@ -66,6 +64,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	private AnswerPanel answerPanel;
 	private GuessTheMeaningGamePanel gamePanel;
 	private ExecutorService es;
+	private static final String CFG_FILE = "buttons.properties";
 
 	public GuessTheMeaning(int height, int width, String titel) {
 		super(height, width, titel);
@@ -78,10 +77,17 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		es = Executors.newSingleThreadExecutor();
 		es.submit(new ExecutorPrepareWordView());
 
-		bp = new ButtonsPanel("NEW_DEAL", "CHECK_ANSWER");
-		drawBtn = bp.getB1();
+		MyProperties mp = new MyProperties(CFG_FILE);
+
+		String[] arr = { mp.getText("NEW_DEAL"), mp.getText("CHECK_ANSWER") };
+		bp = new ButtonsPanel(arr);
+
+		List<JButton> list = bp.getButtonList();
+
+		drawBtn = list.get(0);
 		drawBtn.addActionListener(this);
-		checkBtn = bp.getB2();
+
+		checkBtn = list.get(1);
 		checkBtn.addActionListener(this);
 
 		selectionPanel = new WordSelectionPanel(true);
@@ -151,7 +157,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		resultPan.setOverallResultLab(String.valueOf(actualScore));
 		showImage.showScore(false);
 	}
-	
+
 	private void positiveScoreUpdate() {
 		goodAnswer = goodAnswer + 1;
 		resultPan.setGoodAnswerNumber(String.valueOf(goodAnswer));
@@ -213,7 +219,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 
 	private void setNextWord(int number) {
 		if (number < severalWords.size()) {
-//			actualDraw = +1;
 			Word var = severalWords.get(number);
 			choosenWord = var.getWord();
 			controlWord = choosenWord;
@@ -227,7 +232,7 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 			new ShowMessage("NO_MORE_WORDS");
 		}
 	}
-	
+
 	private List<Word> getSeveral(Integer number) {
 		if (!allWordList.isEmpty()) {
 			List<Word> list = new LinkedList<>();

@@ -23,6 +23,19 @@ public class MyCheckBox extends JPanel {
 		this.add(jb);
 	}
 
+	public MyCheckBox(String information, String toChoose, String title, String tip) {
+		JLabel l = new JLabel(information);
+		jb = new JCheckBox(toChoose);
+		jb.setToolTipText(tip);
+
+		TitledBorder titleBorder = BorderFactory.createTitledBorder(title);
+
+		this.setLayout(new GridLayout(1, 2, 5, 5));
+		this.setBorder(titleBorder);
+		this.add(l);
+		this.add(jb);
+	}
+
 	public boolean result() {
 		return jb.isSelected();
 	}
