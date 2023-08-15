@@ -3,7 +3,10 @@ package edu.german.tools.buttons;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.Color;
 
 import javax.swing.JButton;
@@ -26,6 +29,7 @@ public class ButtonsPanel extends JPanel {
 	private JButton b6;
 	private JButton b7;
 	private Integer defaultFontSize = new MyProperties("screen.properties").getIntValue("DEFAULT_BUTTON_FONT_SIZE");
+	private List<JButton> buttons;
 
 	public ButtonsPanel() {
 	}
@@ -36,6 +40,31 @@ public class ButtonsPanel extends JPanel {
 
 	private String setTitel(Object pattern) {
 		return new MyProperties(CFG_FILE).getText(pattern.toString());
+	}
+
+	public List<JButton> getButtonList() {
+		return buttons;
+	}
+
+	public ButtonsPanel(Object[] objects) {
+		int size = objects.length;
+		buttons = new ArrayList<>(size);
+		myFont = new MyFont();
+		GridLayout gl = new GridLayout(size, 1, 5, 15);
+		JPanel p = new JPanel();
+		p.setBackground(bgColor);
+		p.setLayout(gl);
+
+		for (int i = 0; i < objects.length; i++) {
+			JButton button = new JButton(objects[i].toString());
+			button.setFont(myFont.myFont(defaultFontSize));
+			p.add(button);
+			p.revalidate();
+			this.add(p);
+			buttons.add(button);
+		}
+
+		this.setBackground(bgColor);
 	}
 
 	public ButtonsPanel(Object t1) {
