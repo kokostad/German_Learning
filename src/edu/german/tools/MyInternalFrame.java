@@ -14,7 +14,7 @@ public class MyInternalFrame extends JInternalFrame {
 	protected MyToolbar toolBar;
 
 	public MyInternalFrame(int height, int width, String titel) {
-		String myIcon = "src/edu/german/img/tak3.gif";
+		String myIcon = "tak3.gif";
 		this.setFrameIcon(new ImageIcon(myIcon));
 		this.setTitle(titel);
 		this.setIconifiable(true);
@@ -26,9 +26,9 @@ public class MyInternalFrame extends JInternalFrame {
 		this.setResizable(true);
 
 		ModelButton bExit = new ModelButton.Builder()
-				.setTitle("Exit")
-				.setIconName("exit.png")
-				.setHint(Titel.setTitel("EXIT"))
+				.withTitle("Exit")
+				.withIconName("exit.png")
+				.withHint(Titel.setTitel("EXIT"))
 				.build();
 		bExit.addActionListener(new ActionListener() {
 			@Override

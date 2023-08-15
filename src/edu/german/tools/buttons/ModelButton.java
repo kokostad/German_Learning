@@ -53,7 +53,7 @@ public class ModelButton extends JButton {
 			return this;
 		}
 
-		public Builder setHint(String hint) {
+		public Builder withHint(String hint) {
 			this.hint = hint;
 			return this;
 		}

@@ -26,7 +26,6 @@ import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
-import edu.german.tools.TextCleaner;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 
@@ -48,6 +47,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private List<String> toExport = null;
 	private boolean textImportState = false;
 	private ExportConfigPanel exportConfigPanel;
+	private List<JButton> buttonList;
 
 	public ExportToFile(int height, int width, String titel) {
 		super(height, width, titel);
@@ -68,13 +68,16 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		tp = new JTabbedPane();
 		tp.add(Titel.setTitel("EXPORT_CONFIGURATION"), exportConfigPanel);
 
-		bp = new ButtonsPanel("CLEAR", "SHOW_DATA", "EXPORT");
+		String[] buttonNames = { Titel.setTitel("CLEAR"), Titel.setTitel("SHOW_DATA"), Titel.setTitel("EXPORT") };
+
+		bp = new ButtonsPanel(buttonNames);
 		bp.setFontSize(20);
-		clearEditFieldBtn = bp.getB1();
+		buttonList = bp.getButtonList();
+		clearEditFieldBtn = buttonList.get(0);
 		clearEditFieldBtn.addActionListener(this);
-		showBtn = bp.getB2();
+		showBtn = buttonList.get(1);
 		showBtn.addActionListener(this);
-		exportBtn = bp.getB3();
+		exportBtn = buttonList.get(2);
 		exportBtn.addActionListener(this);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tp, jp);

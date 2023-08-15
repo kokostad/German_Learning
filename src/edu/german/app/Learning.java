@@ -118,37 +118,37 @@ public class Learning extends JFrame implements ActionListener {
 		mGames.add(mGuessing);
 
 		exitBtn = new ModelButton.Builder()
-				.setTitle("Exit")
-				.setIconName(MyIcon.exit)
-				.setHint(Titel.setTitel("EXIT"))
+				.withTitle("Exit")
+				.withIconName(MyIcon.exit)
+				.withHint(Titel.setTitel("EXIT"))
 				.build();
 		exitBtn.addActionListener(this);
 
 		importBtn = new ModelButton.Builder()
-				.setTitle("Import")
-				.setIconName(MyIcon.importItem)
-				.setHint(Titel.setTitel("IMPORT"))
+				.withTitle("Import")
+				.withIconName(MyIcon.importItem)
+				.withHint(Titel.setTitel("IMPORT"))
 				.build();
 		importBtn.addActionListener(this);
 
 		exportBtn = new ModelButton.Builder()
-				.setTitle("Export")
-				.setIconName(MyIcon.exportItem)
-				.setHint(Titel.setTitel("EXPORT"))
+				.withTitle("Export")
+				.withIconName(MyIcon.exportItem)
+				.withHint(Titel.setTitel("EXPORT"))
 				.build();
 		exportBtn.addActionListener(this);
 
 		addRulesBtn = new ModelButton.Builder()
-				.setTitle("Rules")
-				.setIconName(MyIcon.rules)
-				.setHint(Titel.setTitel("ADD_RULES"))
+				.withTitle("Rules")
+				.withIconName(MyIcon.rules)
+				.withHint(Titel.setTitel("ADD_RULES"))
 				.build();
 		addRulesBtn.addActionListener(this);
 
 		addSentenceBtn = new ModelButton.Builder()
-				.setTitle("Add Sentence")
-				.setIconName(MyIcon.add_sentence)
-				.setHint(Titel.setTitel("ADD_SENTENCE"))
+				.withTitle("Add Sentence")
+				.withIconName(MyIcon.add_sentence)
+				.withHint(Titel.setTitel("ADD_SENTENCE"))
 				.build();
 		addSentenceBtn.addActionListener(this);
 		
