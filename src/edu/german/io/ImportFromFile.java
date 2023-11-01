@@ -2,19 +2,15 @@ package edu.german.io;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,21 +22,18 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
 import edu.german.sentences.Sentence;
-import edu.german.services.ExecutorAddSentenceListToRepository;
-import edu.german.services.ExecutorAddSentenceToRepository;
-import edu.german.services.ExecutorWordTask;
+import edu.german.services.ExecutorStringSentenceIntoDB;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
-import edu.german.tools.SentencesListPreparationFromCSVFile;
-import edu.german.tools.SentenceListPreparationFromJSONFile;
+import edu.german.tools.SentencesFromJSON;
+import edu.german.tools.ShowMessage;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
 
 /**
  * ImportFromFile.java
- * 
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com The class for
- *         importing data from JSON and CSV files
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ * The class for importing data from JSON and CSV files
  */
 public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -51,16 +44,12 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	private JTextArea txtArea;
 	private ExecutorService es;
 	private JTabbedPane tp;
-	private String what;
-	private String fileType;
 	private MyProgressBar bar;
-	private ImportConfigPanel importConfigPanel;
-	private String separationSign = ";";
+	private ImportConfigPanel settingPanel;
 
 	public ImportFromFile(int height, int width, String titel) {
 		super(height, width, titel);
 		es = Executors.newSingleThreadExecutor();
-		what = null;
 
 		txtArea = new JTextArea(15, 70);
 		txtArea.setEditable(false);
@@ -72,13 +61,16 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		jp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		importConfigPanel = new ImportConfigPanel.Builder()
+		settingPanel = new ImportConfigPanel
+				.Builder()
 				.withFirstParamTitle(Titel.setTitel("CHANGE_ORDER_OF_IMPORT"))
-				.withFirstHint("Porządek importu (niemiecki/polski)").withSecondParamTitle("Ustaw import wyrazów: ")
-				.withSecondHint("Import (domyślnie: zdania)").build();
+				.withFirstHint("Porządek importu (niemiecki/polski)")
+				.withSecondParamTitle("Ustaw import wyrazów: ")
+				.withSecondHint("Import (domyślnie: zdania)")
+				.build();
 
 		tp = new JTabbedPane();
-		tp.add(Titel.setTitel("IMPORT_CONFIGURATION"), importConfigPanel);
+		tp.add(Titel.setTitel("IMPORT_CONFIGURATION"), settingPanel);
 
 		bp = new ButtonsPanel("CLEAR", "SHOW_DATA", "IMPORT");
 		bp.setFontSize(20);
@@ -114,96 +106,84 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == importBtn) {
-			String filePath = getFilePath();
+			Optional<String> optPath = Optional.ofNullable(getFilePath());
+			Optional<String> optData = Optional.ofNullable(txtArea.getText());
 
-			if (filePath != null) {
-				String data = txtArea.getText();
-//				BufferedInputStream bis = null;
-//				try {
-//					bis = new BufferedInputStream(new FileInputStream(getFilePath()));
-//				} catch (FileNotFoundException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
+			if (!optPath.isEmpty() && !optData.isEmpty()) {
+				String fileType = settingPanel.fileType();
+				String what = settingPanel.sentencesOrWordsAsString();
+				List<String[]> listToExecute = new LinkedList<>();
 
-				if (data.trim().length() > 0) {
-					// TODO code
-					what = importConfigPanel.sentencesOrWordsAsString();
-					fileType = importConfigPanel.fileType();
-
-					if (fileType.equals("CSV") && what.equals("SENTENCE")) {
-						// TODO code
-//						System.out.println(data);
-						SentencesListPreparationFromCSVFile prepCSV = new SentencesListPreparationFromCSVFile(data,
-								separationSign);
-						List<Sentence> list = prepCSV.getSentenceList();
-//						list.forEach(s -> s.toString());
-						// is an ID (oid) needed? maybe for removing from list?
-						if (list != null)
-							es.submit(new ExecutorAddSentenceListToRepository(list, bar, getOrder()));
-
-					}
-
-					if (fileType.equals("JSON") && what.equals("SENTENCE")) {
-						// TODO code
-						System.out.println(data);
-					}
-
-					if (fileType.equals("CSV") && what.equals("WORDS")) {
-						// TODO code
-						System.out.println(data);
-					}
-
-					if (fileType.equals("JSON") && what.equals("WORDS")) {
-						// TODO code
-						System.out.println(data);
-					}
-				} else {
-					try {
-						BufferedReader br = new BufferedReader(new FileReader(filePath));
-						BufferedInputStream bis = new BufferedInputStream(new FileInputStream(getFilePath()));
-						if (br != null) {
-							what = importConfigPanel.sentencesOrWordsAsString();
-							fileType = importConfigPanel.fileType();
-							if (fileType.equals("CSV") && what.equals("SENTENCE")) {
-								SentencesListPreparationFromCSVFile prepCSV = new SentencesListPreparationFromCSVFile(
-										br, separationSign);
-								List<String[]> list = prepCSV.getList();
-								if (list != null)
-									es.submit(new ExecutorAddSentenceToRepository(list, bar, getOrder()));
-								else {
-									es.submit(new ExecutorWordTask(br, separationSign, getGenus(), bar, getOrder()));
-								}
-							}
-
-							else {
-								// NOTICE file type equals JSON
-								if (what.equals("SENTENCE")) {
-									SentenceListPreparationFromJSONFile prepJSON = new SentenceListPreparationFromJSONFile(
-											br);
-									prepJSON.readFromBR();
-								}
-							}
+				if (what.equals("SENTENCE")) {
+					
+					if (fileType.equals("CSV")) {
+						SentenceFromData s = new SentenceFromData(optData);
+						// NOTICE if not empty do prepare list to import and check if word exist
+						if (!s.checkData()) {
+							listToExecute = s.arrayList(s.getListFromData());
 						}
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
+
+						if (!listToExecute.isEmpty()) {
+							listToExecute = checkExistingSenences(listToExecute);
+						}
+						
+						// NOTICE if list is't empty import list into database
+						if (!listToExecute.isEmpty()) {
+							es.submit(new ExecutorStringSentenceIntoDB(listToExecute, bar, getOrder()));
+						}
+					}
+					if (fileType.equals("JSON")) {
+						SentencesFromJSON s = new SentencesFromJSON(optData);
+						// TODO check if list is empty
+						// TODO prepare list to import
+						if (!s.checkData()) {
+							listToExecute = s.arrayListFromJSON();
+//							System.out.println(listToExecute.toString());
+						}
+
+						// TODO check if sentences exists in the database
+						if (!listToExecute.isEmpty()) {
+							listToExecute = checkExistingSenences(listToExecute);
+						}
+						
+						// NOTICE import is disabled
+						if (!listToExecute.isEmpty()) {
+							es.submit(new ExecutorStringSentenceIntoDB(listToExecute, bar, getOrder()));
+						}
 					}
 				}
-				txtArea.setText(null);
-				repaint();
+
+				if (what.equals("WORDS")) {
+					if (fileType.equals("CSV")) {
+						// TODO check if list is empty
+						// TODO check if word exist
+						// TODO prepare list to import
+						// TODO import list into database
+					}
+
+					if (fileType.equals("JSON")) {
+						// TODO check if list is empty
+						// TODO check if word exist
+						// TODO prepare list to import
+						// TODO import list into database
+					}
+				}
+			}
+
+			else {
+				new ShowMessage().directMessage("Nie podałeś pliku!");
 			}
 		}
 
-		else if (src == showBtn)
-
-		{
+		else if (src == showBtn) {
 			bar.setNull();
 			txtArea.setText(null);
-			String filePath = getFilePath();
-			if (filePath != null) {
-				Path p = Paths.get(filePath);
+			Optional<String> optPath = Optional.ofNullable(getFilePath());
+
+			if (!optPath.isEmpty()) {
 				try {
-					Files.lines(p).forEach(s -> txtArea.append(s + "\n"));
+					Files.lines(Paths.get(optPath.get()), StandardCharsets.UTF_8)
+							.forEach(s -> txtArea.append(s + "\n"));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -213,39 +193,57 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		}
 	}
 
+	private List<String[]> checkExistingSenences(List<String[]> listToExecute) {
+		List<String[]> newList = new LinkedList<>();
+		for (String[] sa : listToExecute) {
+			if (!new Sentence().checkOid(sa[0], sa[1])) {
+				newList.add(sa);
+			}
+		}
+		return newList;
+	}
+
+	private List<Sentence> newSentence(List<Sentence> list) {
+		List<Sentence> newList = new LinkedList<>();
+		list.forEach(s -> {
+			if (s.getOid() > 0) {
+				newList.add(s);
+			}
+		});
+
+		return newList;
+	}
+
 	private String getFilePath() {
-		return importConfigPanel.getFilePath();
+		return settingPanel.getFilePath();
 	}
 
 	private String getGenus() {
-		return importConfigPanel.wordGenus();
+		return settingPanel.wordGenus();
 	}
 
 	private boolean getOrder() {
-		return importConfigPanel.order();
+		return settingPanel.order();
+	}
+
+	private String getOrderAsString() {
+		return settingPanel.orderAsString();
 	}
 
 	private void clearAll() {
 		bar.setNull();
 		txtArea.setText(null);
-		importConfigPanel.clear();
+		settingPanel.clear();
 	}
 
-	/*
-	 * NOTICE need to check source file meets the criteria if not show message
-	 */
-	private void checkSource() {
-
-	}
-
-	private void showJSONData(SentenceListPreparationFromJSONFile prepJSON) {
-		// TODO to improve. Is it needed?
-		List<String[]> list = prepJSON.getList(fileType);
-		if (list != null) {
-			for (String[] array : list) {
-				for (String str : array)
-					System.out.println(str);
-			}
+	private void printData(String data) {
+		record Sentence(String sentence, String meaning) {
 		}
+
+		data.lines()
+		.map(r -> r.split(";"))
+		.map(s -> new Sentence(s[0], s[1]))
+		.forEach(a -> System.out.println(a));
 	}
+
 }

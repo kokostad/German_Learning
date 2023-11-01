@@ -48,6 +48,8 @@ public interface IWord {
 	void setPropertyList(List<Properties> propertiesList);
 
 	boolean isExist(String word, String genus);
+	
+	int findId(String word, String genus);
 
 	void putIntoRepository(String word, String meaning, String genus);
 

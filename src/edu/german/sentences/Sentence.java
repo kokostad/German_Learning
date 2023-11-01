@@ -25,6 +25,16 @@ public class Sentence implements ISentence {
 		this.propertyList = new LinkedList<>();
 	}
 
+	public Sentence(String sentence, String meaning) {
+		setSentenceFromRepository(sentence, meaning);
+	}
+
+	private Sentence setSentenceFromRepository(String sentence, String meaning) {
+		// TODO need to prepare sentence from database
+
+		return getSentenceFromRepository(sentence, meaning);
+	}
+
 	public Sentence(String sentence, String meaning, String type, String category, String tens, String word) {
 		this.sentence = sentence;
 		this.meaning = meaning;
@@ -186,11 +196,22 @@ public class Sentence implements ISentence {
 
 		return false;
 	}
+	
+	public boolean checkOid(String sentence, String meaning) {
+		String sql = new SqlQuery().getSql("check_sentence_meaning");
+		QueryContractor qc = new QueryContractor();
+		int id = qc.getId(sql, sentence, meaning);
+		if (id > -1)
+			return true;
+		
+		return false;
+	}
 
 	public Sentence getSentenceFromRepository(String sentenceStr, String meaningStr) {
 		String sql = new SqlQuery().getSql("get_full_sentence");
 		QueryContractor qc = new QueryContractor();
 		Sentence sentence = qc.getSentence(sql, sentenceStr, meaningStr);
+		System.out.println(sentence.toString());
 		return sentence;
 	}
 

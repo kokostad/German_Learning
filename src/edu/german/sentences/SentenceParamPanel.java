@@ -12,6 +12,7 @@ import edu.german.tools.Titel;
 
 public class SentenceParamPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private String PATH = "src/edu/german/sentences/cfg/";
 	private String CFG_FILE = "sentence.properties";
 	private MyComboBox kindBox;
 	private MyComboBox tribeBox;
@@ -19,15 +20,15 @@ public class SentenceParamPanel extends JPanel {
 
 	public SentenceParamPanel() {
 		// NOTICE kind of sentence
-		String[] selectionList = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_KIND_LIST");
+		String[] selectionList = new MyProperties(PATH, CFG_FILE).getValuesArray("SENTENCE_KIND_LIST");
 		kindBox = new MyComboBox(Titel.setTitel("KIND"), selectionList);
 
 		// NOTICE mode = tribe
-		String[] mode = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_TRIBE_LIST");
+		String[] mode = new MyProperties(PATH, CFG_FILE).getValuesArray("SENTENCE_TRIBE_LIST");
 		tribeBox = new MyComboBox(Titel.setTitel("TRIBE"), mode);
 
 		// NOTICE tens = time
-		String[] tenses = new MyProperties(CFG_FILE).getValuesArray("SENTENCE_TENS_LIST");
+		String[] tenses = new MyProperties(PATH, CFG_FILE).getValuesArray("SENTENCE_TENS_LIST");
 		tensBox = new MyComboBox(Titel.setTitel("TENS"), tenses);
 
 		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));

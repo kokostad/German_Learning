@@ -108,6 +108,11 @@ EOSQL
 SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.mode = ? ;
 EOSQL
 
+[check_sentence_meaning]
+SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.meaning = ? ;
+EOSQL
+
+
 // Sentence,Meaning,Genus,Mode,Tens,Word,Word_Meaning,Word_genus
 ## INSERT INTO ge.sentences (sentence,meaning,genus,mode,tens,word,word_meaning,word_genus) VALUES(?, ?, ?, ?, ?, ?);
 [add_sentence]

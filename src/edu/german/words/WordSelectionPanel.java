@@ -9,6 +9,7 @@ import edu.german.tools.Titel;
 
 public class WordSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private static final String PATH = "src/edu/german/words/cfg/";
 	private static final String FILE_NAME = "words_genus.properties";
 	private MyComboBox kindBox;
 	private MyComboBox boxNumber;
@@ -19,7 +20,7 @@ public class WordSelectionPanel extends JPanel {
 		boxNumber = new MyComboBox(Titel.setTitel("WORDS_NUMBER"), numbers);
 
 		if (setWordKinds) {
-			selectionList = new MyProperties(FILE_NAME).getValuesArray("GENUS_LIST_FOR_GAMES");
+			selectionList = new MyProperties(PATH, FILE_NAME).getValuesArray("GENUS_LIST_FOR_GAMES");
 			kindBox = new MyComboBox(Titel.setTitel("CHOOSE_GENUS"), selectionList);
 			this.add(kindBox);
 		}

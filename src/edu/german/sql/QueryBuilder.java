@@ -103,7 +103,8 @@ public class QueryBuilder {
 	}
 
 	public String addNewSentenceToRepository(String[] sentence) {
-		String[] header = new MyProperties("table_headers.properties").getValuesArray("SENTENCES");
+		String[] headers = new MyProperties("src/edu/german/sentences/cfg/", "headers.cfg")
+				.getValuesArray("SENTENCE_SHORT");
 		StringBuilder sb = new StringBuilder();
 		int length = sentence.length - 1;
 
@@ -111,9 +112,9 @@ public class QueryBuilder {
 
 		for (int i = 0; i <= length; i++) {
 			if (i < length)
-				sb.append(header[i] + ", ");
+				sb.append(headers[i] + ", ");
 			else
-				sb.append(header[i]);
+				sb.append(headers[i]);
 		}
 
 		sb.append(") VALUES (");
@@ -297,6 +298,16 @@ public class QueryBuilder {
 			sb.append(", meaning_plural = '" + meaningPlural + "'");
 
 		sb.append(" WHERE oid = " + id);
+
+		return sb.toString();
+	}
+
+	public String getWordId(String word, String genus) {
+		String path = "src/edu/german/words/cfg/";
+		String file = "table_names.cfg";
+		String table = new MyProperties(path, file).getValue(genus, false);
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT FROM " + table + " WHERE word = " + word + ";");
 
 		return sb.toString();
 	}

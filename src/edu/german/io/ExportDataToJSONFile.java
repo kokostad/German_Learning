@@ -32,9 +32,7 @@ public class ExportDataToJSONFile implements Runnable {
 		try {
 			FileWriter writer = new FileWriter(filePath, true);
 
-			data
-			.lines()
-			.forEach(l -> {
+			data.lines().forEach(l -> {
 				if ("SENTENCES".equals(kind.toUpperCase()))
 					try {
 						writer.write(prepareJSONSentence(i, l));
@@ -88,18 +86,16 @@ public class ExportDataToJSONFile implements Runnable {
 			JSONObject var = new WordJSONParser(line).getJSONItem();
 			sb.append("{\"WORDS\":");
 			sb.append("[");
+			sb.append("\n");
 			sb.append(var.toJSONString());
 			sb.append(",");
-			sb.append("\n");
 		} else {
 			JSONObject var = new WordJSONParser(line).getJSONItem();
 			if (i < count - 1) {
 				sb.append(var.toJSONString());
 				sb.append(",");
-				sb.append("\n");
 			} else {
 				sb.append(var.toJSONString());
-				sb.append("\n");
 			}
 		}
 		return sb.toString();

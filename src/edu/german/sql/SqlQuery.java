@@ -10,7 +10,8 @@ import java.io.IOException;
  * SqlQuery.java
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
  * The Class get SQL query from file
- * return query as string  
+ * return query as string
+ * /German_Learning/src/edu/german/sql/queries.lst  
  */
 public class SqlQuery {
 	private String FILE_CFG = "src/edu/german/sql/queries.lst";

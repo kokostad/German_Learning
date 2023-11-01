@@ -7,6 +7,10 @@ import org.json.simple.JSONObject;
 
 public class SentenceJSONParser {
 	private JSONObject json;
+	
+	public SentenceJSONParser() {
+		// NOTICE nothing to do
+	}
 
 	@SuppressWarnings("unchecked")
 	public SentenceJSONParser(String line) {
@@ -35,5 +39,4 @@ public class SentenceJSONParser {
 	public JSONObject getJSONItem() {
 		return json;
 	}
-
 }

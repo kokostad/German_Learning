@@ -129,7 +129,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 				if (data.trim().length() > 0 && "CSV".equals(exportType))
 					es.submit(new ExportDataToCSVFile(data, getFilePath()));
 				else
-					new ExportDataToJSONFile(data, getFilePath(), "WORDS");
+					es.submit(new ExportDataToJSONFile(data, getFilePath(), "WORDS"));
 			} else {
 				if ("CSV".equals(exportType))
 					es.submit(new ExportDataToCSVFile(data, getFilePath()));

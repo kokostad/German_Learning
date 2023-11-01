@@ -1,5 +1,6 @@
 package edu.german.sql;
 
+import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -106,6 +107,26 @@ public class QueryContractor {
 		return false;
 	}
 
+	public int getId(String sql) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		Statement st;
+		try {
+			st = (Statement) con.createStatement();
+			ResultSet rs = ((java.sql.Statement) st).executeQuery(sql);
+			while (rs.next())
+				return rs.getInt(1);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return -1;
+	}
+
 	public int getId(String sql, String variable) {
 		loadDriver();
 		dbc = new DbConnect();
@@ -149,14 +170,14 @@ public class QueryContractor {
 		return -1;
 	}
 
-	public int getId(String sql, String word, String meaning) {
+	public int getId(String sql, String valueOne, String valueTwo) {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
 
 		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.setString(1, word);
-			ps.setString(2, meaning);
+			ps.setString(1, valueOne);
+			ps.setString(2, valueTwo);
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())

@@ -21,7 +21,8 @@ import edu.german.tools.Titel;
 
 public class ExportConfigPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final String WORD_FILE_CFG = "words_genus.properties";
+	private String PATH = "src/edu/german/words/cfg/";
+	private String CFG_FILE = "words_genus.properties";
 	private String labelInfo = "Ścieżka do pliku: ";
 	private JButton chooseBtn;
 	private JLabel pathLab;
@@ -43,7 +44,7 @@ public class ExportConfigPanel extends JPanel {
 
 		sentencesOrWordsChooseBox = new MyCheckBox("Ustaw eksport wyrazów: ", "Wyrazy", "Eksport (domyślnie: zdania)");
 
-		String[] selectionList = new MyProperties(WORD_FILE_CFG).getValuesArray("GENUS_LIST");
+		String[] selectionList = new MyProperties(PATH, CFG_FILE).getValuesArray("GENUS_LIST");
 		wordGenusBox = new MyComboBox(Titel.setTitel("WORDS_GENUS"), selectionList);
 
 		FileKind[] fileKind = FileKind.values();

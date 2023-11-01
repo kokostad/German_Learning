@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 
@@ -172,6 +173,13 @@ public class Word implements IWord {
 
 	public void setProperties(Properties properties) {
 		this.properties = properties;
+	}
+
+	@Override
+	public int findId(String word, String genus) {
+		String sql = new QueryBuilder().getWordId(word, genus);
+		int oid = new QueryContractor().getId(sql);
+		return oid;
 	}
 
 }

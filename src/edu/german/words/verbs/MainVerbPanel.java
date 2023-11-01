@@ -12,7 +12,8 @@ import edu.german.tools.ScreenSetup;
 
 public class MainVerbPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private String CFG_FILE ="word.properties";
+	private String PATH = "src/edu/german/words/cfg/";
+	private String CFG_FILE = "word.properties";
 	private OneEditField word;
 	private OneEditField meaning;
 	private Font font = new ScreenSetup().DEFAULT_FONT;
@@ -39,9 +40,9 @@ public class MainVerbPanel extends JPanel {
 				.build();
 
 		separatable = new MyComboBox("Nierozłączny/rozłączny: ",
-				new MyProperties(CFG_FILE).getValuesArray("VERB_SEPARABLE"));
+				new MyProperties(PATH, CFG_FILE).getValuesArray("VERB_SEPARABLE"));
 		regular = new MyComboBox("Regularny/nieregularny: ",
-				new MyProperties(CFG_FILE).getValuesArray("VERB_REGULAR"));
+				new MyProperties(PATH, CFG_FILE).getValuesArray("VERB_REGULAR"));
 
 		this.add(word);
 		this.add(meaning);

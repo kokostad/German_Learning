@@ -25,6 +25,8 @@ import edu.german.words.Noun;
 
 public class AddNouns extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
+	private String PATH = "src/edu/german/words/cfg/";
+	private String CFG_FILE = "word.properties";
 	private ButtonsPanel bp;
 	private JButton check;
 	private JButton clearEditFields;
@@ -66,7 +68,7 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 		workPanel.setLayout(new BorderLayout());
 		workPanel.add(editPanel, BorderLayout.NORTH);
 
-		header = new MyProperties("word.properties").getValuesArray("NOUN_SIMPLE_TABLE");
+		header = new MyProperties(PATH, CFG_FILE).getValuesArray("NOUN_SIMPLE_TABLE");
 		tb = new TableHanlder(header, true);
 		JScrollPane scp = new JScrollPane(tb);
 

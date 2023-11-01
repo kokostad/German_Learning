@@ -21,6 +21,7 @@ import edu.german.tools.Titel;
 
 public class ImportConfigPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private String PATH = "src/edu/german/words/cfg/";
 	private static final String WORD_FILE_CFG = "words_genus.properties";
 	private String labelInfo = "Ścieżka do pliku: ";
 	private JButton chooseBtn;
@@ -30,10 +31,10 @@ public class ImportConfigPanel extends JPanel {
 	private String secondParamTitle;
 	private String firstHint;
 	private String secondHint;
-	private MyCheckBox orderBox;
-	private MyCheckBox sentencesOrWordsBox;
-	private MyComboBox wordGenusBox;
-	private MyComboBox fileTypeBox;
+	private MyCheckBox order;
+	private MyCheckBox sentenceOrWord;
+	private MyComboBox wordGenus;
+	private MyComboBox fileType;
 
 	public ImportConfigPanel(String firstParamTitle, String secondParamTitle, String firstHint, String secondHint) {
 		this.firstParamTitle = firstParamTitle;
@@ -41,25 +42,25 @@ public class ImportConfigPanel extends JPanel {
 		this.firstHint = firstHint;
 		this.secondHint = secondHint;
 		filePath = null;
-		
+
 		pathLab = new JLabel(labelInfo);
 
 		JPanel upPanel = new JPanel();
 		upPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 
-		orderBox = new MyCheckBox(firstParamTitle, "polski/niemiecki", firstHint);
-		sentencesOrWordsBox = new MyCheckBox(secondParamTitle, "Wyrazy", secondHint);
+		order = new MyCheckBox(firstParamTitle, "polski/niemiecki", firstHint);
+		sentenceOrWord = new MyCheckBox(secondParamTitle, "Wyrazy", secondHint);
 
-		String[] selectionList = new MyProperties(WORD_FILE_CFG).getValuesArray("GENUS_LIST");
-		wordGenusBox = new MyComboBox(Titel.setTitel("WORDS_GENUS"), selectionList, "Puste oznacza wszystko");
+		String[] selectionList = new MyProperties(PATH, WORD_FILE_CFG).getValuesArray("GENUS_LIST");
+		wordGenus = new MyComboBox(Titel.setTitel("WORDS_GENUS"), selectionList, "Puste oznacza wszystko");
 
 		FileKind[] fileKind = FileKind.values();
-		fileTypeBox = new MyComboBox("Typ pliku", fileKind);
+		fileType = new MyComboBox("Typ pliku", fileKind);
 
-		upPanel.add(sentencesOrWordsBox);
-		upPanel.add(orderBox);
-		upPanel.add(wordGenusBox);
-		upPanel.add(fileTypeBox);
+		upPanel.add(sentenceOrWord);
+		upPanel.add(order);
+		upPanel.add(wordGenus);
+		upPanel.add(fileType);
 		upPanel.repaint();
 
 		JPanel downPanel = new JPanel();
@@ -121,6 +122,7 @@ public class ImportConfigPanel extends JPanel {
 		}
 
 	}
+
 	public String getFilePath() {
 		return filePath;
 	}
@@ -130,7 +132,7 @@ public class ImportConfigPanel extends JPanel {
 	}
 
 	public boolean order() {
-		return orderBox.result();
+		return order.result();
 	}
 
 	public String orderAsString() {
@@ -142,22 +144,22 @@ public class ImportConfigPanel extends JPanel {
 	}
 
 	public boolean sentencesOrWords() {
-		return sentencesOrWordsBox.result();
+		return sentenceOrWord.result();
 	}
 
 	public String sentencesOrWordsAsString() {
-		if (sentencesOrWordsBox.result())
+		if (sentenceOrWord.result())
 			return "WORDS";
 
 		return "SENTENCE";
 	}
-	
+
 	public String fileType() {
-		return fileTypeBox.getValue();
+		return fileType.getValue();
 	}
 
 	public String wordGenus() {
-		return wordGenusBox.getValue();
+		return wordGenus.getValue();
 	}
 
 	public HashMap<String, String> exportConfigParam() {
@@ -180,11 +182,9 @@ public class ImportConfigPanel extends JPanel {
 
 	public void clear() {
 		filePath = null;
-		orderBox.clear();
-		sentencesOrWordsBox.clear();
-		wordGenusBox.setValue(null);
+		order.clear();
+		sentenceOrWord.clear();
+		wordGenus.setValue(null);
 		clearFilePath();
 	}
-
 }
-

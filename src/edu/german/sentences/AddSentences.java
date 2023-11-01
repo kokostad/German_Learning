@@ -28,7 +28,9 @@ import edu.german.words.WordEditPanel;
 
 public class AddSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
+	private String SENTENCE_CFG_PATH = "src/edu/german/sentences/cfg/";
 	private String SENTENCE_CFG = "sentence.properties";
+	private String WORD_CFG_PATH = "src/edu/german/words/cfg/";
 	private String WORD_CFG = "word.properties";
 	private ButtonsPanel bp;
 	private JButton clearEditFieldsBtn;
@@ -64,7 +66,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		addToRepoBtn = bp.getB6();
 		addToRepoBtn.addActionListener(this);
 
-		header = new MyProperties(SENTENCE_CFG).getValuesArray("SENTENCE_TABLE_HEADER");
+		header = new MyProperties(SENTENCE_CFG_PATH, SENTENCE_CFG).getValuesArray("SENTENCE_TABLE_HEADER");
 
 		table = new TableHanlder(header, true);
 
@@ -73,7 +75,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		editSentence = new SentenceEditPanel();
 		sentenceParam = new SentenceParamPanel();
 		editWord = new WordEditPanel(Titel.setTitel("WRITE_WORD"), Titel.setTitel("MEANING"),
-				new MyProperties(WORD_CFG).getValuesArray("WORD_MODE_LIST"));
+				new MyProperties(WORD_CFG_PATH, WORD_CFG).getValuesArray("WORD_MODE_LIST"));
 		edit.add(editSentence);
 		edit.add(sentenceParam);
 		edit.add(editWord);

@@ -2,7 +2,6 @@ package edu.german.tools;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Class clean text from spaces
@@ -37,15 +36,12 @@ public class TextCleaner {
 
 	/**
 	 * Method change string into stream and clean from spaces and digit
-	 * @param str is a word or part of the word
+	 * @param word -> it's string to clean
 	 * as result return cleaned string
 	 */
 	public String removeWhitespace(String word) {
-		Stream<String> stream = Stream.of(word);
-		ArrayList<String> filtered = new ArrayList<String>(stream.map(s -> s.replaceAll("[0-9]", ""))
-				.map(s -> s.replace(" ", "")).collect(Collectors.toList()));
-
-		return filtered.toString();
+		String result = word.replaceAll("\\s+", " ");
+		return result.trim();
 	}
 
 	/**
@@ -55,14 +51,14 @@ public class TextCleaner {
 	 */
 	public String removeWhitespaceAndDigit(String string) {
 		String value = string.chars()
-        .filter(c -> !Character.isDigit(c))
-        .filter(c -> !Character.isSpaceChar(c))
-        .mapToObj(c -> String.valueOf((char) c))
-        .collect(Collectors.joining());
-		
+				.filter(c -> !Character.isDigit(c))
+				.filter(c -> !Character.isSpaceChar(c))
+				.mapToObj(c -> String.valueOf((char) c))
+				.collect(Collectors.joining());
+
 		return value;
 	}
-	
+
 	/**
 	 * Method clean string from spaces
 	 * @param str - is word or part of the word

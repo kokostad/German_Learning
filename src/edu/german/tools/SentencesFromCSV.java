@@ -4,30 +4,28 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 
 import edu.german.sentences.Sentence;
 
-public class SentencesListPreparationFromCSVFile {
-	private static String sign;
-	private List<String[]> list;
+public class SentencesFromCSV {
+	private static String sign = ";";
+	private List<String[]> array;
 	private List<String[]> wrongList;
 	private List<Sentence> sentences;
 
-	public SentencesListPreparationFromCSVFile(BufferedReader br, String sign) {
+	public SentencesFromCSV(BufferedReader br, String sign) {
 		this.sign = sign;
-		list = new LinkedList<String[]>();
+		array = new LinkedList<String[]>();
 		wrongList = new LinkedList<String[]>();
 		prepareListOfSentences(br);
 	}
 
-	public SentencesListPreparationFromCSVFile(String data, String sign) {
+	public SentencesFromCSV(String data, String sign) {
 		this.sign = sign;
 
 		sentences = data
 				.lines()
-				.map(SentencesListPreparationFromCSVFile::lineToSentnce)
+				.map(SentencesFromCSV::lineToSentnce)
 				.toList();
 	}
 
@@ -61,9 +59,9 @@ public class SentencesListPreparationFromCSVFile {
 			try {
 				String line = null;
 				while ((line = br.readLine()) != null) {
-					String[] array = prepareArray(line);
-					if (array != null)
-						list.add(prepareArray(line));
+					String[] arr = prepareArray(line);
+					if (arr != null)
+						array.add(prepareArray(line));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -92,14 +90,14 @@ public class SentencesListPreparationFromCSVFile {
 		return null;
 	}
 
-	public List<String[]> getList() {
-		if (!list.isEmpty())
-			return list;
+	public List<String[]> getArray() {
+		if (!array.isEmpty())
+			return array;
 
 		return null;
 	}
 
-	public List<Sentence> getSentenceList() {
+	public List<Sentence> getList() {
 		return sentences;
 	}
 
