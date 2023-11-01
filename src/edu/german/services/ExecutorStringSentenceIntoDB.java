@@ -2,6 +2,7 @@ package edu.german.services;
 
 import java.util.List;
 
+import edu.german.sentences.Sentence;
 import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 import edu.german.tools.MyProgressBar;
@@ -28,9 +29,12 @@ public class ExecutorStringSentenceIntoDB implements Runnable {
 
 	private void addToRepo(List<String[]> list) {
 		if (!order) {
-			for (String[] str : list) {
+			for (String[] a : list) {
 				i += 1;
-				execute(str);
+				a = checkIfSentenceExist(a);
+				if (a != null)
+					execute(a);
+
 				fillBar(i);
 			}
 		}
@@ -57,4 +61,12 @@ public class ExecutorStringSentenceIntoDB implements Runnable {
 
 		return arr;
 	}
+
+	private String[] checkIfSentenceExist(String[] arr) {
+		if (!new Sentence().checkOid(arr[0])) {
+			return arr;
+		}
+		return null;
+	}
+
 }

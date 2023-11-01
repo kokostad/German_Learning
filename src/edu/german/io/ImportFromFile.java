@@ -21,7 +21,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import edu.german.sentences.Sentence;
 import edu.german.services.ExecutorStringSentenceIntoDB;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
@@ -115,38 +114,25 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 				List<String[]> listToExecute = new LinkedList<>();
 
 				if (what.equals("SENTENCE")) {
-					
+
 					if (fileType.equals("CSV")) {
 						SentenceFromData s = new SentenceFromData(optData);
-						// NOTICE if not empty do prepare list to import and check if word exist
+
 						if (!s.checkData()) {
 							listToExecute = s.arrayList(s.getListFromData());
 						}
 
-						if (!listToExecute.isEmpty()) {
-							listToExecute = checkExistingSenences(listToExecute);
-						}
-						
-						// NOTICE if list is't empty import list into database
 						if (!listToExecute.isEmpty()) {
 							es.submit(new ExecutorStringSentenceIntoDB(listToExecute, bar, getOrder()));
 						}
 					}
 					if (fileType.equals("JSON")) {
 						SentencesFromJSON s = new SentencesFromJSON(optData);
-						// TODO check if list is empty
-						// TODO prepare list to import
+
 						if (!s.checkData()) {
 							listToExecute = s.arrayListFromJSON();
-//							System.out.println(listToExecute.toString());
 						}
 
-						// TODO check if sentences exists in the database
-						if (!listToExecute.isEmpty()) {
-							listToExecute = checkExistingSenences(listToExecute);
-						}
-						
-						// NOTICE import is disabled
 						if (!listToExecute.isEmpty()) {
 							es.submit(new ExecutorStringSentenceIntoDB(listToExecute, bar, getOrder()));
 						}
@@ -193,27 +179,6 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		}
 	}
 
-	private List<String[]> checkExistingSenences(List<String[]> listToExecute) {
-		List<String[]> newList = new LinkedList<>();
-		for (String[] sa : listToExecute) {
-			if (!new Sentence().checkOid(sa[0], sa[1])) {
-				newList.add(sa);
-			}
-		}
-		return newList;
-	}
-
-	private List<Sentence> newSentence(List<Sentence> list) {
-		List<Sentence> newList = new LinkedList<>();
-		list.forEach(s -> {
-			if (s.getOid() > 0) {
-				newList.add(s);
-			}
-		});
-
-		return newList;
-	}
-
 	private String getFilePath() {
 		return settingPanel.getFilePath();
 	}
@@ -234,16 +199,6 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		bar.setNull();
 		txtArea.setText(null);
 		settingPanel.clear();
-	}
-
-	private void printData(String data) {
-		record Sentence(String sentence, String meaning) {
-		}
-
-		data.lines()
-		.map(r -> r.split(";"))
-		.map(s -> new Sentence(s[0], s[1]))
-		.forEach(a -> System.out.println(a));
 	}
 
 }

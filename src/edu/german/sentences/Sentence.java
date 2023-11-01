@@ -196,14 +196,24 @@ public class Sentence implements ISentence {
 
 		return false;
 	}
-	
+
 	public boolean checkOid(String sentence, String meaning) {
 		String sql = new SqlQuery().getSql("check_sentence_meaning");
 		QueryContractor qc = new QueryContractor();
 		int id = qc.getId(sql, sentence, meaning);
 		if (id > -1)
 			return true;
-		
+
+		return false;
+	}
+
+	public boolean checkOid(String sentence) {
+		String sql = new SqlQuery().getSql("get_sentence_oid");
+		QueryContractor qc = new QueryContractor();
+		int id = qc.getId(sql, sentence);
+		if (id > -1)
+			return true;
+
 		return false;
 	}
 
@@ -211,7 +221,6 @@ public class Sentence implements ISentence {
 		String sql = new SqlQuery().getSql("get_full_sentence");
 		QueryContractor qc = new QueryContractor();
 		Sentence sentence = qc.getSentence(sql, sentenceStr, meaningStr);
-		System.out.println(sentence.toString());
 		return sentence;
 	}
 

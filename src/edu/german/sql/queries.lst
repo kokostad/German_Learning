@@ -109,7 +109,7 @@ SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.mode = ? ;
 EOSQL
 
 [check_sentence_meaning]
-SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.meaning = ? ;
+SELECT s.oid FROM ge.sentences s WHERE s.sentence = ? AND s.meaning = ? LIMIT 1;
 EOSQL
 
 
