@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,7 +23,7 @@ import edu.german.tools.Titel;
 public class ImportConfigPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private String PATH = "src/edu/german/words/cfg/";
-	private static final String WORD_FILE_CFG = "words_genus.properties";
+	private static final String WORD_FILE_CFG = "word.cfg";
 	private String labelInfo = "Ścieżka do pliku: ";
 	private JButton chooseBtn;
 	private JLabel pathLab;
@@ -162,7 +163,7 @@ public class ImportConfigPanel extends JPanel {
 		return wordGenus.getValue();
 	}
 
-	public HashMap<String, String> exportConfigParam() {
+	public Map<String, String> exportConfigParam() {
 		String kind = "sentence";
 		if (sentencesOrWords())
 			kind = "word";
@@ -170,14 +171,14 @@ public class ImportConfigPanel extends JPanel {
 		if (order())
 			order = "pl";
 
-		HashMap<String, String> exportConfigMap = new HashMap<>();
-		exportConfigMap.put("EXPORT_TYPE", fileType());
-		exportConfigMap.put("GENUS", kind);
-		exportConfigMap.put("ORDER", order);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("EXPORT_TYPE", fileType());
+		map.put("GENUS", kind);
+		map.put("ORDER", order);
 		if (kind.equals("word"))
-			exportConfigMap.put("WORD_GENUS", wordGenus());
+			map.put("WORD_GENUS", wordGenus());
 
-		return exportConfigMap;
+		return map;
 	}
 
 	public void clear() {

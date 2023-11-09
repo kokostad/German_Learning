@@ -1,5 +1,6 @@
 package edu.german.io;
 
+
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -7,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,7 +24,7 @@ import edu.german.tools.Titel;
 public class ExportConfigPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private String PATH = "src/edu/german/words/cfg/";
-	private String CFG_FILE = "words_genus.properties";
+	private String CFG_FILE = "word.cfg";
 	private String labelInfo = "Ścieżka do pliku: ";
 	private JButton chooseBtn;
 	private JLabel pathLab;
@@ -65,7 +67,7 @@ public class ExportConfigPanel extends JPanel {
 		downPanel.add(chooseBtn);
 		downPanel.add(pathLab);
 
-		chooseBtn.addActionListener(new ActionListener() {
+		chooseBtn.addActionListener((ActionListener) new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -113,7 +115,7 @@ public class ExportConfigPanel extends JPanel {
 		return wordGenusBox.getValue();
 	}
 
-	public HashMap<String, String> exportConfigParam() {
+	public Map<String, String> exportConfigParam() {
 		String kind = "sentence";
 		if (sentencesOrWords())
 			kind = "word";
@@ -121,14 +123,14 @@ public class ExportConfigPanel extends JPanel {
 		if (order())
 			order = "pl";
 
-		HashMap<String, String> exportConfigMap = new HashMap<>();
-		exportConfigMap.put("EXPORT_TYPE", exportType());
-		exportConfigMap.put("GENUS", kind);
-		exportConfigMap.put("ORDER", order);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("EXPORT_TYPE", exportType());
+		map.put("GENUS", kind);
+		map.put("ORDER", order);
 		if (kind.equals("word"))
-			exportConfigMap.put("WORD_GENUS", wordGenus());
+			map.put("WORD_GENUS", wordGenus());
 
-		return exportConfigMap;
+		return map;
 	}
 
 	public void clear() {

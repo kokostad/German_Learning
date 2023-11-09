@@ -4,6 +4,11 @@ import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 
 public class ExecutorPrepareNounView implements Runnable {
+	private String pattern = "prepare_view_all_words";
+	
+	public ExecutorPrepareNounView(String pattern){
+		this.pattern = pattern;
+	}
 
 	@Override
 	public void run() {
@@ -11,6 +16,6 @@ public class ExecutorPrepareNounView implements Runnable {
 	}
 
 	private void prepareViewForGame() {
-		new QueryContractor().executeQuery(new SqlQuery().getSql("prepare_view_nouns_for_game"));
+		new QueryContractor().executeQuery(new SqlQuery().getSql(pattern));
 	}
 }

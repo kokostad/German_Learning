@@ -15,7 +15,7 @@ import java.util.Map;
 import edu.german.dao.DbConnect;
 import edu.german.sentences.Sentence;
 import edu.german.tools.PrepareArrayFromString;
-import edu.german.tools.TextCleaner;
+import edu.german.tools.TextHandler;
 import edu.german.words.Noun;
 import edu.german.words.model.Word;
 
@@ -111,10 +111,10 @@ public class QueryContractor {
 		loadDriver();
 		dbc = new DbConnect();
 		con = dbc.getConnection();
-		Statement st;
-		try {
-			st = (Statement) con.createStatement();
-			ResultSet rs = ((java.sql.Statement) st).executeQuery(sql);
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+
 			while (rs.next())
 				return rs.getInt(1);
 
@@ -538,9 +538,9 @@ public class QueryContractor {
 				for (int i = 1; i <= numOfCol; i++) {
 					Object var = rs.getObject(i);
 					if ((i < numOfCol) && (var != null))
-						sb.append(new TextCleaner().removeTab(var.toString()) + ";");
+						sb.append(new TextHandler().removeTab(var.toString()) + ";");
 					else if (var != null)
-						sb.append(new TextCleaner().removeTab(var.toString()));
+						sb.append(new TextHandler().removeTab(var.toString()));
 				}
 				list.add(sb.toString());
 			}

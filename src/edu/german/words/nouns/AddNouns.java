@@ -26,7 +26,7 @@ import edu.german.words.Noun;
 public class AddNouns extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private String PATH = "src/edu/german/words/cfg/";
-	private String CFG_FILE = "word.properties";
+	private String CFG_FILE = "word.cfg";
 	private ButtonsPanel bp;
 	private JButton check;
 	private JButton clearEditFields;
@@ -48,17 +48,18 @@ public class AddNouns extends MyInternalFrame implements ActionListener {
 		propertyList = new LinkedList<Properties>();
 		words = new LinkedList<Noun>();
 
-		bp = new ButtonsPanel("CHECK_IN_DATABASE", "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "CLEAR_LIST",
-				"ADD_LIST_TO_REPOSITORY");
-		check = bp.getB1();
+		String[] headers = { "CHECK_IN_DATABASE", "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "CLEAR_LIST",
+				"ADD_LIST_TO_REPOSITORY" };
+		bp = new ButtonsPanel(headers);
+		check = bp.getButtonList().get(0);
 		check.addActionListener(this);
-		clearEditFields = bp.getB2();
+		clearEditFields = bp.getButtonList().get(0);
 		clearEditFields.addActionListener(this);
-		addToList = bp.getB3();
+		addToList = bp.getButtonList().get(0);
 		addToList.addActionListener(this);
-		clearList = bp.getB4();
+		clearList = bp.getButtonList().get(0);
 		clearList.addActionListener(this);
-		putListIntoRepo = bp.getB5();
+		putListIntoRepo = bp.getButtonList().get(0);
 		putListIntoRepo.addActionListener(this);
 
 		editPanel = new NounEditPanel();

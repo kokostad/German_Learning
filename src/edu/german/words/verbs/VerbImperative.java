@@ -6,7 +6,7 @@ import java.util.Properties;
 import javax.swing.JPanel;
 
 import edu.german.tools.LabelSize;
-import edu.german.tools.TextCleaner;
+import edu.german.tools.TextHandler;
 import edu.german.tools.TwoEditFields;
 
 public class VerbImperative extends JPanel {
@@ -62,14 +62,14 @@ public class VerbImperative extends JPanel {
 		Properties properties = new Properties();
 		properties.put("TENS", getTens());
 		properties.put("MODUS", "IMPERATIV");
-		properties.put("DU", new TextCleaner(youS.getFirst()).getWord());
-		properties.put("TY", new TextCleaner(youS.getSecond()).getWord());
-		properties.put("WIR", new TextCleaner(we.getFirst()).getWord());
-		properties.put("MY", new TextCleaner(we.getSecond()).getWord());
-		properties.put("IHR", new TextCleaner(youP.getFirst()).getWord());
-		properties.put("WY", new TextCleaner(youP.getSecond()).getWord());
-		properties.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
-		properties.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
+		properties.put("DU", new TextHandler(youS.getFirst()).getWord());
+		properties.put("TY", new TextHandler(youS.getSecond()).getWord());
+		properties.put("WIR", new TextHandler(we.getFirst()).getWord());
+		properties.put("MY", new TextHandler(we.getSecond()).getWord());
+		properties.put("IHR", new TextHandler(youP.getFirst()).getWord());
+		properties.put("WY", new TextHandler(youP.getSecond()).getWord());
+		properties.put("SIE_SIE", new TextHandler(they.getFirst()).getWord());
+		properties.put("ONI_PANSTWO", new TextHandler(they.getSecond()).getWord());
 
 		return properties;
 	}

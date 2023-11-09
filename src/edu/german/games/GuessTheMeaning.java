@@ -21,7 +21,6 @@ import javax.swing.JSplitPane;
 import edu.german.services.ExecutorDoCallWord;
 import edu.german.services.ExecutorPrepareWordView;
 import edu.german.tools.MyInternalFrame;
-import edu.german.tools.MyProperties;
 import edu.german.tools.OneEditField;
 import edu.german.tools.ResultsPanel;
 import edu.german.tools.ScreenSetup;
@@ -64,7 +63,6 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 	private AnswerPanel answerPanel;
 	private GuessTheMeaningGamePanel gamePanel;
 	private ExecutorService es;
-	private static final String CFG_FILE = "buttons.properties";
 
 	public GuessTheMeaning(int height, int width, String titel) {
 		super(height, width, titel);
@@ -77,10 +75,8 @@ public class GuessTheMeaning extends MyInternalFrame implements ActionListener {
 		es = Executors.newSingleThreadExecutor();
 		es.submit(new ExecutorPrepareWordView());
 
-		MyProperties mp = new MyProperties(CFG_FILE);
-
-		String[] arr = { mp.getText("NEW_DEAL"), mp.getText("CHECK_ANSWER") };
-		bp = new ButtonsPanel(arr);
+		String[] headers = { "NEW_DEAL", "CHECK_ANSWER" };
+		bp = new ButtonsPanel(headers);
 
 		List<JButton> list = bp.getButtonList();
 

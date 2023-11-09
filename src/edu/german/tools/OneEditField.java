@@ -75,8 +75,9 @@ public class OneEditField extends JPanel {
 		return null;
 	}
 
-	public void setValue(String value) {
-		editField.setText(value);
+	public void setValue(Object value) {
+		if (value != null)
+			editField.setText(value.toString());
 	}
 
 	public void setColor(Color color) {

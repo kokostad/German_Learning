@@ -8,7 +8,7 @@ import java.util.Properties;
 import javax.swing.JPanel;
 
 import edu.german.tools.LabelSize;
-import edu.german.tools.TextCleaner;
+import edu.german.tools.TextHandler;
 import edu.german.tools.TwoEditFields;
 
 public class ImpersonalForm extends JPanel {
@@ -64,14 +64,14 @@ public class ImpersonalForm extends JPanel {
 		Properties properties = new Properties();
 		properties.put("TENS", getTens());
 		properties.put("MODUS", "IMPERSONAL");
-		properties.put("PRESENT_INFINITIVE", new TextCleaner(presentInfinitive.getFirst()).getWord());
-		properties.put("CZAS_TERAZNIEJSZ", new TextCleaner(presentInfinitive.getSecond()).getWord());
-		properties.put("INFINITIVE_PERFECT", new TextCleaner(InfinitivePerfect.getFirst()).getWord());
-		properties.put("CZAS_DOKONANY", new TextCleaner(InfinitivePerfect.getSecond()).getWord());
-		properties.put("PARTICIPLE_I", new TextCleaner(participleOne.getFirst()).getWord());
-		properties.put("IMIESLOW_I", new TextCleaner(participleOne.getSecond()).getWord());
-		properties.put("PARTICIPLE_II", new TextCleaner(participleTwo.getFirst()).getWord());
-		properties.put("IMIESLOW_II", new TextCleaner(participleTwo.getSecond()).getWord());
+		properties.put("PRESENT_INFINITIVE", new TextHandler(presentInfinitive.getFirst()).getWord());
+		properties.put("CZAS_TERAZNIEJSZ", new TextHandler(presentInfinitive.getSecond()).getWord());
+		properties.put("INFINITIVE_PERFECT", new TextHandler(InfinitivePerfect.getFirst()).getWord());
+		properties.put("CZAS_DOKONANY", new TextHandler(InfinitivePerfect.getSecond()).getWord());
+		properties.put("PARTICIPLE_I", new TextHandler(participleOne.getFirst()).getWord());
+		properties.put("IMIESLOW_I", new TextHandler(participleOne.getSecond()).getWord());
+		properties.put("PARTICIPLE_II", new TextHandler(participleTwo.getFirst()).getWord());
+		properties.put("IMIESLOW_II", new TextHandler(participleTwo.getSecond()).getWord());
 
 		return properties;
 	}

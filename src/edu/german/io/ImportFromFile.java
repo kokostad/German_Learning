@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,13 +22,16 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import edu.german.services.ExecutorStringSentenceIntoDB;
+import edu.german.services.ExecutorAddSentenceIntoRepository;
+import edu.german.services.ExecutorPrepareNounView;
+import edu.german.services.ExecutorPutWordAsMapIntoDatabase;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.SentencesFromJSON;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
+import edu.german.words.model.Word;
 
 /**
  * ImportFromFile.java
@@ -49,6 +53,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	public ImportFromFile(int height, int width, String titel) {
 		super(height, width, titel);
 		es = Executors.newSingleThreadExecutor();
+		es.submit(new ExecutorPrepareNounView("prepare_view_all_words"));
 
 		txtArea = new JTextArea(15, 70);
 		txtArea.setEditable(false);
@@ -70,14 +75,16 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 		tp = new JTabbedPane();
 		tp.add(Titel.setTitel("IMPORT_CONFIGURATION"), settingPanel);
+		
 
-		bp = new ButtonsPanel("CLEAR", "SHOW_DATA", "IMPORT");
+		String[] headers = {"CLEAR", "SHOW_DATA", "IMPORT"};
+		bp = new ButtonsPanel(headers);
 		bp.setFontSize(20);
-		clearEditFieldBtn = bp.getB1();
+		clearEditFieldBtn = bp.getButtonList().get(0);
 		clearEditFieldBtn.addActionListener(this);
-		showBtn = bp.getB2();
+		showBtn = bp.getButtonList().get(1);
 		showBtn.addActionListener(this);
-		importBtn = bp.getB3();
+		importBtn = bp.getButtonList().get(2);
 		importBtn.addActionListener(this);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tp, jp);
@@ -123,7 +130,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 						}
 
 						if (!listToExecute.isEmpty()) {
-							es.submit(new ExecutorStringSentenceIntoDB(listToExecute, bar, getOrder()));
+							es.submit(new ExecutorAddSentenceIntoRepository(listToExecute, bar, getOrder()));
 						}
 					}
 					if (fileType.equals("JSON")) {
@@ -134,24 +141,28 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 						}
 
 						if (!listToExecute.isEmpty()) {
-							es.submit(new ExecutorStringSentenceIntoDB(listToExecute, bar, getOrder()));
+							es.submit(new ExecutorAddSentenceIntoRepository(listToExecute, bar, getOrder()));
 						}
 					}
 				}
 
 				if (what.equals("WORDS")) {
 					if (fileType.equals("CSV")) {
-						// TODO check if list is empty
-						// TODO check if word exist
-						// TODO prepare list to import
-						// TODO import list into database
+						Word w = new Word(optData);
+						List<Map> lm = w.getMapList();
+
+						if (!lm.isEmpty()) {
+							es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, bar, getOrder()));
+						}
 					}
 
 					if (fileType.equals("JSON")) {
-						// TODO check if list is empty
-						// TODO check if word exist
-						// TODO prepare list to import
-						// TODO import list into database
+						Word w = new Word(optData);
+						List<Map> lm = w.getMapListFromJSON();
+
+						if (!lm.isEmpty()) {
+							es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, bar, getOrder()));
+						}
 					}
 				}
 			}
@@ -197,6 +208,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 	private void clearAll() {
 		bar.setNull();
+		bar.setInfo("PROGRESS");
 		txtArea.setText(null);
 		settingPanel.clear();
 	}

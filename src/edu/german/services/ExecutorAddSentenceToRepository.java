@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.german.sentences.Sentence;
 import edu.german.sql.QueryContractor;
+import edu.german.sql.SqlQuery;
 import edu.german.sql.QueryBuilder;
 import edu.german.tools.MyProgressBar;
 
@@ -51,6 +52,7 @@ public class ExecutorAddSentenceToRepository implements Runnable {
 
 	private void putSentenceToRepository(String[] sentence) {
 		String sql = new QueryBuilder().addNewSentenceToRepository(sentence);
+//		String sql = new SqlQuery().getSql("add_new_sentence");
 		new QueryContractor().executeQuery(sql);
 	}
 

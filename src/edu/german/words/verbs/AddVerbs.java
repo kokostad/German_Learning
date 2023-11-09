@@ -59,19 +59,21 @@ public class AddVerbs extends MyInternalFrame implements ActionListener {
 		verbList = new LinkedList<Verb>();
 		verbPanel = new MainVerbPanel();
 
-		bp = new ButtonsPanel("CHECK_IN_DATABASE", "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "SHOW_LIST", "CLEAR_LIST",
-				"ADD_LIST_TO_REPOSITORY");
-		checkBtn = bp.getB1();
+		String[] headers = { "CHECK_IN_DATABASE", "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "SHOW_LIST", "CLEAR_LIST",
+				"ADD_LIST_TO_REPOSITORY" };
+
+		bp = new ButtonsPanel(headers);
+		checkBtn = bp.getButtonList().get(0);
 		checkBtn.addActionListener(this);
-		clearEditFieldsBtn = bp.getB2();
+		clearEditFieldsBtn = bp.getButtonList().get(1);
 		clearEditFieldsBtn.addActionListener(this);
-		addToListBtn = bp.getB3();
+		addToListBtn = bp.getButtonList().get(2);
 		addToListBtn.addActionListener(this);
-		showListBtn = bp.getB4();
+		showListBtn = bp.getButtonList().get(3);
 		showListBtn.addActionListener(this);
-		clearListBtn = bp.getB5();
+		clearListBtn = bp.getButtonList().get(4);
 		clearListBtn.addActionListener(this);
-		addListToRepoBtn = bp.getB6();
+		addListToRepoBtn = bp.getButtonList().get(5);
 		addListToRepoBtn.addActionListener(this);
 
 		indikativ = new VerbIndikativ("INDIKATIV");

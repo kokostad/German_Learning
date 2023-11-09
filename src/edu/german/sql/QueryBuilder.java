@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import edu.german.tools.MyProperties;
+import edu.german.tools.TextHandler;
 
 public class QueryBuilder {
 
@@ -102,9 +103,9 @@ public class QueryBuilder {
 		return sb.toString();
 	}
 
-	public String addNewSentenceToRepository(String[] sentence) {
+	public String addNewSentenceToRepository(String[] sentence, String pattern) {
 		String[] headers = new MyProperties("src/edu/german/sentences/cfg/", "headers.cfg")
-				.getValuesArray("SENTENCE_SHORT");
+				.getValuesArray(pattern.toUpperCase());
 		StringBuilder sb = new StringBuilder();
 		int length = sentence.length - 1;
 
@@ -118,6 +119,25 @@ public class QueryBuilder {
 		}
 
 		sb.append(") VALUES (");
+
+		for (int i = 0; i <= length; i++) {
+			if (i < length)
+				sb.append("'" + sentence[i] + "', ");
+			else
+				sb.append("'" + sentence[i] + "'");
+		}
+
+		sb.append(");");
+
+		return sb.toString();
+	}
+
+	public String addNewSentenceToRepository(String[] sentence) {
+		StringBuilder sb = new StringBuilder();
+		int length = sentence.length - 1;
+
+		sb.append("INSERT INTO ge.sentences(sentence, meaning)");
+		sb.append(" VALUES (");
 
 		for (int i = 0; i <= length; i++) {
 			if (i < length)
@@ -221,7 +241,6 @@ public class QueryBuilder {
 		// NOTICE what if parameters 'irregular' and 'separable' is null?
 		StringBuilder sb1 = new StringBuilder();
 		StringBuilder sb2 = new StringBuilder();
-//		sb.append("INSERT INTO ge.verbs(WORD,MEANING,IRREGULAR,SEPARABLE) ");
 		sb1.append("INSERT INTO ge.verbs(WORD");
 		sb2.append(" VALUES('" + word);
 
@@ -240,7 +259,6 @@ public class QueryBuilder {
 			sb2.append("', '" + separable);
 		}
 
-//		sb.append("VALUES('" + word + "', '" + meaning + "', " + irregular + "', '" + separable + "');");
 		sb1.append(")");
 		sb2.append("');");
 
@@ -305,9 +323,87 @@ public class QueryBuilder {
 	public String getWordId(String word, String genus) {
 		String path = "src/edu/german/words/cfg/";
 		String file = "table_names.cfg";
+		String table = new MyProperties(path, file).getValue(new TextHandler().addUnderscore(genus), false);
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT oid FROM " + table + " WHERE word = '" + word + "';");
+
+		return sb.toString();
+	}
+
+	public String getWordId(String word, String meaninig, String genus) {
+		String path = "src/edu/german/words/cfg/";
+		String file = "table_names.cfg";
+		genus = new TextHandler().addUnderscore(genus);
 		String table = new MyProperties(path, file).getValue(genus, false);
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT FROM " + table + " WHERE word = " + word + ";");
+		sb.append("SELECT oid FROM " + table + " WHERE word = '" + word + "';");
+
+		return sb.toString();
+	}
+
+	public String getOid(String word) {
+		String path = "src/edu/german/words/cfg/";
+		String file = "table_names.cfg";
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT oid FROM ge.words WHERE word = '" + word + "';");
+
+		return sb.toString();
+	}
+
+	public String addNewWord(String[] arr, String pattern) {
+		String[] headers = new MyProperties("src/edu/german/words/cfg/", "headers.cfg")
+				.getValuesArray(pattern.toUpperCase());
+		StringBuilder sb = new StringBuilder();
+		int length = arr.length - 1;
+		String table = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg").getValue(pattern.toUpperCase(),
+				false);
+
+		sb.append("INSERT INTO ge." + pattern + " (");
+
+		for (int i = 0; i <= length; i++) {
+			if (i < length)
+				sb.append(headers[i] + ", ");
+			else
+				sb.append(headers[i]);
+		}
+
+		sb.append(") VALUES (");
+
+		for (int i = 0; i <= length; i++) {
+			if (i < length)
+				sb.append("'" + arr[i] + "', ");
+			else
+				sb.append("'" + arr[i] + "'");
+		}
+
+		sb.append(");");
+
+		return sb.toString();
+	}
+
+	public String addNewWord(String word, String meaning, String genus) {
+		// NOTICE maybe need a correct this method?
+		String pattern = new TextHandler().addUnderscore(genus);
+		String[] headers = new MyProperties("src/edu/german/words/cfg/", "headers.cfg").getValuesArray(pattern);
+		String tableName = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg").getValue(pattern, false);
+
+		int count = headers.length;
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT INTO " + tableName + "(");
+
+		for (int i = 0; i < count; i++) {
+			if (i < count - 1)
+				sb.append(headers[i] + ", ");
+			else
+				sb.append(headers[i]);
+		}
+
+		sb.append(") VALUES('" + word + "'");
+		if (meaning != null)
+			sb.append(", '" + meaning);
+
+		sb.append("');");
 
 		return sb.toString();
 	}

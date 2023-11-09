@@ -5,10 +5,10 @@ import java.util.List;
 
 import edu.german.words.AddNewWordIntoDatabase;
 
-public class ExecutorPutWordIntoDatabase implements Runnable {
+public class ExecutorPutWordAsHashMapIntoDatabase implements Runnable {
 	private List<HashMap<String, String>> list;
 
-	public ExecutorPutWordIntoDatabase(List<HashMap<String, String>> list) {
+	public ExecutorPutWordAsHashMapIntoDatabase(List<HashMap<String, String>> list) {
 		this.list = list;
 	}
 

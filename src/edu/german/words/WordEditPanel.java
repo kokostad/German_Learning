@@ -12,7 +12,7 @@ import edu.german.tools.MyComboBox;
 import edu.german.tools.MyFont;
 import edu.german.tools.OneEditField;
 import edu.german.tools.ScreenSetup;
-import edu.german.tools.TextCleaner;
+import edu.german.tools.TextHandler;
 import edu.german.tools.Titel;
 
 public class WordEditPanel extends JPanel {
@@ -69,9 +69,9 @@ public class WordEditPanel extends JPanel {
 	public String[] getValuAsArray() {
 		String[] array = new String[3];
 		if (labelInfo1 != null)
-			array[0] = new TextCleaner(word.getValue()).getWord();
+			array[0] = new TextHandler(word.getValue()).getWord();
 		if (labelInfo2 != null)
-			array[1] = new TextCleaner(meaning.getValue()).getWord();
+			array[1] = new TextHandler(meaning.getValue()).getWord();
 
 		array[2] = box.getValue();
 
@@ -81,9 +81,9 @@ public class WordEditPanel extends JPanel {
 	public List<Object> getValuAsList() {
 		List<Object> list = new ArrayList<>();
 		if (labelInfo1 != null)
-			list.add(new TextCleaner(word.getValue()).getWord());
+			list.add(new TextHandler(word.getValue()).getWord());
 		if (labelInfo2 != null)
-			list.add(new TextCleaner(meaning.getValue()).getWord());
+			list.add(new TextHandler(meaning.getValue()).getWord());
 
 		list.add(box.getValue());
 
@@ -92,11 +92,11 @@ public class WordEditPanel extends JPanel {
 
 	public Map<String, String> getValueAsHashMap(String[] header) {
 		Map<String, String> map = new HashMap<String, String>();
-		String wordTmp = new TextCleaner(word.getValue()).getWord();
+		String wordTmp = new TextHandler(word.getValue()).getWord();
 		if (wordTmp != null)
 			map.put(header[0], wordTmp);
 
-		wordTmp = new TextCleaner(meaning.getValue()).getWord();
+		wordTmp = new TextHandler(meaning.getValue()).getWord();
 		if (labelInfo2 != null)
 			map.put(header[1], wordTmp);
 
@@ -134,7 +134,7 @@ public class WordEditPanel extends JPanel {
 	public Map<Object, Object> getMeaning() {
 		Map<Object, Object> map = new HashMap<>();
 		if (labelInfo1 != null) {
-			String str = new TextCleaner(meaning.getValue()).getWord();
+			String str = new TextHandler(meaning.getValue()).getWord();
 			map.put("WORD_MEANING", str);
 		}
 

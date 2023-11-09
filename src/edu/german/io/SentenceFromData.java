@@ -40,12 +40,13 @@ public class SentenceFromData {
 	};
 
 	public SentenceFromData(String data, String fileType, String firstInOrder) {
+		// TODO change this metod
 		list = new LinkedList<>();
-		data
-		.lines()
-		.map(r -> r.split(";"))
-		.map(s -> new Sentence(s))
-		.forEach(a -> list.add(a));
+//		data
+//		.lines()
+//		.map(r -> r.split(";"))
+//		.map(s -> new Sentence(s))
+//		.forEach(a -> list.add(a));
 	}
 
 	public SentenceFromData(Optional<String> optData) {

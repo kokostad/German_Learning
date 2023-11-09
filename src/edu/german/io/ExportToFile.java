@@ -4,11 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,7 +15,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import edu.german.services.GetWordsAsList;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.ScreenSetup;
@@ -105,7 +100,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		else if (src == showBtn) {
 			textArea.setText(null);
 			setTextImportState(true);
-			putIntoTextArea(prepareDataToExport(exportConfigPanel.exportConfigParam()));
+//			putIntoTextArea(prepareDataToExport(exportConfigPanel.exportConfigParam()));
 		}
 
 		else if (src == exportBtn) {
@@ -121,8 +116,8 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 				exportType = exportConfigPanel.exportType();
 				wordOrSentence = exportConfigPanel.sentencesOrWords();
 
-				if (data.isBlank())
-					data = getString(prepareDataToExport(exportConfigPanel.exportConfigParam()));
+//				if (data.isBlank())
+//					data = getString(prepareDataToExport(exportConfigPanel.exportConfigParam()));
 			}
 
 			if (wordOrSentence) {
@@ -166,31 +161,31 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	 * @param map - Map of Words or Sentences
 	 * @return list of strings
 	 */
-	private List<String> prepareDataToExport(HashMap<String, String> map) {
-		List<String> list = new LinkedList<>();
-		Optional<String> option = map
-				.entrySet()
-				.stream()
-				.filter(e -> "word".equals(e.getValue()))
-				.map(Map.Entry::getKey)
-				.findFirst();
-
-		String wordGenus = null;
-		if (map.containsKey("WORD_GENUS"))
-			wordGenus = map.get("WORD_GENUS");
-
-		// TODO need to use DoCall - Callable<>
-		if (option.isPresent()) {
-			if (wordGenus != null && !wordGenus.isBlank())
-				list = new GetWordsAsList().getGenusList(wordGenus, getOrder());
-			else
-				list = new GetWordsAsList().getList(getOrder());
-		} else {
-			list = new GetSentenceList().getList(getOrder());
-		}
-
-		return list;
-	}
+//	private List<String> prepareDataToExport(HashMap<String, String> map) {
+//		List<String> list = new LinkedList<>();
+//		Optional<String> option = map
+//				.entrySet()
+//				.stream()
+//				.filter(e -> "word".equals(e.getValue()))
+//				.map(Map.Entry::getKey)
+//				.findFirst();
+//
+//		String wordGenus = null;
+//		if (map.containsKey("WORD_GENUS"))
+//			wordGenus = map.get("WORD_GENUS");
+//
+//		// TODO need to use DoCall - Callable<>
+//		if (option.isPresent()) {
+//			if (wordGenus != null && !wordGenus.isBlank())
+//				list = new GetWordsAsList().getGenusList(wordGenus, getOrder());
+//			else
+//				list = new GetWordsAsList().getList(getOrder());
+//		} else {
+//			list = new GetSentenceList().getList(getOrder());
+//		}
+//
+//		return list;
+//	}
 
 	private void putIntoTextArea(List<String> toExport) {
 		toExport.forEach((s) -> textArea.append(s + "\n"));

@@ -13,7 +13,7 @@ import edu.german.tools.ScreenSetup;
 public class MainVerbPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private String PATH = "src/edu/german/words/cfg/";
-	private String CFG_FILE = "word.properties";
+	private String CFG_FILE = "word.cfg";
 	private OneEditField word;
 	private OneEditField meaning;
 	private Font font = new ScreenSetup().DEFAULT_FONT;

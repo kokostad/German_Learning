@@ -6,16 +6,16 @@ import edu.german.sentences.Sentence;
 import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 import edu.german.tools.MyProgressBar;
-import edu.german.tools.TextCleaner;
+import edu.german.tools.TextHandler;
 
-public class ExecutorStringSentenceIntoDB implements Runnable {
+public class ExecutorAddSentenceIntoRepository implements Runnable {
 	private List<String[]> list;
 	private MyProgressBar bar;
 	private int sum;
 	private boolean order;
 	private int i = 0;
 
-	public ExecutorStringSentenceIntoDB(List<String[]> list, MyProgressBar bar, boolean order) {
+	public ExecutorAddSentenceIntoRepository(List<String[]> list, MyProgressBar bar, boolean order) {
 		this.bar = bar;
 		this.list = list;
 		this.order = order;
@@ -42,7 +42,7 @@ public class ExecutorStringSentenceIntoDB implements Runnable {
 
 	private void execute(String[] array) {
 		String sql = new QueryBuilder().addNewSentenceToRepository(cleaning(array));
-		new QueryContractor().executeQuery(sql);
+		boolean state = new QueryContractor().executeQuery(sql);
 	}
 
 	private void fillBar(int i) {
@@ -56,7 +56,7 @@ public class ExecutorStringSentenceIntoDB implements Runnable {
 	private String[] cleaning(String[] array) {
 		String[] arr = new String[array.length];
 		for (int i = 0; i < array.length; i++) {
-			arr[i] = new TextCleaner().removeWhitespace(array[i].toString());
+			arr[i] = new TextHandler().removeWhitespace(array[i].toString());
 		}
 
 		return arr;
@@ -68,5 +68,4 @@ public class ExecutorStringSentenceIntoDB implements Runnable {
 		}
 		return null;
 	}
-
 }

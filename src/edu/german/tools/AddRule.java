@@ -1,6 +1,7 @@
 package edu.german.tools;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -23,14 +24,16 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 	private OneEditField tips;
 	private int editFieldWidth = 440;
 	private int editFieldHeight = 30;
+	private Font font = new ScreenSetup().DEFAULT_FONT;
 
 	public AddRule(int height, int width, String titel) {
 		super(height, width, titel);
 		ScreenSetup scr = new ScreenSetup();
-		bp = new ButtonsPanel("CLEAR_EDIT_FIELD", "ADD_TO_REPOSITORY");
-		clearBtn = bp.getB1();
+		String[] headers = { "CLEAR_EDIT_FIELD", "ADD_TO_REPOSITORY" };
+		bp = new ButtonsPanel(headers);
+		clearBtn = bp.getButtonList().get(0);
 		clearBtn.addActionListener(this);
-		addBtn = bp.getB2();
+		addBtn = bp.getButtonList().get(1);
 		addBtn.addActionListener(this);
 
 		editFieldHeight = scr.EDIT_FIELD_WIDTH;
@@ -41,7 +44,7 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 		titles = new OneEditField.Builder()
 				.withTitle("Podaj tytuł reguły")
 				.withHint(null)
-//				.withFontSize(fontSize)
+				.withFont(font)
 				.withWidth(editFieldWidth)
 				.withHeight(editFieldHeight)
 				.build();
@@ -49,7 +52,7 @@ public class AddRule extends MyInternalFrame implements ActionListener {
 		tips = new OneEditField.Builder()
 				.withTitle("Wskazówka")
 				.withHint("Czego dotyczy")
-//				.withFontSize(fontSize)
+				.withFont(font)
 				.withWidth(editFieldWidth)
 				.withHeight(editFieldHeight)
 				.build();

@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import javax.swing.JPanel;
 
-import edu.german.tools.TextCleaner;
+import edu.german.tools.TextHandler;
 import edu.german.tools.TwoEditFields;
 
 public class VerbTens extends JPanel {
@@ -62,18 +62,18 @@ public class VerbTens extends JPanel {
 		Properties properties = new Properties();
 		properties.put("MODUS", modus);
 		properties.put("TENS", tens);
-		properties.put("ICH", new TextCleaner(i.getFirst()).getWord());
-		properties.put("JA", new TextCleaner(i.getSecond()).getWord());
-		properties.put("DU", new TextCleaner(youS.getFirst()).getWord());
-		properties.put("TY", new TextCleaner(youS.getSecond()).getWord());
-		properties.put("ER_SIE_ES", new TextCleaner(heSheIt.getFirst()).getWord());
-		properties.put("ON_ONA_ONO", new TextCleaner(heSheIt.getSecond()).getWord());
-		properties.put("WIR", new TextCleaner(we.getFirst()).getWord());
-		properties.put("MY", new TextCleaner(we.getSecond()).getWord());
-		properties.put("IHR", new TextCleaner(youP.getFirst()).getWord());
-		properties.put("WY", new TextCleaner(youP.getSecond()).getWord());
-		properties.put("SIE_SIE", new TextCleaner(they.getFirst()).getWord());
-		properties.put("ONI_PANSTWO", new TextCleaner(they.getSecond()).getWord());
+		properties.put("ICH", new TextHandler(i.getFirst()).getWord());
+		properties.put("JA", new TextHandler(i.getSecond()).getWord());
+		properties.put("DU", new TextHandler(youS.getFirst()).getWord());
+		properties.put("TY", new TextHandler(youS.getSecond()).getWord());
+		properties.put("ER_SIE_ES", new TextHandler(heSheIt.getFirst()).getWord());
+		properties.put("ON_ONA_ONO", new TextHandler(heSheIt.getSecond()).getWord());
+		properties.put("WIR", new TextHandler(we.getFirst()).getWord());
+		properties.put("MY", new TextHandler(we.getSecond()).getWord());
+		properties.put("IHR", new TextHandler(youP.getFirst()).getWord());
+		properties.put("WY", new TextHandler(youP.getSecond()).getWord());
+		properties.put("SIE_SIE", new TextHandler(they.getFirst()).getWord());
+		properties.put("ONI_PANSTWO", new TextHandler(they.getSecond()).getWord());
 
 		return properties;
 	}

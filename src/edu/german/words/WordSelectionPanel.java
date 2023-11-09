@@ -10,7 +10,7 @@ import edu.german.tools.Titel;
 public class WordSelectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final String PATH = "src/edu/german/words/cfg/";
-	private static final String FILE_NAME = "words_genus.properties";
+	private static final String FILE_NAME = "word.cfg";
 	private MyComboBox kindBox;
 	private MyComboBox boxNumber;
 	private String[] selectionList;

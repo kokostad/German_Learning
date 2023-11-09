@@ -31,7 +31,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private String SENTENCE_CFG_PATH = "src/edu/german/sentences/cfg/";
 	private String SENTENCE_CFG = "sentence.properties";
 	private String WORD_CFG_PATH = "src/edu/german/words/cfg/";
-	private String WORD_CFG = "word.properties";
+	private String WORD_CFG = "word.cfg";
 	private ButtonsPanel bp;
 	private JButton clearEditFieldsBtn;
 	private JButton clearListBtn;
@@ -51,22 +51,25 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		super(height, width, titel);
 		es = Executors.newSingleThreadExecutor();
 
-		bp = new ButtonsPanel("CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
-				"ADD_TO_REPOSITORY");
-		clearEditFieldsBtn = bp.getB1();
+		String[] headers = { "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
+				"ADD_TO_REPOSITORY" };
+		bp = new ButtonsPanel(headers);
+
+		clearEditFieldsBtn = bp.getButtonList().get(0);
 		clearEditFieldsBtn.addActionListener(this);
-		addToListBtn = bp.getB2();
+		addToListBtn = bp.getButtonList().get(1);
 		addToListBtn.addActionListener(this);
-		removeBtn = bp.getB3();
+		removeBtn = bp.getButtonList().get(2);
 		removeBtn.addActionListener(this);
-		clearListBtn = bp.getB4();
+		clearListBtn = bp.getButtonList().get(3);
 		clearListBtn.addActionListener(this);
-		editRowBtn = bp.getB5();
+		editRowBtn = bp.getButtonList().get(4);
 		editRowBtn.addActionListener(this);
-		addToRepoBtn = bp.getB6();
+		addToRepoBtn = bp.getButtonList().get(5);
 		addToRepoBtn.addActionListener(this);
 
-		header = new MyProperties(SENTENCE_CFG_PATH, SENTENCE_CFG).getValuesArray("SENTENCE_TABLE_HEADER");
+		header = new MyProperties(SENTENCE_CFG_PATH, SENTENCE_CFG)
+				.getValuesArray("SENTENCE_TABLE_HEADER");
 
 		table = new TableHanlder(header, true);
 
@@ -145,5 +148,4 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		editSentence.clearEditFields();
 		editWord.clearEditFields();
 	}
-
 }

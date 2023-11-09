@@ -75,21 +75,22 @@ public class GuessArticle extends MyInternalFrame implements ActionListener {
 		severalNouns = new LinkedList<Noun>();
 
 		es = Executors.newSingleThreadExecutor();
-		es.submit(new ExecutorPrepareNounView());
+		es.submit(new ExecutorPrepareNounView("prepare_view_nouns_for_game"));
 
 		int bigFontSize = scr.GAME_BIG_FONT_SIZE;
 		String fontArt = scr.GAME_FONT_ART;
 
 		showImage = new ShowResultAsImage(200, 200);
 
-		functionalButtons = new ButtonsPanel("NEW_DRAW");
-		drawBtn = functionalButtons.getB1();
+		String[] header = { "NEW_DRAW" };
+		functionalButtons = new ButtonsPanel(header);
+		drawBtn = functionalButtons.getButtonList().get(0);
 		drawBtn.addActionListener(this);
 
 		selectionPan = new WordSelectionPanel(false);
 
-		String[] arr = { "DER", "DIE", "DAS" };
-		gameButtons = new ButtonsPanel(arr);
+		String[] headers = { "DER", "DIE", "DAS" };
+		gameButtons = new ButtonsPanel(headers);
 
 		List<JButton> list = gameButtons.getButtonList();
 

@@ -27,21 +27,23 @@ public class AddAdjective extends MyInternalFrame implements ActionListener {
 
 	public AddAdjective(int height, int width, String setTitel) {
 		super(height, width, setTitel);
-		bp = new ButtonsPanel("CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
-				"ADD_TO_REPOSITORY");
+
+		String[] headers = { "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
+				"ADD_TO_REPOSITORY" };
+		bp = new ButtonsPanel(headers);
 		bp.setFontSize(20);
 
-		clearEditFieldsBtn = bp.getB1();
+		clearEditFieldsBtn = bp.getButtonList().get(0);
 		clearEditFieldsBtn.addActionListener(this);
-		addToListBtn = bp.getB2();
+		addToListBtn = bp.getButtonList().get(1);
 		addToListBtn.addActionListener(this);
-		removeFromListBtn = bp.getB3();
+		removeFromListBtn = bp.getButtonList().get(2);
 		removeFromListBtn.addActionListener(this);
-		clearListBtn = bp.getB4();
+		clearListBtn = bp.getButtonList().get(3);
 		clearListBtn.addActionListener(this);
-		editRowBtn = bp.getB5();
+		editRowBtn = bp.getButtonList().get(4);
 		editRowBtn.addActionListener(this);
-		addToRepoBtn = bp.getB6();
+		addToRepoBtn = bp.getButtonList().get(5);
 		addToRepoBtn.addActionListener(this);
 
 		ag = new AdjectiveGradation();

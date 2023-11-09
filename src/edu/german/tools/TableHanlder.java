@@ -16,7 +16,7 @@ import javax.swing.table.TableModel;
  */
 public class TableHanlder extends JTable {
 	private static final long serialVersionUID = 1L;
-	private static final String FILE_CFG = "translation_table.properties";
+	private static final String FILE_CFG = "translation_table.cfg";
 	private DefaultTableModel model;
 	private String[] header;
 	private List<String[]> wordsList;

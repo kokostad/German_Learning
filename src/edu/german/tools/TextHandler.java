@@ -7,14 +7,14 @@ import java.util.stream.Collectors;
  * Class clean text from spaces
  * @author Tadeusz.Kokotowski
  */
-public class TextCleaner {
+public class TextHandler {
 	private String word;
 
-	public TextCleaner() {
+	public TextHandler() {
 	}
 
 	// TODO need to improve this method, check if exist some value or null
-	public TextCleaner(String word) {
+	public TextHandler(String word) {
 		StringBuilder sb = new StringBuilder();
 		String[] wordParts = word.split(" ");
 		ArrayList<String> ar = new ArrayList<String>();
@@ -85,5 +85,10 @@ public class TextCleaner {
 
 	public String removeTab(String string) {
 		return string.replace("\t", "");
+	}
+	
+	public String addUnderscore(String str) {
+		String result = str.replaceAll("\\s", "_");
+		return result;
 	}
 }

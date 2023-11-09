@@ -241,11 +241,12 @@ EOSQL
 
 [prepare_view_nouns_for_game]
 create or replace recursive view game_nouns(word, meaning, sentence) as (
- with
- lists as ( SELECT T.word, T.sentence
- FROM (SELECT a.*, ROW_NUMBER() OVER (PARTITION BY word ORDER BY word DESC) AS rnk
- FROM ge.sentences as a ) T WHERE T.rnk = 1 ),
- listw as ( select awo.woid, awo.word, awo.meaning from ge.all_words_objects awo  where awo.genus = 'das Substantiv')
+ with lists as 
+  ( SELECT T.word, T.sentence 
+  	FROM (SELECT a.*, ROW_NUMBER() OVER (PARTITION BY word ORDER BY word DESC) AS rnk
+ 	FROM ge.sentences as a ) T WHERE T.rnk = 1 ),
+ listw as 
+  ( select awo.woid, awo.word, awo.meaning from ge.all_words_objects awo  where awo.genus = 'das Substantiv')
  select w.word, w.meaning, s.sentence from listw w left join lists s on w.word = s.word) ;
 EOSQL
 
@@ -260,4 +261,19 @@ create or replace recursive view game_words(word, meaning, sentence) as (
 		FROM ge.sentences as a ) T WHERE T.rnk = 1 ),
  listw as ( select awo.woid, awo.word, awo.meaning from ge.all_words_objects awo)
  select distinct w.word, w.meaning, s.sentence from listw w left join lists s on w.word = s.word) ;
+EOSQL
+
+[prepare_view_all_words]
+create or replace recursive view words(word, meanig, oid, genus) as (
+ with w as(
+	select  v.oid, v.word, v.meaning, '​das Verb' genus from ge.verbs v
+ union all 
+	select n.oid, n.word, n.meaning, '​das Substantiv' genus from ge.nouns n
+ union all
+	select a."oid", a.word, a.meaning, 'das Adjektiv' genus from ge.adjectives a
+ union all
+	select av."oid", av.word, av.meaning, 'das Adverb' genus from ge.adverbs av
+ union all
+	select p."oid", p.word, p.meaning, '​das Pronomen' genus from ge.pronomen p)
+ select word, meaning, oid, genus from w);
 EOSQL
