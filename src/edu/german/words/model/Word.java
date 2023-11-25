@@ -15,6 +15,8 @@ import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 import edu.german.tools.JSONHandler;
+import edu.german.tools.MyProperties;
+import edu.german.tools.TextHandler;
 
 public class Word implements IWord {
 	private int woid;
@@ -47,7 +49,6 @@ public class Word implements IWord {
 
 	public Word(Optional<String> optData) {
 		this.optData = optData;
-
 	}
 
 	public boolean checkData() {
@@ -66,10 +67,7 @@ public class Word implements IWord {
 		List<String[]> list = new LinkedList<>();
 		listToExecute.forEach(s -> {
 			String[] arr = s.split(";");
-//			int id = findId(arr[0], arr[1], arr[2]);
-//			if (id < 0) {
 			list.add(arr);
-//			}
 		});
 		return list;
 	}
@@ -157,12 +155,7 @@ public class Word implements IWord {
 
 	public boolean isExist(String word, String meaninig, String genus) {
 		// TODO Improve this method
-//		String query = new SqlQuery().getSql("check_word");
 		String sql = new QueryBuilder().getWordId(word, meaninig, genus);
-
-		System.out.println(sql);
-
-//		int var = new QueryContractor().getId(sql, word, genus);
 
 		if ((new QueryContractor().getId(sql)) > -1)
 			return true;
@@ -258,13 +251,22 @@ public class Word implements IWord {
 		return false;
 	}
 
-	public List<Map> getMapList() {
-		return new JSONHandler(optData).mapListFromJSON();
+	public List<Map> getMapListFromCSV() {
+		String[] headers = new MyProperties("src/edu/german/words/cfg/", "headers.cfg").getValuesArray("ALL_HEADERS");
+		List<Map> lm = new LinkedList<>();
+
+		optData.stream().forEach(var -> {
+			String[] arr = var.split("\\n");
+			for (int i = 0; i < arr.length; i++) {
+				String[] at = arr[i].split(";");
+				lm.add(toMap(headers, at));
+			}
+		});
+		return lm;
 	}
 
 	public List<Map> getMapListFromJSON() {
 		List<Map> lm = new LinkedList<>();
-//		String[] headers = new MyProperties("src/edu/german/words/cfg/", "headers.cfg").getValuesArray("ALL_HEADERS");
 
 		optData.stream().forEach(var -> {
 			String[] arr = var.split("\\n");
@@ -278,7 +280,6 @@ public class Word implements IWord {
 				});
 			}
 		});
-
 		return lm;
 	}
 
@@ -286,10 +287,30 @@ public class Word implements IWord {
 		Map<String, String> map = new HashMap<String, String>();
 		Iterator<String> keys = jsonobj.keys();
 		while (keys.hasNext()) {
-			String key = keys.next();
+			String key = keys.next().toUpperCase();
 			String value = (String) jsonobj.get(key);
 			map.put(key, value);
 		}
 		return map;
+	}
+
+	private Map toMap(String[] headers, String[] at) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (int j = 0; j < at.length; j++) {
+			map.put(headers[j].toUpperCase(), new TextHandler().removeWhitespace(at[j]));
+		}
+		return map;
+	}
+
+	public static Map<String, String> toMap(String key, String value) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(key, value);
+		return map;
+	}
+
+	public List<Map<String, String>> getType(String genus) {
+		String tableName = new MyProperties("src/edu/german/words/cfg/" + "table_names.cfg")
+				.getText(new TextHandler().addUnderscore(genus));
+		return new QueryContractor().getObjectMap(new SqlQuery().getSql("get_all_" + tableName));
 	}
 }

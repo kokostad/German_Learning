@@ -1,11 +1,14 @@
 package edu.german.words.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public interface IWord {
 
 	String getGenus();
+	
+	List<Map<String, String>> getType(String type);
 
 	int getWoid(String word, String genus);
 

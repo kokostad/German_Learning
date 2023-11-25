@@ -48,16 +48,23 @@ public class ButtonsPanel extends JPanel {
 		p.setLayout(gl);
 
 		for (int i = 0; i < objects.length; i++) {
-			String t = new Translator()
-					.translate(objects[i].toString());
-			JButton button = new JButton(t);
-			button.setFont(myFont.myFont(defaultFontSize));
-			p.add(button);
-			p.revalidate();
-			this.add(p);
-			buttons.add(button);
+			String t = new Translator().translate(objects[i].toString());
+			if (t != null) {
+				JButton button = new JButton(t);
+				buttons.add(button);
+				button.setFont(myFont.myFont(defaultFontSize));
+				p.add(button);
+				p.revalidate();
+				this.add(p);
+			} else {
+				JButton button = new JButton(objects[i].toString());
+				button.setFont(myFont.myFont(defaultFontSize));
+				p.add(button);
+				p.revalidate();
+				this.add(p);
+				buttons.add(button);
+			}
 		}
-
 		this.setBackground(bgColor);
 	}
 

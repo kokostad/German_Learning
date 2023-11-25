@@ -8,6 +8,7 @@ import edu.german.tools.MyProperties;
 import edu.german.tools.TextHandler;
 
 public class QueryBuilder {
+	private int i = 0;
 
 	public QueryBuilder() {
 	}
@@ -136,7 +137,11 @@ public class QueryBuilder {
 		StringBuilder sb = new StringBuilder();
 		int length = sentence.length - 1;
 
-		sb.append("INSERT INTO ge.sentences(sentence, meaning)");
+		if (sentence.length > 2)
+			sb.append("INSERT INTO ge.sentences(sentence, meaning, genus)");
+		else
+			sb.append("INSERT INTO ge.sentences(sentence, meaning)");
+
 		sb.append(" VALUES (");
 
 		for (int i = 0; i <= length; i++) {
@@ -324,10 +329,13 @@ public class QueryBuilder {
 		String path = "src/edu/german/words/cfg/";
 		String file = "table_names.cfg";
 		String table = new MyProperties(path, file).getValue(new TextHandler().addUnderscore(genus), false);
-		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT oid FROM " + table + " WHERE word = '" + word + "';");
 
-		return sb.toString();
+		if (table != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT oid FROM " + table + " WHERE word = '" + word + "';");
+			return sb.toString();
+		}
+		return null;
 	}
 
 	public String getWordId(String word, String meaninig, String genus) {
@@ -342,8 +350,6 @@ public class QueryBuilder {
 	}
 
 	public String getOid(String word) {
-		String path = "src/edu/german/words/cfg/";
-		String file = "table_names.cfg";
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT oid FROM ge.words WHERE word = '" + word + "';");
 
@@ -355,8 +361,8 @@ public class QueryBuilder {
 				.getValuesArray(pattern.toUpperCase());
 		StringBuilder sb = new StringBuilder();
 		int length = arr.length - 1;
-		String table = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg").getValue(pattern.toUpperCase(),
-				false);
+		String table = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg")
+				.getValue(pattern.toUpperCase(), false);
 
 		sb.append("INSERT INTO ge." + pattern + " (");
 
@@ -382,7 +388,6 @@ public class QueryBuilder {
 	}
 
 	public String addNewWord(String word, String meaning, String genus) {
-		// NOTICE maybe need a correct this method?
 		String pattern = new TextHandler().addUnderscore(genus);
 		String[] headers = new MyProperties("src/edu/german/words/cfg/", "headers.cfg").getValuesArray(pattern);
 		String tableName = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg").getValue(pattern, false);
@@ -406,6 +411,41 @@ public class QueryBuilder {
 		sb.append("');");
 
 		return sb.toString();
+	}
+
+	public String wordMapToSQL(Map<String, String> map) {
+		int count = map.size();
+		String genus = map.get("GENUS");
+		String pattern = new TextHandler().addUnderscore(genus);
+		String tableName = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg").getValue(pattern, false);
+
+		if (tableName != null) {
+			StringBuilder sb1 = new StringBuilder();
+			StringBuilder sb2 = new StringBuilder();
+
+			sb1.append("INSERT INTO " + tableName + "(");
+			sb2.append(" VALUES(");
+
+			i = 0;
+			map.forEach((k, v) -> {
+				if (!k.equals("GENUS") && (genus != null)) {
+					if (i < count - 1) {
+						sb1.append(k + ", ");
+						sb2.append("'" + v + "', ");
+					} else {
+						sb1.append(k);
+						sb2.append("'" + v + "'");
+					}
+				}
+				i += 1;
+			});
+
+			sb1.append(")");
+			sb2.append(");");
+
+			return sb1.toString() + sb2.toString();
+		}
+		return null;
 	}
 
 }

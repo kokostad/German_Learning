@@ -11,6 +11,7 @@ public class SentenceFromData {
 	private List<Sentence> list;
 	private Optional<String> optData;
 
+	// NOTICE is it needed?
 	public record Sentence(String[] arr) {
 
 		String getSentence() {

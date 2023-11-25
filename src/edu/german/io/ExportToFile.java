@@ -4,7 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,12 +22,14 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
+import edu.german.sentences.Sentence;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
+import edu.german.words.model.Word;
 
 /**
  * ExportToFile.java
@@ -40,6 +49,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private boolean textImportState = false;
 	private ExportConfigPanel exportConfigPanel;
 	private List<JButton> buttonList;
+	private String data;
 
 	public ExportToFile(int height, int width, String titel) {
 		super(height, width, titel);
@@ -60,7 +70,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		tp = new JTabbedPane();
 		tp.add(Titel.setTitel("EXPORT_CONFIGURATION"), exportConfigPanel);
 
-		String[] buttonNames = { Titel.setTitel("CLEAR"), Titel.setTitel("SHOW_DATA"), Titel.setTitel("EXPORT") };
+		String[] buttonNames = { "CLEAR", "SHOW_DATA", "EXPORT" };
 
 		bp = new ButtonsPanel(buttonNames);
 		bp.setFontSize(20);
@@ -99,25 +109,45 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 
 		else if (src == showBtn) {
 			textArea.setText(null);
-			setTextImportState(true);
-//			putIntoTextArea(prepareDataToExport(exportConfigPanel.exportConfigParam()));
+			String exportType = exportConfigPanel.exportType();
+			boolean wordOrSentence = exportConfigPanel.sentencesOrWords();
+
+			System.out.println("Export type: " + exportType + " words: " + wordOrSentence);
+
+			// TODO make this method
+			if (!wordOrSentence) {
+				List<Map<String, String>> list = new Sentence().getAllAsMapList();
+				list.forEach(s -> textArea.append(s + "\n"));
+				setData(textArea.getText());
+			}
+
+			else {
+				// TODO get data from database
+				String genus = exportConfigPanel.wordGenus();
+				List<Map<String, String>> mapList = new Word().getType(genus);
+				List<String> list = prepareList(mapList);
+
+				list.forEach(s -> textArea.append(s + "\n"));
+				setData(textArea.getText());
+				textArea.setCaretPosition(0);
+				textArea.setEditable(true);
+			}
 		}
 
 		else if (src == exportBtn) {
-			String data = null;
-			String exportType = null;
-			boolean wordOrSentence = false;
-
-			if (exportConfigPanel.getFilePath() == null) {
+			Optional<String> optPath = Optional.ofNullable(getFilePath());
+			if (optPath.isEmpty()) {
 				new ShowMessage("NO_DATA", "uzupełnij brakujące dane");
 				return;
-			} else {
-				data = textArea.getText();
-				exportType = exportConfigPanel.exportType();
-				wordOrSentence = exportConfigPanel.sentencesOrWords();
+			}
+			
+			String exportType = exportConfigPanel.exportType();
+			boolean wordOrSentence = exportConfigPanel.sentencesOrWords();
 
-//				if (data.isBlank())
-//					data = getString(prepareDataToExport(exportConfigPanel.exportConfigParam()));
+			// NOICE what if text area is null?
+			if (data.isBlank()) {
+				List<Map<String, String>> mapList = new Word().getType("nouns");
+				List<String> list = prepareList(mapList);
 			}
 
 			if (wordOrSentence) {
@@ -133,6 +163,19 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 			}
 			textArea.setText(null);
 		}
+	}
+
+	private List<String> prepareList(List<Map<String, String>> mapList) {
+		List<String> list = new LinkedList<>();
+		mapList.forEach(m -> {
+			StringBuilder sb = new StringBuilder();
+			m.forEach((key, val) -> {
+				sb.append(val + ";");
+			});
+			list.add(sb.toString());
+		});
+
+		return list;
 	}
 
 	private String getString(List<String> toExport) {
@@ -203,4 +246,11 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		return exportConfigPanel.orderAsString();
 	}
 
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
+	}
 }

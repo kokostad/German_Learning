@@ -29,7 +29,7 @@ public class Translator {
 		return newArray;
 	}
 	public String translate(String name) {
-		return prop.getText(name.toString());
+		return prop.getText(name);
 	}
 
 	public String getName() {

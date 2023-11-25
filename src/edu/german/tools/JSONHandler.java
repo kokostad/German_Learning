@@ -11,8 +11,6 @@ import java.util.Optional;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.german.tools.MyProperties;
-
 public class JSONHandler {
 	private Optional<String> optData;
 

@@ -65,11 +65,9 @@ public class MyProperties {
 			e.printStackTrace();
 		}
 		if (change)
-			pattern = new PrepareString().replaceSpaceWithUnderscore(pattern);
+			return properties.getProperty(new PrepareString().replaceSpaceWithUnderscore(pattern));
 		else
-			pattern = new PrepareString().replaceUnderscoreWithSpace(pattern);
-
-		return properties.getProperty(pattern);
+			return properties.getProperty(new PrepareString().replaceUnderscoreWithSpace(pattern));
 	}
 
 	public String[] getValuesArray(String pattern) {

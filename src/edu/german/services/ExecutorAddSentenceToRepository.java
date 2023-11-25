@@ -52,7 +52,6 @@ public class ExecutorAddSentenceToRepository implements Runnable {
 
 	private void putSentenceToRepository(String[] sentence) {
 		String sql = new QueryBuilder().addNewSentenceToRepository(sentence);
-//		String sql = new SqlQuery().getSql("add_new_sentence");
 		new QueryContractor().executeQuery(sql);
 	}
 

@@ -35,6 +35,7 @@ import edu.german.words.model.Word;
 
 /**
  * ImportFromFile.java
+ * 
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
  * The class for importing data from JSON and CSV files
  */
@@ -65,8 +66,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		jp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		jp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-		settingPanel = new ImportConfigPanel
-				.Builder()
+		settingPanel = new ImportConfigPanel.Builder()
 				.withFirstParamTitle(Titel.setTitel("CHANGE_ORDER_OF_IMPORT"))
 				.withFirstHint("Porządek importu (niemiecki/polski)")
 				.withSecondParamTitle("Ustaw import wyrazów: ")
@@ -75,9 +75,8 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 
 		tp = new JTabbedPane();
 		tp.add(Titel.setTitel("IMPORT_CONFIGURATION"), settingPanel);
-		
 
-		String[] headers = {"CLEAR", "SHOW_DATA", "IMPORT"};
+		String[] headers = { "CLEAR", "SHOW_DATA", "IMPORT" };
 		bp = new ButtonsPanel(headers);
 		bp.setFontSize(20);
 		clearEditFieldBtn = bp.getButtonList().get(0);
@@ -118,30 +117,29 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 			if (!optPath.isEmpty() && !optData.isEmpty()) {
 				String fileType = settingPanel.fileType();
 				String what = settingPanel.sentencesOrWordsAsString();
-				List<String[]> listToExecute = new LinkedList<>();
+				List<String[]> list = new LinkedList<>();
 
 				if (what.equals("SENTENCE")) {
-
 					if (fileType.equals("CSV")) {
 						SentenceFromData s = new SentenceFromData(optData);
 
 						if (!s.checkData()) {
-							listToExecute = s.arrayList(s.getListFromData());
+							list = s.arrayList(s.getListFromData());
 						}
 
-						if (!listToExecute.isEmpty()) {
-							es.submit(new ExecutorAddSentenceIntoRepository(listToExecute, bar, getOrder()));
+						if (!list.isEmpty()) {
+							es.submit(new ExecutorAddSentenceIntoRepository(list, bar, getOrder()));
 						}
 					}
 					if (fileType.equals("JSON")) {
 						SentencesFromJSON s = new SentencesFromJSON(optData);
 
 						if (!s.checkData()) {
-							listToExecute = s.arrayListFromJSON();
+							list = s.arrayListFromJSON();
 						}
 
-						if (!listToExecute.isEmpty()) {
-							es.submit(new ExecutorAddSentenceIntoRepository(listToExecute, bar, getOrder()));
+						if (!list.isEmpty()) {
+							es.submit(new ExecutorAddSentenceIntoRepository(list, bar, getOrder()));
 						}
 					}
 				}
@@ -149,7 +147,10 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 				if (what.equals("WORDS")) {
 					if (fileType.equals("CSV")) {
 						Word w = new Word(optData);
-						List<Map> lm = w.getMapList();
+						List<Map> lm = w.getMapListFromCSV();
+						String genus = settingPanel.wordGenus();
+						
+						lm = checkGenus(lm, genus);
 
 						if (!lm.isEmpty()) {
 							es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, bar, getOrder()));
@@ -168,12 +169,11 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 			}
 
 			else {
-				new ShowMessage().directMessage("Nie podałeś pliku!");
+				new ShowMessage("NO_FILE");
 			}
 		}
 
 		else if (src == showBtn) {
-			bar.setNull();
 			txtArea.setText(null);
 			Optional<String> optPath = Optional.ofNullable(getFilePath());
 
@@ -190,20 +190,21 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		}
 	}
 
+	private List<Map> checkGenus(List<Map> lm, String genus) {
+		lm.forEach(m -> {
+			if (!m.containsKey("GENUS"))
+				m.put("GENUS", genus);
+		});
+
+		return lm;
+	}
+
 	private String getFilePath() {
 		return settingPanel.getFilePath();
 	}
 
-	private String getGenus() {
-		return settingPanel.wordGenus();
-	}
-
 	private boolean getOrder() {
 		return settingPanel.order();
-	}
-
-	private String getOrderAsString() {
-		return settingPanel.orderAsString();
 	}
 
 	private void clearAll() {
@@ -212,5 +213,4 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		txtArea.setText(null);
 		settingPanel.clear();
 	}
-
 }

@@ -38,21 +38,20 @@ public class ExecutorPutWordAsMapIntoDatabase implements Runnable {
 	}
 
 	private void execute(Map m) {
-		String word = (String) m.get("Word");
-		String meaning = (String) m.get("Meaning");
-		String genus = (String) m.get("Genus");
-		String sql = new QueryBuilder().addNewWord(word, meaning, genus);
-		boolean state = new QueryContractor().executeQuery(sql);
+		String sql = new QueryBuilder().wordMapToSQL(m);
+		if (sql != null)
+			new QueryContractor().executeQuery(sql);
 	}
 
 	private boolean checkWord(Map<String, String> map) {
-		String word = map.get("Word");
-		String genus = map.get("Genus");
-		String sql = new QueryBuilder().getWordId(word, genus);
-		int id = new QueryContractor().getId(sql);
-		if (id > -1)
-			return true;
+		String sql = new QueryBuilder().getWordId(map.get("WORD"), map.get("GENUS"));
 
+		if (sql != null) {
+			System.out.println(sql);
+			int id = new QueryContractor().getId(sql);
+			if (id > -1)
+				return true;
+		}
 		return false;
 	}
 
@@ -60,8 +59,8 @@ public class ExecutorPutWordAsMapIntoDatabase implements Runnable {
 		int result = ((i * 100) / sum);
 		bar.fill(result);
 		bar.showProgress(result);
+
 		if (result == 100 || i == sum)
 			bar.done();
 	}
-
 }

@@ -11,8 +11,11 @@ import javax.swing.border.TitledBorder;
 public class MyCheckBox extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JCheckBox jb;
+	private String toChoose;
+	private String tip;
 
 	public MyCheckBox(String information, String toChoose, String title) {
+		this.toChoose = toChoose;
 		JLabel l = new JLabel(information);
 		jb = new JCheckBox(toChoose);
 		TitledBorder titleBorder = BorderFactory.createTitledBorder(title);
@@ -24,6 +27,8 @@ public class MyCheckBox extends JPanel {
 	}
 
 	public MyCheckBox(String information, String toChoose, String title, String tip) {
+		this.toChoose = toChoose;
+		this.tip = tip;
 		JLabel l = new JLabel(information);
 		jb = new JCheckBox(toChoose);
 		jb.setToolTipText(tip);
@@ -40,8 +45,10 @@ public class MyCheckBox extends JPanel {
 		return jb.isSelected();
 	}
 
+	// NOTICE maybe it's not needed
 	public void clear() {
-		jb.setText("");
+		jb = new JCheckBox(toChoose);
+		jb.setToolTipText(tip);
 	}
 
 }

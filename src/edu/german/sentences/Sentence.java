@@ -2,6 +2,7 @@ package edu.german.sentences;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import edu.german.sentences.model.ISentence;
@@ -247,6 +248,14 @@ public class Sentence implements ISentence {
 	public String toString() {
 		return "Sentence [oid=" + oid + ", woid=" + woid + ", sentence=" + sentence + ", meaning=" + meaning + ", type="
 				+ type + ", category=" + category + ", tens=" + tens + ", word=" + word + "]";
+	}
+
+	public List<Map<String, String>> getAllAsMapList() {
+		String sql = new SqlQuery().getSql("get_all_sentences");
+		QueryContractor qc = new QueryContractor();
+		List<Map<String, String>> lm = qc.getObjectMap(sql);
+
+		return lm;
 	}
 
 }

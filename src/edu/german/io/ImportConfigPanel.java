@@ -183,8 +183,8 @@ public class ImportConfigPanel extends JPanel {
 
 	public void clear() {
 		filePath = null;
-		order.clear();
-		sentenceOrWord.clear();
+//		order.clear();
+//		sentenceOrWord.clear();
 		wordGenus.setValue(null);
 		clearFilePath();
 	}

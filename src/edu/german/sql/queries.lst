@@ -145,6 +145,26 @@ EOSQL
 SELECT * from ge.verbs ;
 EOSQL
 
+[get_all_nouns]
+SELECT * from ge.nouns ;
+EOSQL
+
+[get_all_adverbs]
+SELECT * from ge.adverbs ;
+EOSQL
+
+[get_all_adjectives]
+SELECT * from ge.adjectives ;
+EOSQL
+
+[get_all_pronomen]
+SELECT * from ge.pronomen ;
+EOSQL
+
+[get_all_article]
+SELECT * from ge.article ;
+EOSQL
+
 [get_word_from_main_table_by_woid]
 SELECT awo.word, awo.meaning, awo.genus FROM ge.all_words_objects awo WHERE awo.woid = ? ;
 EOSQL
@@ -165,10 +185,6 @@ EOSQL
 SELECT n.oid FROM ge.nouns n WHERE n.word = ? LIMIT 1;
 EOSQL
 
-[get_all_nouns]
-SELECT * from ge.nouns;
-EOSQL
-
 [get_woid_from_main_tab]
 SELECT woid FROM ge.all_words_objects WHERE word = ? AND genus = ?;
 EOSQL
@@ -185,6 +201,10 @@ EOSQL
 
 [get_woid_from_sentence]
 SELECT woid FROM ge.sentences WHERE oid = ?  ;
+EOSQL
+
+[get_all_sentences]
+SELECT * FROM ge.sentences;
 EOSQL
 
 [get_all_sentences_to_export]

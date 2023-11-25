@@ -1,6 +1,5 @@
 package edu.german.sql;
 
-import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -327,7 +326,7 @@ public class QueryContractor {
 	}
 
 	public void getWordFromMainTable(int woid) {
-
+		// NOTICE method to do
 	}
 
 	public Map<Object, Object> getWordFromMainTable(String sql, String word) {
@@ -345,7 +344,6 @@ public class QueryContractor {
 				wordMap.put("MEANINGS", rs.getString(3));
 				wordMap.put("GENUS", rs.getString(4));
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -427,7 +425,6 @@ public class QueryContractor {
 				noun.setMeaning(rs.getString("meaning"));
 				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -456,7 +453,6 @@ public class QueryContractor {
 				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
 				nounLst.add(noun);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -482,7 +478,6 @@ public class QueryContractor {
 				word.setGenus(rs.getString("genus"));
 				wordLst.add(word);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -513,7 +508,6 @@ public class QueryContractor {
 				}
 				list.add(str);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -544,7 +538,6 @@ public class QueryContractor {
 				}
 				list.add(sb.toString());
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -575,7 +568,6 @@ public class QueryContractor {
 				}
 				list.add(sb.toString());
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -608,7 +600,6 @@ public class QueryContractor {
 				}
 				list.add(sb.toString());
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -636,7 +627,6 @@ public class QueryContractor {
 			ps.setString(7, word);
 
 			i = ps.executeUpdate();
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -790,12 +780,12 @@ public class QueryContractor {
 				sentence.setWord(rs.getString("word"));
 				sentence.setWoid(rs.getInt("woid"));
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			dbc.closeConnection(con);
 		}
+
 		return sentence;
 	}
 
@@ -812,7 +802,6 @@ public class QueryContractor {
 			while (rs.next()) {
 				return rs.getInt("woid");
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -820,6 +809,96 @@ public class QueryContractor {
 		}
 
 		return -1;
+	}
+
+//	public List<Map<String, String>> getSentenceMap(String sql) {
+//		List<Map<String, String>> list = new LinkedList<>();
+//		loadDriver();
+//		dbc = new DbConnect();
+//		con = dbc.getConnection();
+//
+//		try (PreparedStatement ps = con.prepareStatement(sql)) {
+//			ResultSet rs = ps.executeQuery();
+//			ResultSetMetaData rsmd = rs.getMetaData();
+//			int numOfCol = rsmd.getColumnCount();
+//
+//			while (rs.next()) {
+//				Map<String, String> map = new HashMap<>();
+//				for (int i = 1; i <= numOfCol; i++) {
+//					Object var = rs.getObject(i);
+//					if (var != null) {
+//						map.put(rsmd.getColumnName(i).toUpperCase(), var.toString());
+//					}
+//				}
+//				list.add(map);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			dbc.closeConnection(con);
+//		}
+//
+//		return list;
+//	}
+
+//	public List<Map<String, String>> getWordMap(String sql) {
+//		List<Map<String, String>> list = new LinkedList<>();
+//		loadDriver();
+//		dbc = new DbConnect();
+//		con = dbc.getConnection();
+//
+//		try (PreparedStatement ps = con.prepareStatement(sql)) {
+//			ResultSet rs = ps.executeQuery();
+//			ResultSetMetaData rsmd = rs.getMetaData();
+//			int numOfCol = rsmd.getColumnCount();
+//
+//			while (rs.next()) {
+//				Map<String, String> map = new HashMap<>();
+//				for (int i = 1; i <= numOfCol; i++) {
+//					Object var = rs.getObject(i);
+//					if (var != null) {
+//						map.put(rsmd.getColumnName(i).toUpperCase(), var.toString());
+//					}
+//				}
+//				list.add(map);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		} finally {
+//			dbc.closeConnection(con);
+//		}
+//
+//		return list;
+//	}
+
+	public List<Map<String, String>> getObjectMap(String sql) {
+		List<Map<String, String>> list = new LinkedList<>();
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numOfCol = rsmd.getColumnCount();
+
+			while (rs.next()) {
+				Map<String, String> map = new HashMap<>();
+				for (int i = 1; i <= numOfCol; i++) {
+					Object var = rs.getObject(i);
+					if (var != null) {
+						map.put(rsmd.getColumnName(i).toUpperCase(), var.toString());
+					}
+				}
+				list.add(map);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+
+		return list;
 	}
 
 }
