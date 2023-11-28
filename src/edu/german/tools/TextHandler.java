@@ -88,7 +88,6 @@ public class TextHandler {
 	}
 	
 	public String addUnderscore(String str) {
-		String result = str.replaceAll("\\s", "_");
-		return result;
+		return str.replaceAll("\\s", "_");
 	}
 }

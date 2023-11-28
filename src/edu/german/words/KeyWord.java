@@ -9,13 +9,12 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import edu.german.tools.MyComboBox;
-import edu.german.tools.MyFont;
 import edu.german.tools.OneEditField;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.TextHandler;
 import edu.german.tools.Titel;
 
-public class WordEditPanel extends JPanel {
+public class KeyWord extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private OneEditField word;
 	private OneEditField meaning;
@@ -23,7 +22,7 @@ public class WordEditPanel extends JPanel {
 	private String labelInfo1;
 	private String labelInfo2;
 
-	public WordEditPanel(String labelInfo1, String labelInfo2, String[] paramList) {
+	public KeyWord(String labelInfo1, String labelInfo2, String[] paramList) {
 		this.labelInfo1 = labelInfo1;
 		this.labelInfo2 = labelInfo2;
 		ScreenSetup ss = new ScreenSetup();
@@ -48,9 +47,8 @@ public class WordEditPanel extends JPanel {
 			this.add(meaning);
 		}
 
-		box = new MyComboBox(Titel.setTitel("GENUS"), paramList);
-
-		this.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		box = new MyComboBox(Titel.setTitel("GENUS") + ": ", paramList);
+		this.setLayout(new FlowLayout(FlowLayout.RIGHT, 2, 2));
 		this.add(box);
 	}
 
@@ -92,17 +90,16 @@ public class WordEditPanel extends JPanel {
 
 	public Map<String, String> getValueAsHashMap(String[] header) {
 		Map<String, String> map = new HashMap<String, String>();
-		String wordTmp = new TextHandler(word.getValue()).getWord();
-		if (wordTmp != null)
-			map.put(header[0], wordTmp);
+		String w = new TextHandler(word.getValue()).getWord();
+		String m = new TextHandler(meaning.getValue()).getWord();
+		String g = new TextHandler(box.getValue()).getWord();
 
-		wordTmp = new TextHandler(meaning.getValue()).getWord();
-		if (labelInfo2 != null)
-			map.put(header[1], wordTmp);
-
-		wordTmp = box.getValue();
-
-		map.put(header[2], wordTmp);
+		if (w != null)
+			map.put("WORD", w);
+		if (m != null)
+			map.put("WORD_MEANING", w);
+		if (g != null)
+			map.put("WORD_KIND", g);
 
 		return map;
 	}
@@ -114,37 +111,37 @@ public class WordEditPanel extends JPanel {
 		return false;
 	}
 
-	public void showData(String wordTmp, String meaningTmp, String genusTmp) {
-		word.setValue(wordTmp);
-		meaning.setValue(meaningTmp);
-		box.setValue(genusTmp);
+	public void showData(String w, String m, String g) {
+		word.setValue(w);
+		meaning.setValue(m);
+		box.setValue(g);
 	}
 
 	public Map<Object, Object> getWord() {
-		Map<Object, Object> map = new HashMap<>();
-		if (labelInfo1 != null) {
-			String str = word.getValue();
-			map.put("WORD", str);
+		if (labelInfo1 != null && word.getValue() != null) {
+			Map<Object, Object> map = new HashMap<>();
+			map.put("WORD", word.getValue());
+			return map;
 		}
-
-		return map;
+		return null;
 	}
 
-	// TODO need to improve text cleaner, check if exist some value or null
 	public Map<Object, Object> getMeaning() {
-		Map<Object, Object> map = new HashMap<>();
 		if (labelInfo1 != null) {
-			String str = new TextHandler(meaning.getValue()).getWord();
-			map.put("WORD_MEANING", str);
+			Map<Object, Object> map = new HashMap<>();
+			map.put("WORD_MEANING", new TextHandler(meaning.getValue()).getWord());
+			return map;
 		}
-
-		return map;
+		return null;
 	}
 
 	public Map<Object, Object> getBoxValue() {
-		Map<Object, Object> map = new HashMap<>();
-		map.put("WORD_KIND", box.getValue());
-		return map;
+		if (labelInfo1 != null && box.getValue() != null) {
+			Map<Object, Object> map = new HashMap<>();
+			map.put("WORD_KIND", box.getValue());
+			return map;
+		}
+		return null;
 	}
 
 	public void showData(Map<String, String> selectedRowAsMap) {
@@ -160,5 +157,4 @@ public class WordEditPanel extends JPanel {
 		word.setValue(null);
 		meaning.setValue(null);
 	}
-
 }

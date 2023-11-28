@@ -18,20 +18,22 @@ import javax.swing.JSplitPane;
 
 import edu.german.services.ExecutorPutSentenceIntoDatabase;
 import edu.german.tools.MyInternalFrame;
+import edu.german.tools.MyProgressBar;
 import edu.german.tools.MyProperties;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.TableHanlder;
 import edu.german.tools.Titel;
 import edu.german.tools.buttons.ButtonsPanel;
-import edu.german.words.WordEditPanel;
+import edu.german.words.KeyWord;
 
 public class AddSentences extends MyInternalFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private String SENTENCE_CFG_PATH = "src/edu/german/sentences/cfg/";
-	private String SENTENCE_CFG = "sentence.properties";
+	private String SENTENCE_CFG = "sentence.cfg";
 	private String WORD_CFG_PATH = "src/edu/german/words/cfg/";
 	private String WORD_CFG = "word.cfg";
+	private MyProgressBar mbar;
 	private ButtonsPanel bp;
 	private JButton clearEditFieldsBtn;
 	private JButton clearListBtn;
@@ -43,9 +45,9 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	private String[] header;
 	private List<HashMap<String, String>> mapList;
 	private ExecutorService es;
-	private SentenceEditPanel editSentence;
-	private SentenceParamPanel sentenceParam;
-	private WordEditPanel editWord;
+	private EditPanel newSentence;
+	private ParamPanel parameterization;
+	private KeyWord keyWord;
 
 	public AddSentences(int height, int width, String titel) {
 		super(height, width, titel);
@@ -54,7 +56,8 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 		String[] headers = { "CLEAR_EDIT_FIELDS", "ADD_TO_LIST", "REMOVE_FROM_LIST", "CLEAR_LIST", "EDIT_ROW",
 				"ADD_TO_REPOSITORY" };
 		bp = new ButtonsPanel(headers);
-
+		int spread = bp.getMyWidth();
+		
 		clearEditFieldsBtn = bp.getButtonList().get(0);
 		clearEditFieldsBtn.addActionListener(this);
 		addToListBtn = bp.getButtonList().get(1);
@@ -75,14 +78,14 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 
 		JPanel edit = new JPanel();
 		edit.setLayout(new GridLayout(3, 1, 2, 2));
-		editSentence = new SentenceEditPanel();
-		sentenceParam = new SentenceParamPanel();
-		editWord = new WordEditPanel(Titel.setTitel("WRITE_WORD"), Titel.setTitel("MEANING"),
+		newSentence = new EditPanel();
+		parameterization = new ParamPanel();
+		keyWord = new KeyWord(Titel.setTitel("WRITE_WORD"), Titel.setTitel("MEANING"),
 				new MyProperties(WORD_CFG_PATH, WORD_CFG).getValuesArray("WORD_MODE_LIST"));
-		edit.add(editSentence);
-		edit.add(sentenceParam);
-		edit.add(editWord);
-
+		edit.add(newSentence);
+		edit.add(parameterization);
+		edit.add(keyWord);
+		
 		JScrollPane scp = new JScrollPane();
 		scp.setViewportView(table);
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -93,8 +96,16 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 
 		toolBar.addSeparator();
 
-		this.add(bp, BorderLayout.EAST);
+		mbar = new MyProgressBar("IMPORT_PROGRESS", spread);
+		mbar.setInfo("PROGRESS");
+
+		JPanel rightPan = new JPanel();
+		rightPan.setLayout(new GridLayout(2, 1, 10, 10));
+		rightPan.add(bp);
+		rightPan.add(mbar);
+
 		this.add(sp, BorderLayout.CENTER);
+		this.add(rightPan, BorderLayout.EAST);
 		this.setVisible(true);
 		this.repaint();
 	}
@@ -109,14 +120,14 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 
 		else if (src == addToListBtn) {
 			List<Map<Object, Object>> list = new LinkedList<>();
-			list.add(editSentence.getSentence());
-			list.add(editSentence.getMeaning());
-			list.add(sentenceParam.getKindAsMap());
-			list.add(sentenceParam.getTribeAsMap());
-			list.add(sentenceParam.getTensAsMap());
-			list.add(editWord.getWord());
-			list.add(editWord.getMeaning());
-			list.add(editWord.getBoxValue());
+			list.add(newSentence.getSentence());
+			list.add(newSentence.getMeaning());
+			list.add(parameterization.getKindAsMap());
+			list.add(parameterization.getTribeAsMap());
+			list.add(parameterization.getTensAsMap());
+			list.add(keyWord.getWord());
+			list.add(keyWord.getMeaning());
+			list.add(keyWord.getBoxValue());
 
 			if (!list.isEmpty()) {
 				table.showList(list);
@@ -127,9 +138,9 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 
 		else if (src == editRowBtn) {
 			Map<String, String> var = table.getSelectedRowAsMap();
-			editSentence.showData(var);
-			sentenceParam.showData(var);
-			editWord.showData(var);
+			newSentence.showData(var);
+			parameterization.showData(var);
+			keyWord.showData(var);
 			if (table.getIdx() > -1)
 				table.removeRow();
 		}
@@ -145,7 +156,7 @@ public class AddSentences extends MyInternalFrame implements ActionListener {
 	}
 
 	private void clearEditFiles() {
-		editSentence.clearEditFields();
-		editWord.clearEditFields();
+		newSentence.clearFields();
+		keyWord.clearEditFields();
 	}
 }

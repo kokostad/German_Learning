@@ -16,7 +16,7 @@ public class Sentence implements ISentence {
 	private int woid = -1;
 	private String sentence;
 	private String meaning;
-	private String type;
+	private String genus;
 	private String category;
 	private String tens;
 	private String word;
@@ -36,14 +36,19 @@ public class Sentence implements ISentence {
 		return getSentenceFromRepository(sentence, meaning);
 	}
 
-	public Sentence(String sentence, String meaning, String type, String category, String tens, String word) {
+	public Sentence(String sentence, String meaning, String genus, String category, String tens, String word) {
 		this.sentence = sentence;
 		this.meaning = meaning;
-		this.type = type;
+		this.genus = genus;
 		this.category = category;
 		this.tens = tens;
 		this.word = word;
 		this.propertyList = new LinkedList<>();
+		setMode(category);
+	}
+
+	private void setMode(String category) {
+		this.category = category;
 	}
 
 	public int getWoid() {
@@ -60,11 +65,10 @@ public class Sentence implements ISentence {
 
 	@Override
 	public Integer getOid() {
-		if (oid < 0) {
-			oid = new QueryContractor().getId(new SqlQuery().getSql("get_sentence_oid"), sentence);
-		}
+		if (oid < 0)
+			return new QueryContractor().getId(new SqlQuery().getSql("get_sentence_oid"), sentence);
 
-		return oid;
+		return -1;
 	}
 
 	@Override
@@ -93,11 +97,11 @@ public class Sentence implements ISentence {
 	}
 
 	public String getType() {
-		return type;
+		return genus;
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		this.genus = type;
 	}
 
 	@Override
@@ -230,8 +234,8 @@ public class Sentence implements ISentence {
 	 * change the name
 	 */
 	public void addToRepository(int woid) {
-		String sql = new QueryBuilder().addNewSentenceWithWoid(sentence, meaning, type, category, tens, word, woid);
-		new QueryContractor().simpleQueryExecution(sql);
+		String sql = new QueryBuilder().addNewSentenceWithWoid(sentence, meaning, genus, category, tens, word, woid);
+		new QueryContractor().executeSQL(sql);
 	}
 
 	public void addToRepository(String sql, String sentence, String meaning, String genus) {
@@ -247,7 +251,7 @@ public class Sentence implements ISentence {
 	@Override
 	public String toString() {
 		return "Sentence [oid=" + oid + ", woid=" + woid + ", sentence=" + sentence + ", meaning=" + meaning + ", type="
-				+ type + ", category=" + category + ", tens=" + tens + ", word=" + word + "]";
+				+ genus + ", category=" + category + ", tens=" + tens + ", word=" + word + "]";
 	}
 
 	public List<Map<String, String>> getAllAsMapList() {
@@ -256,6 +260,21 @@ public class Sentence implements ISentence {
 		List<Map<String, String>> lm = qc.getObjectMap(sql);
 
 		return lm;
+	}
+
+	public void addToRepository() {
+		// NOTICE sentence,meaning,genus,mode,tens,word
+		String sql = new QueryBuilder().addNewSentence(this.getSentence(), this.getMeaning(), this.getGenus(),
+				this.getMode(), this.getTens(), this.getWord());
+		boolean state = new QueryContractor().executeQuery(sql);
+	}
+
+	private String getMode() {
+		return category;
+	}
+
+	private String getGenus() {
+		return genus;
 	}
 
 }

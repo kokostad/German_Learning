@@ -41,14 +41,23 @@ public class Word implements IWord {
 		this.meaning = meaning;
 		this.genus = genus;
 
-		if (!isExist(word, genus) && (meaning != null))
-			new QueryContractor().addNewWord(new SqlQuery().getSql("add_new_word"), word, meaning, genus);
-
-		setWoid(new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus));
+//		if (!isExist(word, genus) && (meaning != null))
+//			new QueryContractor().addNewWord(new SqlQuery().getSql("add_new_word"), word, meaning, genus);
+//
+//		setWoid(new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus));
 	}
 
 	public Word(Optional<String> optData) {
 		this.optData = optData;
+	}
+
+	// NOTICE not finished yet
+	public Word(Map<String, String> m) {
+		if (!isExist(m.get("WORD"), m.get("GENUS")) && (m.get("MEANING") != null)) {
+			String sql = new QueryBuilder().wordMapToSQL(m);
+			new QueryContractor().executeSQL(sql);
+		}
+		
 	}
 
 	public boolean checkData() {
@@ -78,7 +87,12 @@ public class Word implements IWord {
 
 	@Override
 	public int getOid() {
-		return oid;
+		if (oid < 0) {
+			String sql = new QueryBuilder().getWordId(word, meaning, genus);
+			int oid = new QueryContractor().getId(sql);
+			return oid;
+		}
+		return -1;
 	}
 
 	@Override
@@ -166,8 +180,8 @@ public class Word implements IWord {
 	@Override
 	public void putIntoRepository(String word, String meaning, String genus) {
 		if (!isExist(word, genus)) {
-			String query = new SqlQuery().getSql("add_new_word");
-			new QueryContractor().addNewWord(query, word, meaning, genus);
+			String sql = new QueryBuilder().addNewWord(word, meaning, genus);
+			new QueryContractor().executeSQL(sql);
 		}
 	}
 
@@ -309,7 +323,7 @@ public class Word implements IWord {
 	}
 
 	public List<Map<String, String>> getType(String genus) {
-		String tableName = new MyProperties("src/edu/german/words/cfg/" + "table_names.cfg")
+		String tableName = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg")
 				.getText(new TextHandler().addUnderscore(genus));
 		return new QueryContractor().getObjectMap(new SqlQuery().getSql("get_all_" + tableName));
 	}

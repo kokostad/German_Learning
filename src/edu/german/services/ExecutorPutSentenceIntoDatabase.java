@@ -3,7 +3,7 @@ package edu.german.services;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.german.sentences.AddSenteceToDatabase;
+import edu.german.sentences.AddToPepository;
 
 public class ExecutorPutSentenceIntoDatabase implements Runnable {
 	private List<HashMap<String, String>> list;
@@ -14,7 +14,7 @@ public class ExecutorPutSentenceIntoDatabase implements Runnable {
 
 	@Override
 	public void run() {
-		new AddSenteceToDatabase().addList(list);
+		new AddToPepository().addList(list);
 	}
 
 }

@@ -21,7 +21,7 @@ public class MyComboBox extends JPanel {
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		label.setFont(ss.DEFAULT_FONT);
 		boxPanel.add(label);
-		boxPanel.add(Box.createRigidArea(new Dimension(5, 2)));
+		boxPanel.add(Box.createRigidArea(new Dimension(2, 2)));
 		if (array != null) {
 			box = new JComboBox<Object>(array);
 			box.setFont(ss.DEFAULT_FONT);
@@ -29,7 +29,7 @@ public class MyComboBox extends JPanel {
 			boxPanel.add(box);
 		}
 
-		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
 		this.add(boxPanel);
 	}
 
@@ -41,7 +41,7 @@ public class MyComboBox extends JPanel {
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		label.setFont(ss.DEFAULT_FONT);
 		boxPanel.add(label);
-		boxPanel.add(Box.createRigidArea(new Dimension(5, 2)));
+		boxPanel.add(Box.createRigidArea(new Dimension(2, 2)));
 		if (array != null) {
 			box = new JComboBox<Object>(array);
 			box.setFont(ss.DEFAULT_FONT);
@@ -50,7 +50,7 @@ public class MyComboBox extends JPanel {
 			boxPanel.add(box);
 		}
 
-		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
 		this.add(boxPanel);
 	}
 
@@ -61,7 +61,7 @@ public class MyComboBox extends JPanel {
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		label.setFont(font);
 		boxPanel.add(label);
-		boxPanel.add(Box.createRigidArea(new Dimension(5, 2)));
+		boxPanel.add(Box.createRigidArea(new Dimension(2, 2)));
 		if (array != null) {
 			box = new JComboBox<Object>(array);
 			box.setFont(font);
@@ -69,7 +69,7 @@ public class MyComboBox extends JPanel {
 			boxPanel.add(box);
 		}
 
-		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
 		this.add(boxPanel);
 	}
 
@@ -80,7 +80,7 @@ public class MyComboBox extends JPanel {
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		label.setFont(font);
 		boxPanel.add(label);
-		boxPanel.add(Box.createRigidArea(new Dimension(5, 2)));
+		boxPanel.add(Box.createRigidArea(new Dimension(2, 2)));
 		if (array != null) {
 			box = new JComboBox<Object>(array);
 			box.setFont(font);
@@ -89,7 +89,7 @@ public class MyComboBox extends JPanel {
 			boxPanel.add(box);
 		}
 
-		this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
 		this.add(boxPanel);
 	}
 
@@ -108,5 +108,4 @@ public class MyComboBox extends JPanel {
 	public void clearField() {
 		box.setSelectedItem(null);
 	}
-
 }

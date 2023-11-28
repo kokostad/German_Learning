@@ -341,10 +341,10 @@ public class QueryBuilder {
 	public String getWordId(String word, String meaninig, String genus) {
 		String path = "src/edu/german/words/cfg/";
 		String file = "table_names.cfg";
-		genus = new TextHandler().addUnderscore(genus);
-		String table = new MyProperties(path, file).getValue(genus, false);
+		String pattern = new TextHandler().addUnderscore(genus);
+		String table = new MyProperties(path, file).getValue(pattern);
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT oid FROM " + table + " WHERE word = '" + word + "';");
+		sb.append("SELECT oid FROM " + table + " WHERE word = '" + word + "' AND meaninig = '" + meaninig + "';");
 
 		return sb.toString();
 	}
@@ -390,7 +390,7 @@ public class QueryBuilder {
 	public String addNewWord(String word, String meaning, String genus) {
 		String pattern = new TextHandler().addUnderscore(genus);
 		String[] headers = new MyProperties("src/edu/german/words/cfg/", "headers.cfg").getValuesArray(pattern);
-		String tableName = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg").getValue(pattern, false);
+		String tableName = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg").getValue(pattern);
 
 		int count = headers.length;
 
@@ -417,7 +417,7 @@ public class QueryBuilder {
 		int count = map.size();
 		String genus = map.get("GENUS");
 		String pattern = new TextHandler().addUnderscore(genus);
-		String tableName = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg").getValue(pattern, false);
+		String tableName = new MyProperties("table_names.cfg").getValue(pattern);
 
 		if (tableName != null) {
 			StringBuilder sb1 = new StringBuilder();
@@ -446,6 +446,12 @@ public class QueryBuilder {
 			return sb1.toString() + sb2.toString();
 		}
 		return null;
+	}
+
+	public String addNewSentence(String sentence, String meaning, String genus, String mode, String tens, String word) {
+		String sql = "INSERT INTO ge.sencences(sentence, meaning, genus, mode, tens, word) " + "VALUES('" + sentence
+				+ "', '" + meaning + "', '" + genus + "', '" + mode + "', " + "'" + tens + "', '" + word + "');";
+		return sql;
 	}
 
 }

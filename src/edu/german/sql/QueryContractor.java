@@ -36,6 +36,19 @@ public class QueryContractor {
 		}
 	}
 
+	public void executeSQL(String sql) {
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+	}
+
 	public boolean executeQuery(String sql) {
 		loadDriver();
 		dbc = new DbConnect();
@@ -48,7 +61,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return false;
 	}
 
@@ -65,7 +77,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return false;
 	}
 
@@ -83,7 +94,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return false;
 	}
 
@@ -102,7 +112,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return false;
 	}
 
@@ -122,7 +131,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
 
@@ -143,7 +151,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
 
@@ -165,7 +172,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
 
@@ -187,7 +193,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
 
@@ -210,7 +215,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
 
@@ -234,7 +238,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
 
@@ -259,13 +262,11 @@ public class QueryContractor {
 				}
 				list.add(str);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
 	}
 
@@ -295,7 +296,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
 	}
 
@@ -321,7 +321,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
 	}
 
@@ -349,7 +348,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return wordMap;
 	}
 
@@ -365,13 +363,11 @@ public class QueryContractor {
 			while (rs.next()) {
 				return rs.getInt("woid");
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
 
@@ -397,13 +393,11 @@ public class QueryContractor {
 				noun.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
 				nounLst.add(noun);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return nounLst;
 	}
 
@@ -430,7 +424,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return noun;
 	}
 
@@ -458,7 +451,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return nounLst;
 	}
 
@@ -483,7 +475,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return wordLst;
 	}
 
@@ -513,7 +504,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
 	}
 
@@ -543,7 +533,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
 	}
 
@@ -573,7 +562,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
 	}
 
@@ -605,7 +593,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
 	}
 
@@ -625,7 +612,6 @@ public class QueryContractor {
 			ps.setString(5, goal5);
 			ps.setString(6, goal6);
 			ps.setString(7, word);
-
 			i = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -647,7 +633,6 @@ public class QueryContractor {
 			ps.setString(1, mainWord);
 			ps.setString(2, meaning);
 			ps.setString(3, genus);
-
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -669,7 +654,6 @@ public class QueryContractor {
 			ps.setString(4, mode);
 			ps.setString(5, tens);
 			ps.setString(6, word);
-
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -698,27 +682,12 @@ public class QueryContractor {
 
 				list.add(noun);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
-	}
-
-	public void simpleQueryExecution(String sql) {
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ps.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
 	}
 
 	public void addSentenceToDatabase(String sql, String sentence, String meaning, String genus, String mode,
@@ -734,7 +703,6 @@ public class QueryContractor {
 			ps.setString(5, tens);
 			ps.setString(6, word);
 			ps.setInt(7, woid);
-
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -756,7 +724,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
 
@@ -785,7 +752,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return sentence;
 	}
 
@@ -807,69 +773,8 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return -1;
 	}
-
-//	public List<Map<String, String>> getSentenceMap(String sql) {
-//		List<Map<String, String>> list = new LinkedList<>();
-//		loadDriver();
-//		dbc = new DbConnect();
-//		con = dbc.getConnection();
-//
-//		try (PreparedStatement ps = con.prepareStatement(sql)) {
-//			ResultSet rs = ps.executeQuery();
-//			ResultSetMetaData rsmd = rs.getMetaData();
-//			int numOfCol = rsmd.getColumnCount();
-//
-//			while (rs.next()) {
-//				Map<String, String> map = new HashMap<>();
-//				for (int i = 1; i <= numOfCol; i++) {
-//					Object var = rs.getObject(i);
-//					if (var != null) {
-//						map.put(rsmd.getColumnName(i).toUpperCase(), var.toString());
-//					}
-//				}
-//				list.add(map);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			dbc.closeConnection(con);
-//		}
-//
-//		return list;
-//	}
-
-//	public List<Map<String, String>> getWordMap(String sql) {
-//		List<Map<String, String>> list = new LinkedList<>();
-//		loadDriver();
-//		dbc = new DbConnect();
-//		con = dbc.getConnection();
-//
-//		try (PreparedStatement ps = con.prepareStatement(sql)) {
-//			ResultSet rs = ps.executeQuery();
-//			ResultSetMetaData rsmd = rs.getMetaData();
-//			int numOfCol = rsmd.getColumnCount();
-//
-//			while (rs.next()) {
-//				Map<String, String> map = new HashMap<>();
-//				for (int i = 1; i <= numOfCol; i++) {
-//					Object var = rs.getObject(i);
-//					if (var != null) {
-//						map.put(rsmd.getColumnName(i).toUpperCase(), var.toString());
-//					}
-//				}
-//				list.add(map);
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		} finally {
-//			dbc.closeConnection(con);
-//		}
-//
-//		return list;
-//	}
 
 	public List<Map<String, String>> getObjectMap(String sql) {
 		List<Map<String, String>> list = new LinkedList<>();
@@ -897,8 +802,6 @@ public class QueryContractor {
 		} finally {
 			dbc.closeConnection(con);
 		}
-
 		return list;
 	}
-
 }

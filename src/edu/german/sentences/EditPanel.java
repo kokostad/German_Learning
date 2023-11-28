@@ -1,5 +1,6 @@
 package edu.german.sentences;
 
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,37 +12,38 @@ import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.Translate;
 
-public class SentenceEditPanel extends JPanel {
+public class EditPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private OneEditField sentence;
 	private OneEditField meaning;
 	private String[] header;
 
-	public SentenceEditPanel() {
-		ScreenSetup ss = new ScreenSetup();
+	public EditPanel() {
+		ScreenSetup sc = new ScreenSetup();
 
 		sentence = new OneEditField.Builder()
 				.withTitle(Translate.setText("write_german_sentence"))
 				.withHint(Translate.setText("write_in_german"))
-				.withFont(ss.DEFAULT_FONT)
-				.withWidth(ss.EDIT_FIELD_WIDTH)
-				.withHeight(ss.EDIT_FIELD_FACTOR)
+				.withFont(sc.DEFAULT_FONT)
+				.withWidth(sc.EDIT_FIELD_WIDTH)
+				.withHeight(sc.EDIT_FIELD_FACTOR)
 				.build();
 
 		meaning = new OneEditField.Builder()
 				.withTitle(Translate.setText("write_polish_meaning"))
 				.withHint(Translate.setText("write_in_polish"))
-				.withFont(ss.DEFAULT_FONT)
-				.withWidth(ss.EDIT_FIELD_WIDTH)
-				.withHeight(ss.EDIT_FIELD_FACTOR)
+				.withFont(sc.DEFAULT_FONT)
+				.withWidth(sc.EDIT_FIELD_WIDTH)
+				.withHeight(sc.EDIT_FIELD_FACTOR)
 				.build();
 
-		GridLayout gl = new GridLayout(2, 1, 10, 10);
+		GridLayout gl = new GridLayout(2, 1, 2, 2);
 		JPanel editFieldsPan = new JPanel();
 		editFieldsPan.setLayout(gl);
 		editFieldsPan.add(sentence);
 		editFieldsPan.add(meaning);
 
+		this.setLayout(new FlowLayout(FlowLayout.RIGHT, 2, 2));
 		this.add(editFieldsPan);
 	}
 
@@ -55,13 +57,13 @@ public class SentenceEditPanel extends JPanel {
 
 	public Map<Object, Object> getMeaning() {
 		Map<Object, Object> map = new HashMap<>();
-		if (!meaning.getValue().isBlank())
+		if (!meaning.getValue().isBlank() || meaning.getValue() != null)
 			map.put("SENTENCE_MEANING", meaning.getValue());
 
 		return map;
 	}
 
-	public Map<Object, Object> getValueAsMap() {
+	public Map<Object, Object> getMap() {
 		Map<Object, Object> map = new HashMap<>();
 		if (!sentence.getValue().isBlank())
 			map.put("SENTENCE", sentence.getValue());
@@ -76,7 +78,7 @@ public class SentenceEditPanel extends JPanel {
 		return map;
 	}
 
-	String[] getValuesAsArray() {
+	String[] getArray() {
 		String[] array = new String[header.length];
 		int i = 0;
 		if (sentence.getValue() != null || meaning.getValue() != null) {
@@ -85,11 +87,10 @@ public class SentenceEditPanel extends JPanel {
 
 			return array;
 		}
-
 		return null;
 	}
 
-	void clearEditFields() {
+	void clearFields() {
 		sentence.clearField();
 		meaning.clearField();
 	}
@@ -102,5 +103,4 @@ public class SentenceEditPanel extends JPanel {
 				meaning.setValue(entry.getValue());
 		});
 	}
-
 }

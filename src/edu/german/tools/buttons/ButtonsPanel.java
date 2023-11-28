@@ -19,12 +19,14 @@ public class ButtonsPanel extends JPanel {
 	private MyFont myFont;
 	private Integer defaultFontSize;
 	private List<JButton> buttons;
-
+	private int myWidth;
+	
 	public ButtonsPanel() {
 		myFont = new MyFont();
 		bgColor = ScreenSetup.BG_COLOR;
 		defaultFontSize = new MyProperties("screen.properties")
 				.getIntValue("DEFAULT_BUTTON_FONT_SIZE");
+		setMyWidth(this.getWidth());
 	}
 
 	public void setFontSize(Integer size) {
@@ -53,12 +55,14 @@ public class ButtonsPanel extends JPanel {
 				JButton button = new JButton(t);
 				buttons.add(button);
 				button.setFont(myFont.myFont(defaultFontSize));
+				setMyWidth(button.getWidth());
 				p.add(button);
 				p.revalidate();
 				this.add(p);
 			} else {
 				JButton button = new JButton(objects[i].toString());
 				button.setFont(myFont.myFont(defaultFontSize));
+				setMyWidth(button.getWidth());
 				p.add(button);
 				p.revalidate();
 				this.add(p);
@@ -66,6 +70,18 @@ public class ButtonsPanel extends JPanel {
 			}
 		}
 		this.setBackground(bgColor);
+		setMyWidth(this.getWidth());
 	}
 
+	public int getMyWidth() {
+		if(myWidth > 0)
+			return myWidth;
+		
+		return 200;
+	}
+
+	public void setMyWidth(int myWidth) {
+		if (myWidth < getMyWidth())
+			this.myWidth = myWidth;
+	}
 }

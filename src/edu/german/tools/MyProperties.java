@@ -70,6 +70,17 @@ public class MyProperties {
 			return properties.getProperty(new PrepareString().replaceUnderscoreWithSpace(pattern));
 	}
 
+	public String getValue(String pattern) {
+		Properties properties = null;
+		try {
+			properties = loadProps();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return properties.getProperty(pattern);
+	}
+
 	public String[] getValuesArray(String pattern) {
 		if (getText(pattern) != null)
 			return (getText(pattern)).split(",");
