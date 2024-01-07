@@ -5,17 +5,20 @@ import java.util.List;
 import edu.german.sentences.Sentence;
 import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
+import edu.german.tools.MyFrameProgressBar;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.TextHandler;
 
 public class ExecutorAddSentenceIntoRepository implements Runnable {
 	private List<String[]> list;
 	private MyProgressBar bar;
+	private MyFrameProgressBar mbar;
 	private int sum;
 	private boolean order;
 	private int i = 0;
 
 	public ExecutorAddSentenceIntoRepository(List<String[]> list, MyProgressBar bar, boolean order) {
+		mbar = new MyFrameProgressBar();
 		this.bar = bar;
 		this.list = list;
 		this.order = order;
@@ -32,7 +35,7 @@ public class ExecutorAddSentenceIntoRepository implements Runnable {
 			for (String[] a : list) {
 				i += 1;
 				a = checkIfSentenceExist(a);
-				if (a != null)
+//				if (a != null)
 					execute(a);
 
 				fillBar(i);
@@ -42,15 +45,18 @@ public class ExecutorAddSentenceIntoRepository implements Runnable {
 
 	private void execute(String[] array) {
 		String sql = new QueryBuilder().addNewSentenceToRepository(cleaning(array));
-		boolean state = new QueryContractor().executeQuery(sql);
+		System.out.println(sql);
+//		boolean state = new QueryContractor().executeQuery(sql);
 	}
 
 	private void fillBar(int i) {
 		int result = ((i * 100) / sum);
-		bar.fill(result);
-		bar.showProgress(result);
+//		bar.fill(result);
+		mbar.fill(result);
+//		bar.showProgress(result);
+		mbar.showProgress(result);
 		if (result == 100 || i == sum)
-			bar.done();
+			mbar.done();
 	}
 
 	private String[] cleaning(String[] array) {

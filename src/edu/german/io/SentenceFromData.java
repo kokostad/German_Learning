@@ -75,16 +75,18 @@ public class SentenceFromData {
 	 * more than two parameters, type of sentence, key word and other
 	 */
 	public List<String[]> arrayList(List<String> listToExecute) {
-
-		List<String[]> list = new LinkedList<>();
-		listToExecute.forEach(s -> {
-			String[] arr = s.split(";");
-			int oid = getOid(arr[0], arr[1]);
-			if (oid < 0) {
-				list.add(arr);
-			}
-		});
-		return list;
+		if (!listToExecute.isEmpty()) {
+			List<String[]> list = new LinkedList<>();
+			listToExecute.forEach(s -> {
+				String[] arr = s.split(";");
+				int oid = getOid(arr[0], arr[1]);
+				if (oid < 0) {
+					list.add(arr);
+				}
+			});
+			return list;
+		}
+		return null;
 	}
 
 	private int getOid(String sentence, String meaninig) {

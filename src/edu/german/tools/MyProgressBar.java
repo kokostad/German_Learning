@@ -12,12 +12,12 @@ public class MyProgressBar extends JPanel {
 
 	public MyProgressBar(String title) {
 		titleLabel = new JLabel(Titel.setTitel(title));
-		titleLabel.setBounds(0, 0, width, 30);
+		titleLabel.setBounds(0, 0, width, 50);
 		bar = new JProgressBar();
 		fill(0);
-		bar.setBounds(0, 35, width, 40);
+		bar.setBounds(0, 10, width, 40);
 		bar.setStringPainted(true);
-
+		
 		this.setLayout(null);
 		this.add(titleLabel);
 		this.add(bar);
@@ -26,10 +26,10 @@ public class MyProgressBar extends JPanel {
 	public MyProgressBar(String title, int width) {
 		this.width = width;
 		titleLabel = new JLabel(Titel.setTitel(title));
-		titleLabel.setBounds(0, 0, width, 30);
+		titleLabel.setBounds(0, 0, width, 50);
 		bar = new JProgressBar();
 		fill(0);
-		bar.setBounds(0, 35, width, 40);
+		bar.setBounds(0, 10, width, 40);
 		bar.setStringPainted(true);
 
 		this.setLayout(null);
@@ -51,7 +51,7 @@ public class MyProgressBar extends JPanel {
 
 	public void setNull() {
 		bar.setValue(0);
-		this.repaint();
+//		this.repaint();
 	}
 	
 	public int getWidth() {

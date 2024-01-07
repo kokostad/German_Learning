@@ -25,6 +25,7 @@ import javax.swing.JTextArea;
 import edu.german.services.ExecutorAddSentenceIntoRepository;
 import edu.german.services.ExecutorPrepareNounView;
 import edu.german.services.ExecutorPutWordAsMapIntoDatabase;
+import edu.german.tools.MyFileChooser;
 import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyProgressBar;
 import edu.german.tools.SentencesFromJSON;
@@ -36,7 +37,7 @@ import edu.german.words.model.Word;
 /**
  * ImportFromFile.java
  * 
- * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
+ * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com 
  * The class for importing data from JSON and CSV files
  */
 public class ImportFromFile extends MyInternalFrame implements ActionListener {
@@ -45,11 +46,14 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	private JButton clearEditFieldBtn;
 	private JButton showBtn;
 	private JButton importBtn;
+	private JButton chooseBtn;
 	private JTextArea txtArea;
 	private ExecutorService es;
 	private JTabbedPane tp;
 	private MyProgressBar bar;
 	private ImportConfigPanel settingPanel;
+	private String filePath;
+	private JTextArea textArea;
 
 	public ImportFromFile(int height, int width, String titel) {
 		super(height, width, titel);
@@ -76,7 +80,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		tp = new JTabbedPane();
 		tp.add(Titel.setTitel("IMPORT_CONFIGURATION"), settingPanel);
 
-		String[] headers = { "CLEAR", "SHOW_DATA", "IMPORT" };
+		String[] headers = { "CLEAR", "SHOW_DATA", "IMPORT", "CHOOSE_A_FILE" };
 		bp = new ButtonsPanel(headers);
 		bp.setFontSize(20);
 		clearEditFieldBtn = bp.getButtonList().get(0);
@@ -85,20 +89,18 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 		showBtn.addActionListener(this);
 		importBtn = bp.getButtonList().get(2);
 		importBtn.addActionListener(this);
+		chooseBtn = bp.getButtonList().get(3);
+		chooseBtn.addActionListener(this);
 
 		JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tp, jp);
 		sp.setOneTouchExpandable(true);
 
-		bar = new MyProgressBar("IMPORT_PROGRESS");
-		bar.setInfo("PROGRESS");
-
 		JPanel rightPan = new JPanel();
 		rightPan.setLayout(new GridLayout(2, 1, 10, 10));
 		rightPan.add(bp);
-		rightPan.add(bar);
 
 		this.add(sp, BorderLayout.CENTER);
-		this.add(rightPan, BorderLayout.EAST);
+		this.add(bp, BorderLayout.EAST);
 	}
 
 	@Override
@@ -110,73 +112,39 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 			repaint();
 		}
 
+		else if (src == chooseBtn) {
+			MyFileChooser mfc = new MyFileChooser();
+			filePath = mfc.getFilePath("IMPORT");
+			settingPanel.setPathLab(filePath);
+		}
+
 		else if (src == importBtn) {
-			Optional<String> optPath = Optional.ofNullable(getFilePath());
 			Optional<String> optData = Optional.ofNullable(txtArea.getText());
+			if (!optData.isEmpty()) {
+				execute(settingPanel.fileType(), settingPanel.sentencesOrWordsAsString(), optData);
+				filePath = null;
+				optData = null;
+			}
 
-			if (!optPath.isEmpty() && !optData.isEmpty()) {
-				String fileType = settingPanel.fileType();
-				String what = settingPanel.sentencesOrWordsAsString();
-				List<String[]> list = new LinkedList<>();
-
-				if (what.equals("SENTENCE")) {
-					if (fileType.equals("CSV")) {
-						SentenceFromData s = new SentenceFromData(optData);
-
-						if (!s.checkData()) {
-							list = s.arrayList(s.getListFromData());
-						}
-
-						if (!list.isEmpty()) {
-							es.submit(new ExecutorAddSentenceIntoRepository(list, bar, getOrder()));
-						}
-					}
-					if (fileType.equals("JSON")) {
-						SentencesFromJSON s = new SentencesFromJSON(optData);
-
-						if (!s.checkData()) {
-							list = s.arrayListFromJSON();
-						}
-
-						if (!list.isEmpty()) {
-							es.submit(new ExecutorAddSentenceIntoRepository(list, bar, getOrder()));
-						}
-					}
-				}
-
-				if (what.equals("WORDS")) {
-					if (fileType.equals("CSV")) {
-						Word w = new Word(optData);
-						List<Map> lm = w.getMapListFromCSV();
-						String genus = settingPanel.wordGenus();
-						
-						lm = checkGenus(lm, genus);
-
-						if (!lm.isEmpty()) {
-							es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, bar, getOrder()));
-						}
-					}
-
-					if (fileType.equals("JSON")) {
-						Word w = new Word(optData);
-						List<Map> lm = w.getMapListFromJSON();
-
-						if (!lm.isEmpty()) {
-							es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, bar, getOrder()));
-						}
-					}
+			else if (filePath != null) {
+				try {
+					textArea = new JTextArea();
+					Files.lines(Paths.get(filePath), StandardCharsets.UTF_8).forEach(s -> textArea.append(s + "\n"));
+					optData = Optional.ofNullable(textArea.getText());
+					execute(settingPanel.fileType(), settingPanel.sentencesOrWordsAsString(), optData);
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
 			}
 
 			else {
-				new ShowMessage("NO_FILE");
+				new ShowMessage("NO_DATA");
 			}
 		}
 
 		else if (src == showBtn) {
 			txtArea.setText(null);
 			Optional<String> optPath = Optional.ofNullable(getFilePath());
-
 			if (!optPath.isEmpty()) {
 				try {
 					Files.lines(Paths.get(optPath.get()), StandardCharsets.UTF_8)
@@ -200,7 +168,10 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	}
 
 	private String getFilePath() {
-		return settingPanel.getFilePath();
+		if (filePath != null)
+			return filePath;
+		else
+			return Optional.ofNullable(settingPanel.getFilePath()).get();
 	}
 
 	private boolean getOrder() {
@@ -208,9 +179,59 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	}
 
 	private void clearAll() {
-		bar.setNull();
-		bar.setInfo("PROGRESS");
 		txtArea.setText(null);
 		settingPanel.clear();
+	}
+
+	private void execute(String fileType, String what, Optional<String> optData) {
+		List<String[]> list = new LinkedList<>();
+		if (what.equals("SENTENCE")) {
+			if (fileType.equals("CSV")) {
+				SentenceFromData s = new SentenceFromData(optData);
+
+				if (!s.checkData()) {
+					list = s.arrayList(s.getListFromData());
+				}
+
+				if (!list.isEmpty()) {
+					es.submit(new ExecutorAddSentenceIntoRepository(list, bar, getOrder()));
+				}
+			}
+			if (fileType.equals("JSON")) {
+				SentencesFromJSON s = new SentencesFromJSON(optData);
+
+				if (!s.checkData()) {
+					list = s.arrayListFromJSON();
+				}
+
+				if (!list.isEmpty()) {
+					es.submit(new ExecutorAddSentenceIntoRepository(list, bar, getOrder()));
+				}
+			}
+		}
+
+		if (what.equals("WORDS")) {
+			if (fileType.equals("CSV")) {
+				Word w = new Word(optData);
+				List<Map> lm = w.getMapListFromCSV();
+				String genus = settingPanel.wordGenus();
+
+				lm = checkGenus(lm, genus);
+
+				if (!lm.isEmpty()) {
+					es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, getOrder()));
+				}
+			}
+
+			if (fileType.equals("JSON")) {
+				Word w = new Word(optData);
+				List<Map> lm = w.getMapListFromJSON();
+
+				if (!lm.isEmpty()) {
+					es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, getOrder()));
+				}
+			}
+		}
+
 	}
 }

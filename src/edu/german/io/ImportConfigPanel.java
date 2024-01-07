@@ -25,23 +25,22 @@ public class ImportConfigPanel extends JPanel {
 	private String PATH = "src/edu/german/words/cfg/";
 	private static final String WORD_FILE_CFG = "word.cfg";
 	private String labelInfo = "Ścieżka do pliku: ";
-	private JButton chooseBtn;
 	private JLabel pathLab;
 	private String filePath;
-	private String firstParamTitle;
-	private String secondParamTitle;
-	private String firstHint;
-	private String secondHint;
+//	private String firstParamTitle;
+//	private String secondParamTitle;
+//	private String firstHint;
+//	private String secondHint;
 	private MyCheckBox order;
 	private MyCheckBox sentenceOrWord;
 	private MyComboBox wordGenus;
 	private MyComboBox fileType;
 
 	public ImportConfigPanel(String firstParamTitle, String secondParamTitle, String firstHint, String secondHint) {
-		this.firstParamTitle = firstParamTitle;
-		this.secondParamTitle = secondParamTitle;
-		this.firstHint = firstHint;
-		this.secondHint = secondHint;
+//		this.firstParamTitle = firstParamTitle;
+//		this.secondParamTitle = secondParamTitle;
+//		this.firstHint = firstHint;
+//		this.secondHint = secondHint;
 		filePath = null;
 
 		pathLab = new JLabel(labelInfo);
@@ -67,21 +66,17 @@ public class ImportConfigPanel extends JPanel {
 		JPanel downPanel = new JPanel();
 		downPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
 
-		chooseBtn = new JButton(Titel.setTitel("CHOOSE_FILE"));
-		chooseBtn.setPreferredSize(new Dimension(200, 32));
-
-		downPanel.add(chooseBtn);
 		downPanel.add(pathLab);
 
-		chooseBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				MyFileChooser mfc = new MyFileChooser();
-				filePath = mfc.getFilePath("WRITE");
-				pathLab.setText(labelInfo + " " + filePath);
-			}
-		});
+//		JButton chooseBtn.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				MyFileChooser mfc = new MyFileChooser();
+//				filePath = mfc.getFilePath("WRITE");
+//				pathLab.setText(labelInfo + " " + filePath);
+//			}
+//		});
 
 		this.setLayout(new GridLayout(2, 1, 5, 5));
 		this.add(upPanel);
@@ -181,10 +176,13 @@ public class ImportConfigPanel extends JPanel {
 		return map;
 	}
 
+	public void setPathLab(String path) {
+		filePath = path;
+		pathLab.setText(labelInfo + " " + path);
+	}
+
 	public void clear() {
 		filePath = null;
-//		order.clear();
-//		sentenceOrWord.clear();
 		wordGenus.setValue(null);
 		clearFilePath();
 	}

@@ -5,19 +5,19 @@ import java.util.Map;
 
 import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
-import edu.german.tools.MyProgressBar;
+import edu.german.tools.MyFrameProgressBar;
 
 public class ExecutorPutWordAsMapIntoDatabase implements Runnable {
 	private List<Map> lm;
-	private MyProgressBar bar;
+	private MyFrameProgressBar mbar;
 	private boolean order;
 	private String[] headers;
 	private int sum;
 	private int i = 0;
 
-	public ExecutorPutWordAsMapIntoDatabase(List<Map> lm, MyProgressBar bar, boolean order) {
+	public ExecutorPutWordAsMapIntoDatabase(List<Map> lm, boolean order) {
+		mbar = new MyFrameProgressBar();
 		this.lm = lm;
-		this.bar = bar;
 		this.order = order;
 		sum = lm.size();
 	}
@@ -37,7 +37,7 @@ public class ExecutorPutWordAsMapIntoDatabase implements Runnable {
 		});
 	}
 
-	private void execute(Map m) {
+	private void execute(Map<String, String> m) {
 		String sql = new QueryBuilder().wordMapToSQL(m);
 		if (sql != null)
 			new QueryContractor().executeQuery(sql);
@@ -47,7 +47,6 @@ public class ExecutorPutWordAsMapIntoDatabase implements Runnable {
 		String sql = new QueryBuilder().getWordId(map.get("WORD"), map.get("GENUS"));
 
 		if (sql != null) {
-			System.out.println(sql);
 			int id = new QueryContractor().getId(sql);
 			if (id > -1)
 				return true;
@@ -57,10 +56,10 @@ public class ExecutorPutWordAsMapIntoDatabase implements Runnable {
 
 	private void fillBar(int i) {
 		int result = ((i * 100) / sum);
-		bar.fill(result);
-		bar.showProgress(result);
+		mbar.fill(result);
+		mbar.showProgress(result);
 
 		if (result == 100 || i == sum)
-			bar.done();
+			mbar.done();
 	}
 }
