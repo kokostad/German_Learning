@@ -21,6 +21,9 @@ public class SqlQuery {
 
 	public String getSql(String pattern) {
 		String expression = rgxStart + pattern + rgxEnd;
+		
+		System.out.println(expression);
+		
 		BufferedReader br = null;
 		try {
 			File file = new File(FILE_CFG);

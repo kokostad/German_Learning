@@ -10,32 +10,15 @@ public class ModelButton extends JButton {
 	private static final long serialVersionUID = 1L;
 	private ScreenSetup sp = new ScreenSetup();
 	private ImgUtils myImg = new ImgUtils();
-	private String title;
-	private String hint;
-	private String iconName;
 
 	public ModelButton() {
+		// Nothing to do
 	}
 
 	public ModelButton(String title, String iconName, String hint) {
-		this.title = title;
-		this.iconName = iconName;
-		this.hint = hint;
+		this.setIcon(new ImageIcon(myImg.scaleImage(sp.ICON_WIDTH, sp.ICON_HEIGHT, iconName)));
 		this.setToolTipText(title);
 		this.setToolTipText(hint);
-		this.setIcon(new ImageIcon(myImg.scaleImage(sp.ICON_WIDTH, sp.ICON_HEIGHT, iconName)));
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public void setIconName(String iconName) {
-		this.iconName = iconName;
-	}
-
-	public void setHint(String hint) {
-		this.hint = hint;
 	}
 
 	public static class Builder {
@@ -62,5 +45,4 @@ public class ModelButton extends JButton {
 			return new ModelButton(title, iconName, hint);
 		}
 	}
-
 }

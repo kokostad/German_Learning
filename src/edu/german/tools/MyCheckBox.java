@@ -45,7 +45,6 @@ public class MyCheckBox extends JPanel {
 		return jb.isSelected();
 	}
 
-	// NOTICE maybe it's not needed
 	public void clear() {
 		jb = new JCheckBox(toChoose);
 		jb.setToolTipText(tip);

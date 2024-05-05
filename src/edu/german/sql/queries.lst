@@ -137,6 +137,14 @@ EOSQL
 SELECT * FROM ge.sentences WHERE sentence = ? AND meaning = ? ; 
 EOSQL
 
+[get_all_ge.sentence]
+SELECT * FROM ge.sentences WHERE sentence = ? AND meaning = ? ; 
+EOSQL
+
+[get_all_sentence]
+SELECT * FROM ge.sentences WHERE sentence = ? AND meaning = ? ; 
+EOSQL
+
 [get_all_words_by_genus]
 SELECT * FROM ge.all_words_objects awo WHERE awo.genus = ? LIMIT ? ;
 EOSQL
@@ -145,7 +153,15 @@ EOSQL
 SELECT * from ge.verbs ;
 EOSQL
 
+[get_all_ge.verbs]
+SELECT * from ge.verbs ;
+EOSQL
+
 [get_all_nouns]
+SELECT * from ge.nouns ;
+EOSQL
+
+[get_all_ge.nouns]
 SELECT * from ge.nouns ;
 EOSQL
 
@@ -153,7 +169,15 @@ EOSQL
 SELECT * from ge.adverbs ;
 EOSQL
 
+[get_all_ge.adverbs]
+SELECT * from ge.adverbs ;
+EOSQL
+
 [get_all_adjectives]
+SELECT * from ge.adjectives ;
+EOSQL
+
+[get_all_ge.adjectives]
 SELECT * from ge.adjectives ;
 EOSQL
 
@@ -161,7 +185,15 @@ EOSQL
 SELECT * from ge.pronomen ;
 EOSQL
 
+[get_all_ge.pronomen]
+SELECT * from ge.pronomen ;
+EOSQL
+
 [get_all_article]
+SELECT * from ge.article ;
+EOSQL
+
+[get_all_ge.article]
 SELECT * from ge.article ;
 EOSQL
 
@@ -215,6 +247,7 @@ EOSQL
 SELECT meaning, sentence, type FROM ge.sentences;
 EOSQL
 
+## TODO need to to Change
 [get_all_words]
 SELECT * from ge.all_words_objects;
 EOSQL

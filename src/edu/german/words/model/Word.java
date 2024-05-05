@@ -57,7 +57,7 @@ public class Word implements IWord {
 			String sql = new QueryBuilder().wordMapToSQL(m);
 			new QueryContractor().executeSQL(sql);
 		}
-		
+
 	}
 
 	public boolean checkData() {
@@ -323,8 +323,16 @@ public class Word implements IWord {
 	}
 
 	public List<Map<String, String>> getType(String genus) {
-		String tableName = new MyProperties("src/edu/german/words/cfg/", "table_names.cfg")
-				.getText(new TextHandler().addUnderscore(genus));
-		return new QueryContractor().getObjectMap(new SqlQuery().getSql("get_all_" + tableName));
+		if (genus != null) {
+			String tableName = new MyProperties("table_names.cfg").getText(new TextHandler().addUnderscore(genus));
+			System.out.println(tableName);
+			String sql = new SqlQuery().getSql("get_all_" + tableName);
+			System.out.println(sql);
+			return new QueryContractor().getObjectMap(sql);
+		} else {
+			String sql = new SqlQuery().getSql("get_all_words");
+			System.out.println(sql);
+			return new QueryContractor().getObjectMap(sql);
+		}
 	}
 }

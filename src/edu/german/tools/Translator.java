@@ -1,13 +1,12 @@
 package edu.german.tools;
 
 public class Translator {
-	private static String PATH = "config/";
 	private static String CFG_FILE = "translation_table.cfg";
 	private MyProperties prop;
 	private String name;
 
 	public Translator() {
-		this.prop = new MyProperties(PATH, CFG_FILE);
+		this.prop = new MyProperties(CFG_FILE);
 	}
 
 	public Translator(String genus) {
