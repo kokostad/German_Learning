@@ -55,5 +55,9 @@ public interface IWord {
 	int findId(String word, String genus);
 
 	void putIntoRepository(String word, String meaning, String genus);
+	
+//	void putIlistation(int oid, String word, String meaning, String genus) {};
+	
+//	getIlustation(){int oid, String word, String genus};
 
 }

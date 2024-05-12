@@ -9,9 +9,7 @@ import java.io.IOException;
 /**
  * SqlQuery.java
  * @author Tadeusz Kokotowski, email: t.kokotowski@gmail.com
- * The Class get SQL query from file
- * return query as string
- * /German_Learning/src/edu/german/sql/queries.lst  
+ * The Class get SQL query from file return query as string
  */
 public class SqlQuery {
 	private String FILE_CFG = "src/edu/german/sql/queries.lst";
@@ -21,9 +19,6 @@ public class SqlQuery {
 
 	public String getSql(String pattern) {
 		String expression = rgxStart + pattern + rgxEnd;
-		
-		System.out.println(expression);
-		
 		BufferedReader br = null;
 		try {
 			File file = new File(FILE_CFG);

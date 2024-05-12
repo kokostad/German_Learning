@@ -14,8 +14,10 @@ import java.util.Map;
 import edu.german.dao.DbConnect;
 import edu.german.sentences.Sentence;
 import edu.german.tools.PrepareArrayFromString;
+import edu.german.tools.PrepareString;
 import edu.german.tools.TextHandler;
 import edu.german.words.Noun;
+import edu.german.words.cfg.WordGenus;
 import edu.german.words.model.Word;
 
 /**
@@ -454,30 +456,6 @@ public class QueryContractor {
 		return nounLst;
 	}
 
-	public List<Word> getAllWordList(String sql) {
-		List<Word> wordLst = new LinkedList<>();
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Word word = new Word();
-				word.setWoid(rs.getInt("woid"));
-				word.setMainWord(rs.getString("word"));
-				word.setMeaning(rs.getString("meaning"));
-				word.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
-				word.setGenus(rs.getString("genus"));
-				wordLst.add(word);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-		return wordLst;
-	}
-
 	public List<String[]> getSentencesList(String sql) {
 		List<String[]> list = new LinkedList<String[]>();
 		loadDriver();
@@ -804,4 +782,5 @@ public class QueryContractor {
 		}
 		return list;
 	}
+
 }

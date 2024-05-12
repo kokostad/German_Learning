@@ -18,8 +18,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import org.apache.logging.log4j.Logger;
-
 import edu.german.sentences.Sentence;
 import edu.german.tools.MyFileChooser;
 import edu.german.tools.MyInternalFrame;
@@ -52,7 +50,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private List<JButton> buttonList;
 	private String data;
 	private String filePath;
-	private static final Logger log = null;
 	
 	public ExportToFile(int height, int width, String titel) {
 		super(height, width, titel);
@@ -118,16 +115,10 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 			exportConfigPanel.setPath(filePath);
 		}
 
-//		@Log4j2
 		else if (src == showBtn) {
 			textArea.setText(null);
-			String exportType = exportConfigPanel.exportType();
 			boolean wordOrSentence = exportConfigPanel.sentencesOrWords();
 
-//			System.out.println("Export type: " + exportType + " words: " + wordOrSentence);
-			log.info("Export type: " + exportType + " words: " + wordOrSentence);
-
-			// TODO make this method
 			if (!wordOrSentence) {
 				List<Map<String, String>> list = new Sentence().getAllAsMapList();
 				list.forEach(s -> textArea.append(s + "\n"));
@@ -135,7 +126,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 			}
 
 			else {
-				// TODO get data from database
 				String genus = exportConfigPanel.wordGenus();
 				List<Map<String, String>> mapList = new Word().getType(genus);
 				List<String> list = prepareList(mapList);
@@ -161,7 +151,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 			if (data == null || data.isBlank()) {
 				List<Map<String, String>> mydata = getDataFromDatabase(exportType, wordOrSentence, genus);
 				List<String> list = prepareList(mydata);
-				list.forEach(l -> System.out.println(l));
 
 				if (wordOrSentence) {
 					if ("CSV".equals(exportType))
@@ -189,7 +178,10 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private List<Map<String, String>> getDataFromDatabase(String type, boolean wordOrSentence, String genus) {
 		List<Map<String, String>> mapList = new LinkedList<>();
 		if (wordOrSentence) {
-			mapList = new Word().getType(genus);
+			if (genus != null && genus != "")
+				mapList = new Word().getType(genus);
+			else
+				mapList = new Word().getAllAsMapList();
 		} else {
 			mapList = new Sentence().getAllAsMapList();
 		}
@@ -211,14 +203,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		return list;
 	}
 
-	private String getString(List<String> toExport) {
-		StringBuilder sb = new StringBuilder();
-
-		toExport.stream().forEach(l -> sb.append(l + "\n"));
-
-		return sb.toString();
-	}
-
 	private String getFilePath() {
 		return exportConfigPanel.getFilePath();
 	}
@@ -230,52 +214,12 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		setTextImportState(false);
 	}
 
-	/**
-	 * The method completes and return the data in the form of a list of strings
-	 * 
-	 * @param map - Map of Words or Sentences
-	 * @return list of strings
-	 */
-//	private List<String> prepareDataToExport(HashMap<String, String> map) {
-//		List<String> list = new LinkedList<>();
-//		Optional<String> option = map
-//				.entrySet()
-//				.stream()
-//				.filter(e -> "word".equals(e.getValue()))
-//				.map(Map.Entry::getKey)
-//				.findFirst();
-//
-//		String wordGenus = null;
-//		if (map.containsKey("WORD_GENUS"))
-//			wordGenus = map.get("WORD_GENUS");
-//
-//		// TODO need to use DoCall - Callable<>
-//		if (option.isPresent()) {
-//			if (wordGenus != null && !wordGenus.isBlank())
-//				list = new GetWordsAsList().getGenusList(wordGenus, getOrder());
-//			else
-//				list = new GetWordsAsList().getList(getOrder());
-//		} else {
-//			list = new GetSentenceList().getList(getOrder());
-//		}
-//
-//		return list;
-//	}
-
-	private void putIntoTextArea(List<String> toExport) {
-		toExport.forEach((s) -> textArea.append(s + "\n"));
-	}
-
 	public boolean isTextImportState() {
 		return textImportState;
 	}
 
 	public void setTextImportState(boolean textImportState) {
 		this.textImportState = textImportState;
-	}
-
-	private String getOrder() {
-		return exportConfigPanel.orderAsString();
 	}
 
 	public String getData() {
@@ -285,5 +229,5 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	public void setData(String data) {
 		this.data = data;
 	}
-	
+
 }

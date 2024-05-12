@@ -98,16 +98,10 @@ public class PrepareString {
 	}
 
 	public String replaceUnderscoreWithSpace() {
-		if (Pattern.matches(regex, string))
-			return string.replace('_', ' ');
-
-		return string;
+		return string.replace('_', ' ');
 	}
 
 	public String replaceUnderscoreWithSpace(String str) {
-		if (Pattern.matches(regex, str))
-			return str.replace('_', ' ');
-
-		return str;
+		return str.replaceAll("_", " ");
 	}
 }

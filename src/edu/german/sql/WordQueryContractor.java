@@ -12,7 +12,9 @@ import java.util.Map;
 
 import edu.german.dao.DbConnect;
 import edu.german.tools.PrepareArrayFromString;
+import edu.german.tools.PrepareString;
 import edu.german.words.Noun;
+import edu.german.words.cfg.WordGenus;
 import edu.german.words.model.Word;
 
 public class WordQueryContractor extends QueryContractor {
@@ -122,30 +124,6 @@ public class WordQueryContractor extends QueryContractor {
 			dbc.closeConnection(con);
 		}
 		return nounLst;
-	}
-
-	public List<Word> getAllWordList(String sql) {
-		List<Word> wordLst = new LinkedList<>();
-		loadDriver();
-		dbc = new DbConnect();
-		con = dbc.getConnection();
-		try (PreparedStatement ps = con.prepareStatement(sql)) {
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Word word = new Word();
-				word.setWoid(rs.getInt("woid"));
-				word.setMainWord(rs.getString("word"));
-				word.setMeaning(rs.getString("meaning"));
-				word.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
-				word.setGenus(rs.getString("genus"));
-				wordLst.add(word);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbc.closeConnection(con);
-		}
-		return wordLst;
 	}
 
 	public void addNewWord(String sql, String mainWord, String meaning, String genus) {
@@ -405,6 +383,61 @@ public class WordQueryContractor extends QueryContractor {
 			dbc.closeConnection(con);
 		}
 		return -1;
+	}
+
+	public List<Map<String, String>> getWordMap(WordGenus value, String sql) {
+		List<Map<String, String>> list = new LinkedList<>();
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numOfCol = rsmd.getColumnCount();
+
+			while (rs.next()) {
+				Map<String, String> map = new HashMap<>();
+				String s = new PrepareString().replaceUnderscoreWithSpace(value.toString());
+				map.put("GENUS", s.toString());
+				for (int i = 1; i <= numOfCol; i++) {
+					Object var = rs.getObject(i);
+					if (var != null) {
+						map.put(rsmd.getColumnName(i).toUpperCase(), var.toString());
+					}
+				}
+				list.add(map);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+		return list;
+	}
+
+	public List<Word> getAllWordsList(String sql) {
+		List<Word> wordLst = new LinkedList<>();
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Word word = new Word();
+				word.setWoid(rs.getInt("woid"));
+				word.setMainWord(rs.getString("word"));
+				word.setMeaning(rs.getString("meaning"));
+				word.setMeanings(new PrepareArrayFromString(rs.getString("meaning")).getArray());
+				word.setGenus(rs.getString("genus"));
+				wordLst.add(word);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+		return wordLst;
 	}
 
 }

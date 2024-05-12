@@ -14,9 +14,11 @@ import org.json.JSONObject;
 import edu.german.sql.QueryBuilder;
 import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
+import edu.german.sql.WordQueryContractor;
 import edu.german.tools.JSONHandler;
 import edu.german.tools.MyProperties;
 import edu.german.tools.TextHandler;
+import edu.german.words.cfg.WordGenus;
 
 public class Word implements IWord {
 	private int woid;
@@ -40,11 +42,6 @@ public class Word implements IWord {
 		this.word = word;
 		this.meaning = meaning;
 		this.genus = genus;
-
-//		if (!isExist(word, genus) && (meaning != null))
-//			new QueryContractor().addNewWord(new SqlQuery().getSql("add_new_word"), word, meaning, genus);
-//
-//		setWoid(new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus));
 	}
 
 	public Word(Optional<String> optData) {
@@ -188,8 +185,25 @@ public class Word implements IWord {
 	@Override
 	public List<Word> getAllWords() {
 		String query = new SqlQuery().getSql("get_all_words");
-		List<Word> list = new QueryContractor().getAllWordList(query);
+		List<Word> list = new WordQueryContractor().getAllWordsList(query);
 		return list;
+	}
+
+	public List<Map<String, String>> getAllAsMapList() {
+		List<Map<String, String>> mapList = new LinkedList<>();
+		MyProperties p = new MyProperties("table_names.cfg");
+		WordGenus[] values = WordGenus.values();
+
+		for (WordGenus value : values) {
+			String query = new SqlQuery().getSql("get_all_" + p.getValue(value.toString()));
+			if (query != null) {
+				List<Map<String, String>> var = new WordQueryContractor().getWordMap(value, query);
+				if (!var.isEmpty())
+					mapList.addAll(var);
+			}
+		}
+
+		return mapList;
 	}
 
 	public void addToPropertyList(Properties properties) {
@@ -266,7 +280,7 @@ public class Word implements IWord {
 	}
 
 	public List<Map> getMapListFromCSV() {
-		String[] headers = new MyProperties("src/edu/german/words/cfg/", "headers.cfg").getValuesArray("ALL_HEADERS");
+		String[] headers = new MyProperties("headers.cfg").getValuesArray("ALL_HEADERS");
 		List<Map> lm = new LinkedList<>();
 
 		optData.stream().forEach(var -> {
@@ -325,14 +339,12 @@ public class Word implements IWord {
 	public List<Map<String, String>> getType(String genus) {
 		if (genus != null) {
 			String tableName = new MyProperties("table_names.cfg").getText(new TextHandler().addUnderscore(genus));
-			System.out.println(tableName);
 			String sql = new SqlQuery().getSql("get_all_" + tableName);
-			System.out.println(sql);
 			return new QueryContractor().getObjectMap(sql);
 		} else {
 			String sql = new SqlQuery().getSql("get_all_words");
-			System.out.println(sql);
 			return new QueryContractor().getObjectMap(sql);
 		}
 	}
+
 }

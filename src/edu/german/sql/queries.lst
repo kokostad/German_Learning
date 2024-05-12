@@ -165,6 +165,14 @@ EOSQL
 SELECT * from ge.nouns ;
 EOSQL
 
+[get_all_adverb]
+SELECT * from ge.adverbs ;
+EOSQL
+
+[get_all_ge.adverb]
+SELECT * from ge.adverbs ;
+EOSQL
+
 [get_all_adverbs]
 SELECT * from ge.adverbs ;
 EOSQL
@@ -195,6 +203,14 @@ EOSQL
 
 [get_all_ge.article]
 SELECT * from ge.article ;
+EOSQL
+
+[get_all_ge.preposition]
+SELECT * from ge.preposition ;
+EOSQL
+
+[get_all_prepositions]
+SELECT * from ge.preposition ;
 EOSQL
 
 [get_word_from_main_table_by_woid]

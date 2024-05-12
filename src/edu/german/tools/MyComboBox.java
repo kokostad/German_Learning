@@ -99,7 +99,7 @@ public class MyComboBox extends JPanel {
 	}
 
 	public String getValue() {
-		if (box.getSelectedItem() != null)
+		if (box.getSelectedItem() != null && box.getSelectedItem() != "")
 			return (box.getSelectedItem().toString());
 
 		return null;

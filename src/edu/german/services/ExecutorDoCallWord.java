@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import edu.german.sql.SqlQuery;
-import edu.german.sql.QueryContractor;
+import edu.german.sql.WordQueryContractor;
 import edu.german.words.model.Word;
 
 public class ExecutorDoCallWord implements Callable<List<Word>> {
@@ -16,7 +16,7 @@ public class ExecutorDoCallWord implements Callable<List<Word>> {
 
 	public List<Word> getWordList() {
 		String query = new SqlQuery().getSql("get_all_words");
-		return list = new QueryContractor().getAllWordList(query);
+		return list = new WordQueryContractor().getAllWordsList(query);
 	}
 
 	@Override
