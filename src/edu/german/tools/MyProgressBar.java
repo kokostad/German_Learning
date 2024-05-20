@@ -51,7 +51,6 @@ public class MyProgressBar extends JPanel {
 
 	public void setNull() {
 		bar.setValue(0);
-//		this.repaint();
 	}
 	
 	public int getWidth() {

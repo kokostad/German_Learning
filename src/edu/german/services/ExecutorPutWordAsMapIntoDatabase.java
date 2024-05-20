@@ -15,8 +15,8 @@ public class ExecutorPutWordAsMapIntoDatabase implements Runnable {
 	private int sum;
 	private int i = 0;
 
-	public ExecutorPutWordAsMapIntoDatabase(List<Map> lm, boolean order) {
-		mbar = new MyFrameProgressBar();
+	public ExecutorPutWordAsMapIntoDatabase(List<Map> lm, boolean order, MyFrameProgressBar mbar) {
+		this.mbar = mbar;
 		this.lm = lm;
 		this.order = order;
 		sum = lm.size();

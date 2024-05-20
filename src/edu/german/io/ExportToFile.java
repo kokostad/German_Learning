@@ -21,7 +21,7 @@ import javax.swing.JTextArea;
 import edu.german.sentences.Sentence;
 import edu.german.tools.MyFileChooser;
 import edu.german.tools.MyInternalFrame;
-import edu.german.tools.MyProgressBar;
+import edu.german.tools.MyFrameProgressBar;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.Titel;
@@ -44,7 +44,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private JTextArea textArea;
 	private ExecutorService es;
 	private JTabbedPane tp;
-	private MyProgressBar bar;
+	private MyFrameProgressBar bar;
 	private boolean textImportState = false;
 	private ExportConfigPanel exportConfigPanel;
 	private List<JButton> buttonList;
@@ -71,9 +71,9 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		tp.add(Titel.setTitel("EXPORT_CONFIGURATION"), exportConfigPanel);
 
 		String[] buttonNames = { "INDICATE_FILE", "CLEAR", "SHOW_DATA", "EXPORT" };
-
 		bp = new ButtonsPanel(buttonNames);
 		bp.setFontSize(20);
+
 		buttonList = bp.getButtonList();
 		indicateFileBtn = buttonList.get(0);
 		indicateFileBtn.addActionListener(this);
@@ -88,13 +88,9 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		sp.setOneTouchExpandable(true);
 		sp.setDividerLocation(new ScreenSetup().SPLIT_PANE_FACTOR);
 
-//		bar = new MyProgressBar("EXPORT_PROGRESS");
-//		bar.setInfo("PROGRESS");
-
 		JPanel rightPan = new JPanel();
 		rightPan.setLayout(new GridLayout(2, 1, 10, 10));
 		rightPan.add(bp);
-//		rightPan.add(bar);
 
 		this.add(sp, BorderLayout.CENTER);
 		this.add(rightPan, BorderLayout.EAST);
@@ -123,9 +119,7 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 				List<Map<String, String>> list = new Sentence().getAllAsMapList();
 				list.forEach(s -> textArea.append(s + "\n"));
 				setData(textArea.getText());
-			}
-
-			else {
+			} else {
 				String genus = exportConfigPanel.wordGenus();
 				List<Map<String, String>> mapList = new Word().getType(genus);
 				List<String> list = prepareList(mapList);
@@ -138,6 +132,8 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == exportBtn) {
+			bar = new MyFrameProgressBar("EXPORT_PROGRESS");
+
 			Optional<String> optPath = Optional.ofNullable(getFilePath());
 			if (optPath.isEmpty()) {
 				new ShowMessage("NO_DATA", "uzupełnij brakujące dane");
@@ -154,14 +150,14 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 
 				if (wordOrSentence) {
 					if ("CSV".equals(exportType))
-						es.submit(new ExportListToCSVFile(list, getFilePath()));
+						es.submit(new ExportListToCSVFile(list, getFilePath(), bar));
 					else
-						es.submit(new ExportListToJSONFile(list, getFilePath(), "WORDS"));
+						es.submit(new ExportListToJSONFile(list, getFilePath(), "WORDS", bar));
 				} else {
 					if ("CSV".equals(exportType))
-						es.submit(new ExportListToCSVFile(list, getFilePath()));
+						es.submit(new ExportListToCSVFile(list, getFilePath(), bar));
 					else
-						es.submit(new ExportListToJSONFile(list, getFilePath(), "SENTENCES"));
+						es.submit(new ExportListToJSONFile(list, getFilePath(), "SENTENCES", bar));
 				}
 			}
 
@@ -189,6 +185,10 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		return mapList;
 	}
 
+	/**
+	 * @param mapList
+	 * @return List of string prepared to export
+	 */
 	private List<String> prepareList(List<Map<String, String>> mapList) {
 		List<String> list = new LinkedList<>();
 		mapList.forEach(m -> {

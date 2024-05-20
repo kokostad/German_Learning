@@ -26,8 +26,8 @@ import edu.german.services.ExecutorAddSentenceIntoRepository;
 import edu.german.services.ExecutorPrepareNounView;
 import edu.german.services.ExecutorPutWordAsMapIntoDatabase;
 import edu.german.tools.MyFileChooser;
+import edu.german.tools.MyFrameProgressBar;
 import edu.german.tools.MyInternalFrame;
-import edu.german.tools.MyProgressBar;
 import edu.german.tools.SentencesFromJSON;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.Titel;
@@ -50,7 +50,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 	private JTextArea txtArea;
 	private ExecutorService es;
 	private JTabbedPane tp;
-	private MyProgressBar bar;
+	private MyFrameProgressBar bar;
 	private ImportConfigPanel settingPanel;
 	private String filePath;
 	private JTextArea textArea;
@@ -194,7 +194,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 				}
 
 				if (!list.isEmpty()) {
-					es.submit(new ExecutorAddSentenceIntoRepository(list, bar, getOrder()));
+					es.submit(new ExecutorAddSentenceIntoRepository(list, getOrder(), bar));
 				}
 			}
 			if (fileType.equals("JSON")) {
@@ -205,7 +205,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 				}
 
 				if (!list.isEmpty()) {
-					es.submit(new ExecutorAddSentenceIntoRepository(list, bar, getOrder()));
+					es.submit(new ExecutorAddSentenceIntoRepository(list, getOrder(), bar));
 				}
 			}
 		}
@@ -219,7 +219,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 				lm = checkGenus(lm, genus);
 
 				if (!lm.isEmpty()) {
-					es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, getOrder()));
+					es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, getOrder(), bar));
 				}
 			}
 
@@ -228,7 +228,7 @@ public class ImportFromFile extends MyInternalFrame implements ActionListener {
 				List<Map> lm = w.getMapListFromJSON();
 
 				if (!lm.isEmpty()) {
-					es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, getOrder()));
+					es.submit(new ExecutorPutWordAsMapIntoDatabase(lm, getOrder(), bar));
 				}
 			}
 		}

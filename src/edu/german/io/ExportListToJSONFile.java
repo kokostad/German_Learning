@@ -8,23 +8,27 @@ import java.util.List;
 
 import org.json.simple.JSONObject;
 
+import edu.german.tools.MyFrameProgressBar;
 import edu.german.tools.SentenceJSONParser;
 import edu.german.tools.WordJSONParser;
 
 public class ExportListToJSONFile implements Runnable {
+	private int sum;
+	private MyFrameProgressBar bar;
 	private List<String> list;
 	private String filePath;
 	private String type;
-	private Long count;
 	private int i = 0;
 
-	public ExportListToJSONFile(List<String> list, String filePath, String type) {
+	public ExportListToJSONFile(List<String> list, String filePath, String type, MyFrameProgressBar bar) {
+		this.bar = bar;
 		this.list = list;
 		this.filePath = filePath;
 		this.type = type;
+		this.bar = bar;
 
 		deleteIfFileExist();
-		count = (long) list.size();
+		sum = list.size();
 	}
 
 	@Override
@@ -49,6 +53,7 @@ public class ExportListToJSONFile implements Runnable {
 						e.printStackTrace();
 					}
 				i++;
+				fillBar(i);
 			});
 
 			sb.append("]");
@@ -71,7 +76,7 @@ public class ExportListToJSONFile implements Runnable {
 			sb.append(",");
 		} else {
 			JSONObject var = new SentenceJSONParser(line).getJSONItem();
-			if (i < count - 1) {
+			if (i < sum - 1) {
 				sb.append(var.toJSONString());
 				sb.append(",");
 			} else {
@@ -92,7 +97,7 @@ public class ExportListToJSONFile implements Runnable {
 			sb.append(",");
 		} else {
 			JSONObject var = new WordJSONParser(line).getJSONItem();
-			if (i < count - 1) {
+			if (i < sum - 1) {
 				sb.append(var.toJSONString());
 				sb.append(",");
 			} else {
@@ -109,5 +114,14 @@ public class ExportListToJSONFile implements Runnable {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	private void fillBar(int i) {
+		int result = ((i * 100) / sum);
+		bar.fill(result);
+		bar.fill(result);
+		bar.showProgress(result);
+		if (result == 100 || i == sum)
+			bar.done();
 	}
 }
