@@ -19,9 +19,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
 import edu.german.sentences.Sentence;
+import edu.german.tools.MapOrganizer;
 import edu.german.tools.MyFileChooser;
-import edu.german.tools.MyInternalFrame;
 import edu.german.tools.MyFrameProgressBar;
+import edu.german.tools.MyInternalFrame;
 import edu.german.tools.ScreenSetup;
 import edu.german.tools.ShowMessage;
 import edu.german.tools.Titel;
@@ -45,16 +46,16 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 	private ExecutorService es;
 	private JTabbedPane tp;
 	private MyFrameProgressBar bar;
-	private boolean textImportState = false;
 	private ExportConfigPanel exportConfigPanel;
 	private List<JButton> buttonList;
-	private String data;
+	private List<String> list;
 	private String filePath;
 	
 	public ExportToFile(int height, int width, String titel) {
 		super(height, width, titel);
 		es = Executors.newFixedThreadPool(4);
 
+		list = null;
 		textArea = new JTextArea(15, 70);
 		textArea.setEditable(true);
 		textArea.setLineWrap(true);
@@ -112,20 +113,26 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == showBtn) {
+			list = null;
 			textArea.setText(null);
 			boolean wordOrSentence = exportConfigPanel.sentencesOrWords();
 
 			if (!wordOrSentence) {
-				List<Map<String, String>> list = new Sentence().getAllAsMapList();
+				List<Map<String, String>> mapList = new Sentence().getAllAsMapList();
+				list = new MapOrganizer(mapList, "SENTECES").sortedList();
 				list.forEach(s -> textArea.append(s + "\n"));
-				setData(textArea.getText());
 			} else {
 				String genus = exportConfigPanel.wordGenus();
-				List<Map<String, String>> mapList = new Word().getType(genus);
-				List<String> list = prepareList(mapList);
+				List<Map<String, String>> mapList = new LinkedList<Map<String, String>>();
+				if (genus != null)
+					mapList = new Word().getType(genus);
+				else
+					mapList = new Word().getAllType();
+
+				String type = exportConfigPanel.sentencesOrWordsAsString();
+				list = new MapOrganizer(mapList, type).sortedList();
 
 				list.forEach(s -> textArea.append(s + "\n"));
-				setData(textArea.getText());
 				textArea.setCaretPosition(0);
 				textArea.setEditable(true);
 			}
@@ -133,101 +140,66 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 
 		else if (src == exportBtn) {
 			bar = new MyFrameProgressBar("EXPORT_PROGRESS");
+			String filePath = null;
 
-			Optional<String> optPath = Optional.ofNullable(getFilePath());
+			Optional<String> optPath = Optional.ofNullable(exportConfigPanel.getFilePath());
 			if (optPath.isEmpty()) {
 				new ShowMessage("NO_DATA", "uzupełnij brakujące dane");
 				return;
+			} else {
+				filePath = optPath.get();
 			}
 
+			String sentenceOrWord = exportConfigPanel.sentencesOrWordsAsString();
 			String exportType = exportConfigPanel.exportType();
-			boolean wordOrSentence = exportConfigPanel.sentencesOrWords();
-			String genus = exportConfigPanel.wordGenus();
 
-			if (data == null || data.isBlank()) {
-				List<Map<String, String>> mydata = getDataFromDatabase(exportType, wordOrSentence, genus);
-				List<String> list = prepareList(mydata);
-
-				if (wordOrSentence) {
+			if (list == null) {
+				if (sentenceOrWord.equals("SENTENCES")) {
+					List<Map<String, String>> mapList = new Sentence().getAllAsMapList();
+					List<String> list = new MapOrganizer(mapList, sentenceOrWord).sortedList();
 					if ("CSV".equals(exportType))
-						es.submit(new ExportListToCSVFile(list, getFilePath(), bar));
+						es.submit(new ExportListToCSVFile(list, filePath, bar));
 					else
-						es.submit(new ExportListToJSONFile(list, getFilePath(), "WORDS", bar));
+						es.submit(new ExportListToJSONFile(list, filePath, sentenceOrWord, bar));
+				} else {
+					String genus = exportConfigPanel.wordGenus();
+					List<Map<String, String>> mapList = new LinkedList<Map<String, String>>();
+					if (genus != null)
+						mapList = new Word().getType(genus);
+					else
+						mapList = new Word().getAllType();
+
+					List<String> list = new MapOrganizer(mapList, "WORDS").sortedList();
+					if ("CSV".equals(exportType))
+						es.submit(new ExportListToCSVFile(list, filePath, bar));
+					else
+						es.submit(new ExportListToJSONFile(list, filePath, "WORDS", bar));
+				}
+			} else {
+				if (sentenceOrWord.equals("SENTENCES")) {
+					if ("CSV".equals(exportType))
+						es.submit(new ExportListToCSVFile(list, filePath, bar));
+					else
+						es.submit(new ExportListToJSONFile(list, filePath, sentenceOrWord, bar));
+
 				} else {
 					if ("CSV".equals(exportType))
-						es.submit(new ExportListToCSVFile(list, getFilePath(), bar));
+						es.submit(new ExportListToCSVFile(list, filePath, bar));
 					else
-						es.submit(new ExportListToJSONFile(list, getFilePath(), "SENTENCES", bar));
+						es.submit(new ExportListToJSONFile(list, filePath, "WORDS", bar));
+
 				}
 			}
 
 			textArea.setText(null);
+			list = null;
 		}
-	}
-
-	/**
-	 * @param type of export, CSV or JSON
-	 * @param wordOrSentence - choose word or sentences to export
-	 * @param genus - kind of words to export
-	 * @return data as map list
-	 */
-	private List<Map<String, String>> getDataFromDatabase(String type, boolean wordOrSentence, String genus) {
-		List<Map<String, String>> mapList = new LinkedList<>();
-		if (wordOrSentence) {
-			if (genus != null && genus != "")
-				mapList = new Word().getType(genus);
-			else
-				mapList = new Word().getAllAsMapList();
-		} else {
-			mapList = new Sentence().getAllAsMapList();
-		}
-
-		return mapList;
-	}
-
-	/**
-	 * @param mapList
-	 * @return List of string prepared to export
-	 */
-	private List<String> prepareList(List<Map<String, String>> mapList) {
-		List<String> list = new LinkedList<>();
-		mapList.forEach(m -> {
-			StringBuilder sb = new StringBuilder();
-			m.forEach((key, val) -> {
-				sb.append(key + ":");
-				sb.append(val + ";");
-			});
-			list.add(sb.toString());
-		});
-
-		return list;
-	}
-
-	private String getFilePath() {
-		return exportConfigPanel.getFilePath();
 	}
 
 	private void clearAll() {
 		bar.setNull();
 		textArea.setText(null);
 		exportConfigPanel.clear();
-		setTextImportState(false);
-	}
-
-	public boolean isTextImportState() {
-		return textImportState;
-	}
-
-	public void setTextImportState(boolean textImportState) {
-		this.textImportState = textImportState;
-	}
-
-	public String getData() {
-		return data;
-	}
-
-	public void setData(String data) {
-		this.data = data;
 	}
 
 }

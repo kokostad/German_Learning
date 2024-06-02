@@ -65,6 +65,13 @@ public class ExportConfigPanel extends JPanel {
 		return sentencesOrWordsChooseBox.result();
 	}
 
+	public String sentencesOrWordsAsString() {
+		if (sentencesOrWordsChooseBox.result())
+			return "WORDS";
+		else
+			return "SENTENCES";
+	}
+
 	public String exportType() {
 		return exportTypeBox.getValue();
 	}

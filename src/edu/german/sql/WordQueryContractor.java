@@ -440,4 +440,34 @@ public class WordQueryContractor extends QueryContractor {
 		return wordLst;
 	}
 
+	public List<Map<String, String>> getObjectMap(String sql, String genus) {
+		List<Map<String, String>> list = new LinkedList<>();
+		loadDriver();
+		dbc = new DbConnect();
+		con = dbc.getConnection();
+
+		try (PreparedStatement ps = con.prepareStatement(sql)) {
+			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int numOfCol = rsmd.getColumnCount();
+
+			while (rs.next()) {
+				Map<String, String> map = new HashMap<>();
+				map.put("GENUS", genus);
+				for (int i = 1; i <= numOfCol; i++) {
+					Object var = rs.getObject(i);
+					if (var != null) {
+						map.put(rsmd.getColumnName(i).toUpperCase(), var.toString());
+					}
+				}
+				list.add(map);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			dbc.closeConnection(con);
+		}
+		return list;
+	}
+
 }

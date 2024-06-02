@@ -1,5 +1,6 @@
 package edu.german.words.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.german.sql.QueryBuilder;
-import edu.german.sql.QueryContractor;
 import edu.german.sql.SqlQuery;
 import edu.german.sql.WordQueryContractor;
 import edu.german.tools.JSONHandler;
@@ -52,7 +52,7 @@ public class Word implements IWord {
 	public Word(Map<String, String> m) {
 		if (!isExist(m.get("WORD"), m.get("GENUS")) && (m.get("MEANING") != null)) {
 			String sql = new QueryBuilder().wordMapToSQL(m);
-			new QueryContractor().executeSQL(sql);
+			new WordQueryContractor().executeSQL(sql);
 		}
 
 	}
@@ -86,7 +86,7 @@ public class Word implements IWord {
 	public int getOid() {
 		if (oid < 0) {
 			String sql = new QueryBuilder().getWordId(word, meaning, genus);
-			int oid = new QueryContractor().getId(sql);
+			int oid = new WordQueryContractor().getId(sql);
 			return oid;
 		}
 		return -1;
@@ -135,7 +135,7 @@ public class Word implements IWord {
 	@Override
 	public int getWoid(String word, String genus) {
 		if (woid < 0)
-			return new QueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus);
+			return new WordQueryContractor().getId(new SqlQuery().getSql("get_word_woid"), word, genus);
 
 		return -1;
 	}
@@ -158,7 +158,7 @@ public class Word implements IWord {
 	@Override
 	public boolean isExist(String word, String genus) {
 		String query = new SqlQuery().getSql("check_word");
-		if (new QueryContractor().getId(query, word, genus) > 0)
+		if (new WordQueryContractor().getId(query, word, genus) > 0)
 			return true;
 
 		return false;
@@ -168,7 +168,7 @@ public class Word implements IWord {
 		// TODO Improve this method
 		String sql = new QueryBuilder().getWordId(word, meaninig, genus);
 
-		if ((new QueryContractor().getId(sql)) > -1)
+		if ((new WordQueryContractor().getId(sql)) > -1)
 			return true;
 
 		return false;
@@ -178,7 +178,7 @@ public class Word implements IWord {
 	public void putIntoRepository(String word, String meaning, String genus) {
 		if (!isExist(word, genus)) {
 			String sql = new QueryBuilder().addNewWord(word, meaning, genus);
-			new QueryContractor().executeSQL(sql);
+			new WordQueryContractor().executeSQL(sql);
 		}
 	}
 
@@ -256,13 +256,13 @@ public class Word implements IWord {
 	@Override
 	public int findId(String word, String genus) {
 		String sql = new QueryBuilder().getWordId(word, meaning, genus);
-		int oid = new QueryContractor().getId(sql);
+		int oid = new WordQueryContractor().getId(sql);
 		return oid;
 	}
 
 	public int findId(String word, String meaninig, String genus) {
 		String sql = new QueryBuilder().getWordId(word, meaning, genus);
-		int oid = new QueryContractor().getId(sql);
+		int oid = new WordQueryContractor().getId(sql);
 		return oid;
 	}
 
@@ -272,7 +272,7 @@ public class Word implements IWord {
 
 	public boolean checkOid(String string) {
 		String sql = new QueryBuilder().getOid(string);
-		int oid = new QueryContractor().getId(sql);
+		int oid = new WordQueryContractor().getId(sql);
 		if (oid > -1)
 			return true;
 
@@ -339,12 +339,31 @@ public class Word implements IWord {
 	public List<Map<String, String>> getType(String genus) {
 		if (genus != null) {
 			String tableName = new MyProperties("table_names.cfg").getText(new TextHandler().addUnderscore(genus));
-			String sql = new SqlQuery().getSql("get_all_" + tableName);
-			return new QueryContractor().getObjectMap(sql);
-		} else {
-			String sql = new SqlQuery().getSql("get_all_words");
-			return new QueryContractor().getObjectMap(sql);
+			if (tableName != null) {
+				String sql = new SqlQuery().getSql("get_all_" + tableName);
+				return new WordQueryContractor().getObjectMap(sql, genus);
+			} else {
+				tableName = "ge.adverbs";
+				String sql = new SqlQuery().getSql("get_all_" + tableName);
+				return new WordQueryContractor().getObjectMap(sql, genus);
+			}
 		}
+
+		return null;
+	}
+
+	public List<Map<String, String>> getAllType() {
+		WordGenus[] values = WordGenus.values();
+
+		List<Map<String, String>> mapList = new LinkedList<Map<String, String>>();
+		for (WordGenus genus : values) {
+			Collection<? extends Map<String, String>> var = (Collection<? extends Map<String, String>>) getType(
+					genus.toString());
+			if (var != null)
+				mapList.addAll(var);
+		}
+
+		return mapList;
 	}
 
 }
