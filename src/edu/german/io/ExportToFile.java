@@ -139,7 +139,6 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 		}
 
 		else if (src == exportBtn) {
-			bar = new MyFrameProgressBar("EXPORT_PROGRESS");
 			String filePath = null;
 
 			Optional<String> optPath = Optional.ofNullable(exportConfigPanel.getFilePath());
@@ -154,6 +153,8 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 			String exportType = exportConfigPanel.exportType();
 
 			if (list == null) {
+				bar = new MyFrameProgressBar("EXPORT_PROGRESS");
+
 				if (sentenceOrWord.equals("SENTENCES")) {
 					List<Map<String, String>> mapList = new Sentence().getAllAsMapList();
 					List<String> list = new MapOrganizer(mapList, sentenceOrWord).sortedList();
@@ -176,6 +177,8 @@ public class ExportToFile extends MyInternalFrame implements ActionListener {
 						es.submit(new ExportListToJSONFile(list, filePath, "WORDS", bar));
 				}
 			} else {
+				bar = new MyFrameProgressBar("EXPORT_PROGRESS");
+
 				if (sentenceOrWord.equals("SENTENCES")) {
 					if ("CSV".equals(exportType))
 						es.submit(new ExportListToCSVFile(list, filePath, bar));
